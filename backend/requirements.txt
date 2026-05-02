@@ -7,7 +7,9 @@ sse-starlette==2.1.3
 # LLM providers (Anthropic native + OpenRouter via OpenAI-compatible)
 anthropic>=0.45.0
 openai>=1.59.0
-voyageai>=0.3.0
+# Voyage embeddings — used for V2 semantic search over interview chunks.
+# Not in the V1 demo path; left commented to keep the build fast.
+# voyageai>=0.2.4
 
 # Storage
 supabase>=2.10.0
