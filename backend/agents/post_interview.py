@@ -125,20 +125,22 @@ async def process_interview(
         transcript_turns=len(transcript),
     )
 
-    # Anthropic constraint: extended thinking is incompatible with forced
-    # tool_choice. Extraction is a structured pass — we don't need thinking,
-    # we need a clean tool call. So: force the tool, no thinking.
-    # max_tokens 10000 — enough to fit all 9 sections of the extract tool
-    # (informal_rules + relationships near the end of the schema otherwise
-    # truncate). Each call ~45s on Opus, still acceptable.
-    message = call_with_retry(
-        model=settings.model_extractor,
-        fallback_model=settings.model_qa_fallback,
-        max_tokens=10000,
-        system=[cached_system(POST_INTERVIEW_SYSTEM)],
-        tools=[EXTRACT_FROM_INTERVIEW_TOOL],
-        tool_choice={"type": "tool", "name": "extract_from_interview"},
-        messages=[{"role": "user", "content": user_msg}],
+    # Anthropic SDK is sync. Running it directly inside an async endpoint
+    # blocks the event loop — Render then kills the worker because /health
+    # probes time out. Wrap in run_in_executor to keep the loop responsive.
+    import asyncio
+    loop = asyncio.get_event_loop()
+    message = await loop.run_in_executor(
+        None,
+        lambda: call_with_retry(
+            model=settings.model_extractor,
+            fallback_model=settings.model_qa_fallback,
+            max_tokens=10000,
+            system=[cached_system(POST_INTERVIEW_SYSTEM)],
+            tools=[EXTRACT_FROM_INTERVIEW_TOOL],
+            tool_choice={"type": "tool", "name": "extract_from_interview"},
+            messages=[{"role": "user", "content": user_msg}],
+        ),
     )
 
     extracted = extract_tool_use(message, "extract_from_interview")

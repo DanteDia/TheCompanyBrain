@@ -69,13 +69,18 @@ async def route_entities(
         f"Seleccioná hasta {max_entities} ids relevantes para la pregunta."
     )
 
-    message = call_with_retry(
-        model=settings.model_router,
-        max_tokens=2000,
-        system=ROUTER_SYSTEM,
-        tools=[ROUTE_ENTITIES_TOOL],
-        tool_choice={"type": "tool", "name": "route_entities"},
-        messages=[{"role": "user", "content": user_msg}],
+    import asyncio
+    loop = asyncio.get_event_loop()
+    message = await loop.run_in_executor(
+        None,
+        lambda: call_with_retry(
+            model=settings.model_router,
+            max_tokens=2000,
+            system=ROUTER_SYSTEM,
+            tools=[ROUTE_ENTITIES_TOOL],
+            tool_choice={"type": "tool", "name": "route_entities"},
+            messages=[{"role": "user", "content": user_msg}],
+        ),
     )
     selected = extract_tool_use(message, "route_entities")
     log.info(

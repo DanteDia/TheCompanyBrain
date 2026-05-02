@@ -111,19 +111,23 @@ async def answer_query(
         sub_brain_rules=len(sub_brain["informal_rules"]),
     )
 
-    # Anthropic constraint: extended thinking is incompatible with forced
-    # tool_choice. Q&A benefits a lot from thinking (it's the WOW in the UI),
-    # so we keep thinking and use tool_choice="auto". The system prompt forces
-    # the model to call submit_answer — Opus complies ~100% of the time.
-    message = call_with_retry(
-        model=settings.model_qa,
-        fallback_model=settings.model_qa_fallback,
-        max_tokens=10000,
-        thinking={"type": "enabled", "budget_tokens": 4000},
-        system=[cached_system(QA_SYSTEM)],
-        tools=[SUBMIT_ANSWER_TOOL],
-        tool_choice={"type": "auto"},
-        messages=[{"role": "user", "content": user_blocks}],
+    # Sync Anthropic SDK in an async endpoint → run in threadpool to keep
+    # the event loop responsive (otherwise Render's health probe blocks
+    # and the worker gets recycled mid-call).
+    import asyncio
+    loop = asyncio.get_event_loop()
+    message = await loop.run_in_executor(
+        None,
+        lambda: call_with_retry(
+            model=settings.model_qa,
+            fallback_model=settings.model_qa_fallback,
+            max_tokens=10000,
+            thinking={"type": "enabled", "budget_tokens": 4000},
+            system=[cached_system(QA_SYSTEM)],
+            tools=[SUBMIT_ANSWER_TOOL],
+            tool_choice={"type": "auto"},
+            messages=[{"role": "user", "content": user_blocks}],
+        ),
     )
 
     answer = extract_tool_use(message, "submit_answer")
