@@ -1,6 +1,6 @@
 // Thin typed client for the Company Brain backend.
 
-import type { Answer, InterviewsResponse, SkillsFile } from "./types";
+import type { Answer, InterviewsResponse, SkillsFile, WebCallResponse } from "./types-backend";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
@@ -52,32 +52,11 @@ export async function getInterviews(organization_id?: string): Promise<Interview
   return request<InterviewsResponse>(`/api/interviews${qs}`);
 }
 
-export async function buildBrain(organization_id?: string): Promise<{ ok: boolean; processed: number }> {
-  return request("/api/build-brain", {
-    method: "POST",
-    body: JSON.stringify({ organization_id }),
-  });
-}
-
-export async function uploadOrgChart(
-  file: File,
-  organization_id: string
-): Promise<{ ok: boolean; people_loaded: number; total_in_brain: number }> {
-  const fd = new FormData();
-  fd.append("file", file);
-  fd.append("organization_id", organization_id);
-  fd.append("organization_name", organization_id);
-  // Don't set Content-Type — browser injects multipart boundary.
-  const res = await fetch(`${API_URL}/api/upload-org-chart`, { method: "POST", body: fd });
-  if (!res.ok) throw new ApiError(res.status, await res.text());
-  return res.json();
-}
-
-export async function initiateCall(
+export async function startWebCall(
   employee_id: string,
   organization_id?: string
-): Promise<{ ok: boolean; call_id: string; agent_id: string }> {
-  return request("/api/call/initiate", {
+): Promise<WebCallResponse> {
+  return request<WebCallResponse>("/api/call/web-initiate", {
     method: "POST",
     body: JSON.stringify({ employee_id, organization_id }),
   });

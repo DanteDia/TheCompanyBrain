@@ -10,7 +10,8 @@ import { UserSelector, useActiveUser } from "@/components/user-selector";
 import { AnswerCard } from "@/components/answer-card";
 import { ThinkingTrace } from "@/components/thinking-trace";
 import { Composer } from "@/components/composer";
-import { DEMO_QUERIES, SUGGESTED_QUERIES, matchDemoQuery, ORGANIZATION } from "@/lib/mock-data";
+import { SUGGESTED_QUERIES, ORGANIZATION } from "@/lib/mock-data";
+import { askBrain, getAskMode } from "@/lib/ask-router";
 import { t } from "@/lib/i18n";
 import type { ChatTurn, QAAnswer } from "@/lib/types";
 
@@ -41,23 +42,23 @@ export default function AskPage() {
     setTurns((t) => [...t, userTurn]);
     setThinking(true);
 
-    // Simular delay de extended thinking
-    await new Promise((r) => setTimeout(r, 2400));
-
-    const matchKey = matchDemoQuery(question);
+    // Real backend call (with mock fallback if backend unreachable, or if
+    // the URL has ?demo=1). askBrain never throws in auto mode.
     let answer: QAAnswer;
-
-    if (matchKey) {
-      answer = DEMO_QUERIES[matchKey];
-    } else {
-      // Fallback genérico
+    try {
+      const result = await askBrain(question, { user_email: user.email });
+      answer = result.answer;
+    } catch (err) {
+      // Live mode + backend down → surface the error
       answer = {
         answer:
-          "No encontré información específica sobre eso en el Brain todavía. ¿Querés probar con una de las preguntas sugeridas? Estamos en modo demo con datos sintéticos limitados.",
+          err instanceof Error
+            ? err.message
+            : "Error contactando al Brain. Probá ?demo=1 para usar datos mock.",
         answer_type: "unknown",
         entities_referenced: [],
         citations: [],
-        confidence: 0.3,
+        confidence: 0.2,
         insufficient_information: true,
         follow_up_suggestions: SUGGESTED_QUERIES.slice(0, 2),
       };

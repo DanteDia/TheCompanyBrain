@@ -369,6 +369,48 @@ async def api_initiate_call(req: InitiateCallRequest) -> dict[str, Any]:
     return {"ok": True, "call_id": result.get("call_id"), "agent_id": agent_id}
 
 
+@app.post("/api/call/web-initiate")
+async def api_initiate_web_call(req: InitiateCallRequest) -> dict[str, Any]:
+    """Create a Retell web call and return the URL to open in the browser.
+
+    Best path for live demos — no Twilio SIP setup needed. The user opens the
+    URL, grants mic permission, and the agent talks via WebRTC. When the
+    call ends, our /retell/webhook fires the same as a phone call would,
+    so the post-interview pipeline runs identically.
+    """
+    from backend.agents.interview_agent import (
+        create_or_update_agent,
+        initiate_web_call,
+    )
+
+    sf = _get_skills_file_or_404(req.organization_id)
+    person = sf.person(req.employee_id)
+    if not person:
+        raise HTTPException(404, "employee not found")
+
+    agent_id = settings.retell_agent_id
+    if not agent_id:
+        agent = create_or_update_agent(person.name)
+        agent_id = agent.get("agent_id", "")
+
+    result = initiate_web_call(
+        agent_id=agent_id,
+        employee_id=person.id,
+        employee_name=person.name,
+    )
+    call_id = result.get("call_id", "")
+    access_token = result.get("access_token", "")
+    # Retell-hosted call page (works in any modern browser, mic required):
+    call_url = f"https://app.retellai.com/conversation?call_id={call_id}&access_token={access_token}"
+    return {
+        "ok": True,
+        "call_id": call_id,
+        "agent_id": agent_id,
+        "access_token": access_token,
+        "call_url": call_url,
+    }
+
+
 # ─── Retell webhook ──────────────────────────────────────────────────────────
 
 

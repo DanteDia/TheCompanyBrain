@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { WebCallButton } from "@/components/web-call-button";
 import { INTERVIEWS, PEOPLE } from "@/lib/mock-data";
 
 export default function InterviewsPage() {
@@ -141,6 +142,7 @@ function InterviewCard({
                 <Phone className="h-3 w-3" />
                 {interview.status === "scheduled" ? "Reagendar" : "Agendar"}
               </Button>
+              <WebCallButton employee_id={person.id} />
             </div>
           )}
         </div>

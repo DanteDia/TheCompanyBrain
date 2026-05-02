@@ -135,3 +135,13 @@ export interface InterviewsResponse {
   interviews: InterviewSummary[];
   coverage: Coverage;
 }
+
+export interface WebCallResponse {
+  ok: boolean;
+  call_id: string;
+  agent_id: string;
+  access_token: string;
+  // The web-call URL the user opens in their browser to talk to the agent.
+  // Retell hosts the page; pass `?accessToken=...` when navigating.
+  call_url: string;
+}
