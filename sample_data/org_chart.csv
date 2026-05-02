@@ -1,0 +1,13 @@
+id,name,email,role,area,manager_id,phone
+ceo_01,Mariana Torres,mariana@bancodemo.test,CEO,Direccion,,+5491100000001
+cto_01,Juan Perez,juan@bancodemo.test,CTO,Tecnologia,ceo_01,+5491100000002
+vp_risk,Carlos Mendez,carlos@bancodemo.test,VP de Riesgo,Riesgos,ceo_01,+5491100000003
+cfo_01,Laura Gomez,laura@bancodemo.test,CFO,Finanzas,ceo_01,+5491100000004
+gte_credit,Ana Lopez,ana@bancodemo.test,Gerente de Creditos,Riesgos,vp_risk,+5491100000005
+gte_ops,Diego Ramirez,diego@bancodemo.test,Gerente de Operaciones,Operaciones,ceo_01,+5491100000006
+analyst_sr,Martin Suarez,martin@bancodemo.test,Analista Senior Creditos,Riesgos,gte_credit,+5491100000007
+analyst_jr,Diego Herrera,diego.h@bancodemo.test,Analista Creditos,Riesgos,gte_credit,+5491100000008
+account_off,Roberto Pascual,roberto@bancodemo.test,Oficial de Cuentas,Operaciones,gte_ops,+5491100000009
+backoffice,Sofia Mendez,sofia@bancodemo.test,Backoffice Operaciones,Operaciones,gte_ops,+5491100000010
+sysadmin,Tomas Ledesma,tomas@bancodemo.test,Sysadmin / IT,Tecnologia,cto_01,+5491100000011
+hr_lead,Valeria Rios,valeria@bancodemo.test,Lider de RRHH,RRHH,ceo_01,+5491100000012
