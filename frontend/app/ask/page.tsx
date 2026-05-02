@@ -1,146 +1,239 @@
 "use client";
 
-import { useState } from "react";
-import { Send, Loader2, Sparkles } from "lucide-react";
-import { ask, ApiError } from "@/lib/api";
-import type { Answer, FollowUpSuggestion } from "@/lib/types";
-import { AnswerCard } from "@/components/AnswerCard";
+import { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Sparkles } from "lucide-react";
+import { Logo } from "@/components/ui/logo";
+import { Avatar } from "@/components/ui/avatar";
+import { LocaleToggle, useLocale } from "@/components/locale-toggle";
+import { UserSelector, useActiveUser } from "@/components/user-selector";
+import { AnswerCard } from "@/components/answer-card";
+import { ThinkingTrace } from "@/components/thinking-trace";
+import { Composer } from "@/components/composer";
+import { DEMO_QUERIES, SUGGESTED_QUERIES, matchDemoQuery, ORGANIZATION } from "@/lib/mock-data";
+import { t } from "@/lib/i18n";
+import type { ChatTurn, QAAnswer } from "@/lib/types";
 
-interface Turn {
-  query: string;
-  answer?: Answer;
-  loading: boolean;
-  error?: string;
-}
-
-const SUGGESTED = [
-  "Necesito acceso a Salesforce, ¿a quién le pido?",
-  "¿Quién maneja los reclamos de clientes mayoristas?",
-  "¿Cuánto tarda realmente un alta de usuario en sistemas?",
-  "¿Cuál es la política de licencias por paternidad?",
-];
+const ADMIN_ROLES = ["CEO", "CTO", "VP de Riesgo", "CFO", "Líder de RRHH"];
 
 export default function AskPage() {
-  const [query, setQuery] = useState("");
-  const [thread, setThread] = useState<Turn[]>([]);
+  const [user, setUser] = useActiveUser();
+  const [locale, setLocale] = useLocale();
+  const [turns, setTurns] = useState<ChatTurn[]>([]);
+  const [thinking, setThinking] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-  async function submit(q: string) {
-    const text = q.trim();
-    if (!text) return;
-    setQuery("");
-    setThread((t) => [...t, { query: text, loading: true }]);
-    try {
-      const answer = await ask(text);
-      setThread((t) =>
-        t.map((turn, i) =>
-          i === t.length - 1 ? { ...turn, answer, loading: false } : turn
-        )
-      );
-    } catch (err) {
-      const msg =
-        err instanceof ApiError
-          ? `${err.status} — ${err.message}`
-          : err instanceof Error
-            ? err.message
-            : "Error desconocido";
-      setThread((t) =>
-        t.map((turn, i) =>
-          i === t.length - 1 ? { ...turn, loading: false, error: msg } : turn
-        )
-      );
+  const isAdmin = ADMIN_ROLES.some((r) => user.role.includes(r));
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
+  }, [turns, thinking]);
+
+  async function handleQuestion(question: string) {
+    const userTurn: ChatTurn = {
+      id: `u-${Date.now()}`,
+      role: "user",
+      content: question,
+      timestamp: Date.now(),
+    };
+    setTurns((t) => [...t, userTurn]);
+    setThinking(true);
+
+    // Simular delay de extended thinking
+    await new Promise((r) => setTimeout(r, 2400));
+
+    const matchKey = matchDemoQuery(question);
+    let answer: QAAnswer;
+
+    if (matchKey) {
+      answer = DEMO_QUERIES[matchKey];
+    } else {
+      // Fallback genérico
+      answer = {
+        answer:
+          "No encontré información específica sobre eso en el Brain todavía. ¿Querés probar con una de las preguntas sugeridas? Estamos en modo demo con datos sintéticos limitados.",
+        answer_type: "unknown",
+        entities_referenced: [],
+        citations: [],
+        confidence: 0.3,
+        insufficient_information: true,
+        follow_up_suggestions: SUGGESTED_QUERIES.slice(0, 2),
+      };
+    }
+
+    const asstTurn: ChatTurn = {
+      id: `a-${Date.now()}`,
+      role: "assistant",
+      content: "",
+      answer,
+      timestamp: Date.now(),
+    };
+
+    setThinking(false);
+    setTurns((t) => [...t, asstTurn]);
   }
 
   return (
-    <div className="mx-auto max-w-3xl space-y-8">
-      <header className="space-y-2">
-        <div className="flex items-center gap-2 text-xs uppercase tracking-wide text-accent">
-          <Sparkles className="h-3.5 w-3.5" />
-          Trojan Horse · onboarding
+    <div className="flex h-dvh flex-col bg-stone-50">
+      {/* Header */}
+      <header className="sticky top-0 z-30 border-b border-stone-200 bg-white/90 backdrop-blur-sm">
+        <div className="flex h-14 items-center justify-between px-4 md:px-6">
+          <div className="flex items-center gap-3">
+            <Logo />
+            <span className="hidden sm:inline-block text-stone-300">/</span>
+            <span className="hidden sm:inline-block text-sm text-stone-600 font-medium">
+              {ORGANIZATION.name}
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <LocaleToggle locale={locale} onChange={setLocale} />
+            <UserSelector user={user} onChange={setUser} />
+          </div>
         </div>
-        <h1 className="text-3xl font-semibold tracking-tight">
-          Preguntale al Brain.
-        </h1>
-        <p className="text-ink-600">
-          La respuesta sale de las entrevistas a los empleados — no de los docs.
-          Si no lo sabe, te dice a quién preguntarle.
-        </p>
       </header>
 
-      {thread.length === 0 && (
-        <section>
-          <div className="text-xs font-medium uppercase tracking-wide text-ink-500">
-            Probá con una de estas
-          </div>
-          <div className="mt-3 grid gap-2 sm:grid-cols-2">
-            {SUGGESTED.map((s) => (
-              <button
-                key={s}
-                onClick={() => submit(s)}
-                className="rounded-lg border border-ink-200 bg-white px-4 py-3 text-left text-sm text-ink-800 transition-all hover:border-accent hover:shadow-sm"
-              >
-                {s}
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
-
-      <section className="space-y-6">
-        {thread.map((turn, i) => (
-          <div key={i} className="space-y-3">
-            <div className="flex justify-end">
-              <div className="max-w-prose-wide rounded-2xl rounded-tr-sm bg-ink-900 px-4 py-2 text-sm text-white">
-                {turn.query}
-              </div>
+      {/* Conversation area */}
+      <div ref={scrollRef} className="flex-1 overflow-y-auto">
+        <div className="mx-auto max-w-3xl px-4 md:px-6 py-8 md:py-12">
+          {turns.length === 0 ? (
+            <EmptyState
+              userName={user.name.split(" ")[0]}
+              orgName={ORGANIZATION.name}
+              locale={locale}
+              onSelect={handleQuestion}
+            />
+          ) : (
+            <div className="space-y-6">
+              {turns.map((turn) =>
+                turn.role === "user" ? (
+                  <UserMessage key={turn.id} content={turn.content} userName={user.name} />
+                ) : (
+                  <AssistantMessage
+                    key={turn.id}
+                    answer={turn.answer!}
+                    isAdmin={isAdmin}
+                    onSuggestionClick={handleQuestion}
+                  />
+                )
+              )}
+              {thinking && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="rounded-lg border border-stone-200 bg-white px-5 py-4"
+                >
+                  <ThinkingTrace active />
+                </motion.div>
+              )}
             </div>
-            {turn.loading && (
-              <div className="flex items-center gap-2 text-sm text-ink-500">
-                <Loader2 className="h-4 w-4 animate-spin" />
-                Pensando...
-              </div>
-            )}
-            {turn.error && (
-              <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800">
-                {turn.error}
-              </div>
-            )}
-            {turn.answer && (
-              <AnswerCard
-                answer={turn.answer}
-                onFollowUp={(fu: FollowUpSuggestion) => submit(fu.text)}
-              />
-            )}
-          </div>
-        ))}
-      </section>
-
-      {/* Input — sticky to bottom on mobile, inline above on desktop */}
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          submit(query);
-        }}
-        className="sticky bottom-4 mt-6"
-      >
-        <div className="flex items-center gap-2 rounded-full border border-ink-200 bg-white px-4 py-2 shadow-sm focus-within:border-accent focus-within:ring-1 focus-within:ring-accent">
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="¿Qué querés saber?"
-            className="flex-1 bg-transparent py-2 text-sm text-ink-900 outline-none placeholder:text-ink-400"
-            autoFocus
-          />
-          <button
-            type="submit"
-            disabled={!query.trim()}
-            className="inline-flex items-center gap-1.5 rounded-full bg-accent px-3 py-1.5 text-sm font-medium text-white transition-all hover:bg-accent-dark disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            <Send className="h-3.5 w-3.5" />
-            Preguntar
-          </button>
+          )}
         </div>
-      </form>
+      </div>
+
+      {/* Composer */}
+      <div className="border-t border-stone-200 bg-white">
+        <div className="mx-auto max-w-3xl px-4 md:px-6 py-4">
+          <Composer
+            onSubmit={handleQuestion}
+            disabled={thinking}
+            placeholder={t("ask.composer_placeholder", locale)}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function EmptyState({
+  userName,
+  orgName,
+  locale,
+  onSelect,
+}: {
+  userName: string;
+  orgName: string;
+  locale: "es" | "en";
+  onSelect: (q: string) => void;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="text-center pt-4 md:pt-12"
+    >
+      <div className="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-50 mb-6">
+        <Sparkles className="h-6 w-6 text-accent-600" strokeWidth={1.5} />
+      </div>
+      <h1 className="text-3xl md:text-4xl tracking-tight font-medium text-stone-900">
+        Hola {userName}.
+      </h1>
+      <p className="mt-3 text-stone-600 max-w-md mx-auto text-base md:text-lg">
+        {locale === "es"
+          ? `Preguntame cualquier cosa sobre cómo funciona ${orgName}.`
+          : `Ask me anything about how ${orgName} works.`}
+      </p>
+
+      <div className="mt-10 grid gap-2 max-w-xl mx-auto text-left">
+        <div className="text-[11px] uppercase tracking-wider text-stone-400 mb-1 px-1">
+          {locale === "es" ? "Probá con esto" : "Try these"}
+        </div>
+        {SUGGESTED_QUERIES.map((q, i) => (
+          <motion.button
+            key={q}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 + i * 0.05 }}
+            onClick={() => onSelect(q)}
+            className="group flex items-center justify-between w-full text-left rounded-lg border border-stone-200 bg-white hover:border-stone-400 hover:shadow-sm transition-all px-4 py-3"
+          >
+            <span className="text-sm text-stone-700 group-hover:text-stone-900">
+              → {q}
+            </span>
+            <span className="text-xs text-stone-400 opacity-0 group-hover:opacity-100 transition-opacity font-mono">
+              ⏎
+            </span>
+          </motion.button>
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
+function UserMessage({ content, userName }: { content: string; userName: string }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 4 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="flex items-start gap-3 justify-end"
+    >
+      <div className="max-w-[80%] rounded-2xl rounded-tr-sm bg-stone-900 px-4 py-2.5 text-stone-50">
+        <p className="text-sm leading-relaxed">{content}</p>
+      </div>
+      <Avatar name={userName} size="sm" />
+    </motion.div>
+  );
+}
+
+function AssistantMessage({
+  answer,
+  isAdmin,
+  onSuggestionClick,
+}: {
+  answer: QAAnswer;
+  isAdmin: boolean;
+  onSuggestionClick: (q: string) => void;
+}) {
+  return (
+    <div>
+      <ThinkingTrace />
+      <AnswerCard
+        answer={answer}
+        isAdmin={isAdmin}
+        onSuggestionClick={onSuggestionClick}
+      />
     </div>
   );
 }
