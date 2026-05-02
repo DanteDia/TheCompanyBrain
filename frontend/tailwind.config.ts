@@ -4,38 +4,51 @@ const config: Config = {
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./lib/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
-      fontFamily: {
-        sans: ['ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
-      },
       colors: {
-        ink: {
-          50:  '#f7f7f6',
-          100: '#ededec',
-          200: '#d9d8d5',
-          300: '#b8b6b1',
-          400: '#8e8a83',
-          500: '#6f6b64',
-          600: '#55524c',
-          700: '#3d3b36',
-          800: '#26241f',
-          900: '#15140f',
-        },
+        // Acento terracotta tipo Anthropic
         accent: {
-          DEFAULT: '#cc785c',
-          dark:    '#a05a44',
-          light:   '#e6a585',
+          50: "#FEF3E2",
+          100: "#FDE4C0",
+          200: "#FAC88F",
+          300: "#F5A961",
+          400: "#EB8C40",
+          500: "#D2691E",
+          600: "#B25319",
+          700: "#A0522D",
+          800: "#7C3F1F",
+          900: "#5C2F18",
+          950: "#3D1F10",
         },
       },
-      maxWidth: {
-        'prose-wide': '72ch',
+      fontFamily: {
+        sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],
+        mono: ["var(--font-geist-mono)", "ui-monospace", "monospace"],
+      },
+      animation: {
+        "fade-in": "fadeIn 0.2s ease-out",
+        "slide-up": "slideUp 0.2s ease-out",
+        "pulse-soft": "pulseSoft 2s ease-in-out infinite",
+      },
+      keyframes: {
+        fadeIn: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+        slideUp: {
+          "0%": { opacity: "0", transform: "translateY(8px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        pulseSoft: {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.5" },
+        },
       },
     },
   },
-  plugins: [require('@tailwindcss/typography')],
+  plugins: [],
 };
+
 export default config;

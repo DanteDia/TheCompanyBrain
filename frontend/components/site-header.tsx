@@ -1,0 +1,40 @@
+"use client";
+
+import Link from "next/link";
+import { Logo } from "@/components/ui/logo";
+import { Button } from "@/components/ui/button";
+import { LocaleToggle, useLocale } from "@/components/locale-toggle";
+import { t } from "@/lib/i18n";
+
+export function SiteHeader() {
+  const [locale, setLocale] = useLocale();
+
+  return (
+    <header className="sticky top-0 z-30 border-b border-stone-200/80 bg-white/80 backdrop-blur-md">
+      <div className="mx-auto max-w-6xl px-6 md:px-8">
+        <div className="flex h-16 items-center justify-between">
+          <Logo />
+          <nav className="hidden md:flex items-center gap-7 text-sm text-stone-600">
+            <a href="#producto" className="hover:text-stone-900 transition-colors">
+              {t("nav.product", locale)}
+            </a>
+            <a href="#como-funciona" className="hover:text-stone-900 transition-colors">
+              {t("nav.how_it_works", locale)}
+            </a>
+            <a href="#integraciones" className="hover:text-stone-900 transition-colors">
+              {t("nav.integrations", locale)}
+            </a>
+          </nav>
+          <div className="flex items-center gap-2">
+            <LocaleToggle locale={locale} onChange={setLocale} />
+            <Link href="/ask">
+              <Button variant="default" size="sm">
+                {t("nav.demo", locale)}
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
