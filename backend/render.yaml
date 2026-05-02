@@ -1,0 +1,55 @@
+services:
+  - type: web
+    name: company-brain-backend
+    runtime: python
+    plan: starter
+    region: oregon
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    autoDeploy: true
+    branch: main
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12"
+      - key: ENVIRONMENT
+        value: production
+      - key: LOG_LEVEL
+        value: INFO
+      - key: DEFAULT_TIMEZONE
+        value: America/Argentina/Buenos_Aires
+      - key: MODEL_QA
+        value: claude-opus-4-7
+      - key: MODEL_QA_FALLBACK
+        value: claude-opus-4-6
+      - key: MODEL_EXTRACTOR
+        value: claude-opus-4-7
+      - key: MODEL_INTERVIEW
+        value: claude-sonnet-4-6
+      - key: MODEL_ROUTER
+        value: claude-haiku-4-5
+      - key: VOYAGE_MODEL
+        value: voyage-3-large
+      # Secrets configured via the Render dashboard (sync: false) so they aren't
+      # written to the repo:
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: VOYAGE_API_KEY
+        sync: false
+      - key: RETELL_API_KEY
+        sync: false
+      - key: RETELL_AGENT_ID
+        sync: false
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_FROM_NUMBER
+        sync: false
+      - key: GCP_SERVICE_ACCOUNT_JSON
+        sync: false
+      - key: CALENDAR_ORGANIZER_EMAIL
+        sync: false
