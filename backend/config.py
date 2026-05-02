@@ -23,8 +23,22 @@ class Settings(BaseSettings):
     default_timezone: str = "America/Argentina/Buenos_Aires"
     default_org_id: str = "banco_demo"
 
-    # ── Anthropic ────────────────────────────────────────────────────────────
+    # ── LLM provider switch ──────────────────────────────────────────────────
+    # "anthropic" → uses native Anthropic SDK (extended thinking + caching available)
+    # "openrouter" → uses OpenAI-compatible SDK at openrouter.ai (no thinking, no caching)
+    # "auto" → anthropic if ANTHROPIC_API_KEY is set, else openrouter
+    llm_provider: str = "auto"
+
+    # ── Anthropic native ─────────────────────────────────────────────────────
     anthropic_api_key: str = ""
+
+    # ── OpenRouter (alternative; works with the same model names) ────────────
+    openrouter_api_key: str = ""
+    openrouter_base_url: str = "https://openrouter.ai/api/v1"
+    openrouter_app_url: str = "https://github.com/DanteDia/TheCompanyBrain"
+    openrouter_app_name: str = "Company Brain"
+
+    # ── Models (work with both providers — names are normalized internally) ──
     model_qa: str = "claude-opus-4-7"
     model_qa_fallback: str = "claude-opus-4-6"
     model_extractor: str = "claude-opus-4-7"
@@ -60,6 +74,17 @@ class Settings(BaseSettings):
     @property
     def is_production(self) -> bool:
         return self.environment.lower() == "production"
+
+    @property
+    def resolved_provider(self) -> str:
+        """Resolve "auto" → anthropic if key present, else openrouter."""
+        if self.llm_provider != "auto":
+            return self.llm_provider.lower()
+        if self.anthropic_api_key:
+            return "anthropic"
+        if self.openrouter_api_key:
+            return "openrouter"
+        return "anthropic"  # will error at first call with a clear message
 
 
 @lru_cache(maxsize=1)

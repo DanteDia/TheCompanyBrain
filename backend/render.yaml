@@ -31,7 +31,11 @@ services:
         value: voyage-3-large
       # Secrets configured via the Render dashboard (sync: false) so they aren't
       # written to the repo:
+      - key: LLM_PROVIDER
+        value: auto
       - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: OPENROUTER_API_KEY
         sync: false
       - key: SUPABASE_URL
         sync: false
