@@ -52,12 +52,18 @@ class EvidenceSpan(BaseModel):
 
 
 class Person(BaseModel):
-    """An employee. Skeleton seeded from org_chart.csv, enriched per interview."""
+    """An employee. Skeleton seeded from org_chart.csv, enriched per interview.
+
+    Only `id` and `name` are strictly required — the extractor often surfaces
+    peripheral mentions ("Juan, the CTO") where role/area aren't in the
+    transcript. Those fields get filled in when that person is interviewed
+    themselves or merged with the org_chart.
+    """
 
     id: str = Field(..., description='stable id, e.g. "ana_lopez"')
     name: str
-    role: str
-    area: str
+    role: str = ""
+    area: str = ""
     email: Optional[str] = None
     phone: Optional[str] = None
     manager_id: Optional[str] = None
@@ -117,7 +123,7 @@ class Process(BaseModel):
 
     id: str
     name: str
-    description: str
+    description: str = ""
     owner_id: Optional[str] = None
     participants: list[str] = Field(default_factory=list)
     related_tools: list[str] = Field(default_factory=list)
