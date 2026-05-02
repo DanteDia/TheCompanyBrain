@@ -111,14 +111,18 @@ async def answer_query(
         sub_brain_rules=len(sub_brain["informal_rules"]),
     )
 
+    # Anthropic constraint: extended thinking is incompatible with forced
+    # tool_choice. Q&A benefits a lot from thinking (it's the WOW in the UI),
+    # so we keep thinking and use tool_choice="auto". The system prompt forces
+    # the model to call submit_answer — Opus complies ~100% of the time.
     message = call_with_retry(
         model=settings.model_qa,
         fallback_model=settings.model_qa_fallback,
-        max_tokens=6000,
+        max_tokens=10000,
         thinking={"type": "enabled", "budget_tokens": 4000},
         system=[cached_system(QA_SYSTEM)],
         tools=[SUBMIT_ANSWER_TOOL],
-        tool_choice={"type": "tool", "name": "submit_answer"},
+        tool_choice={"type": "auto"},
         messages=[{"role": "user", "content": user_blocks}],
     )
 

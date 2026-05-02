@@ -25,6 +25,8 @@ from datetime import datetime, timezone
 from io import StringIO
 from typing import Any, Optional
 
+from pathlib import Path
+
 from fastapi import (
     BackgroundTasks,
     FastAPI,
@@ -137,6 +139,64 @@ async def upload_org_chart(
 
 class BuildBrainRequest(BaseModel):
     organization_id: str = Field(default_factory=lambda: settings.default_org_id)
+
+
+@app.post("/api/seed-from-sample")
+async def seed_from_sample(background: BackgroundTasks) -> dict[str, Any]:
+    """Process the bundled sample_data/ in the background → Skills File in Supabase.
+
+    Returns 202 immediately. Runs ~90s in background (3 Opus calls). Poll
+    /api/skills-file to check when it's done.
+
+    Idempotent — re-running merges with existing Skills File.
+    """
+    background.add_task(_seed_from_sample_bg)
+    return {"ok": True, "queued": True, "note": "Skills File will be ready in ~90s. Poll /api/skills-file."}
+
+
+async def _seed_from_sample_bg() -> None:
+    import json as _json
+
+    from backend.utils.org_chart_loader import load_org_chart
+
+    repo_root = Path(__file__).resolve().parents[1]
+    org_chart = repo_root / "sample_data" / "org_chart.csv"
+    interviews_dir = repo_root / "sample_data" / "interviews"
+
+    sb = _supabase()
+    sf = sb.load_skills_file(settings.default_org_id) or SkillsFile(
+        organization_id=settings.default_org_id,
+        organization_name="Banco Demo",
+        generated_at=datetime.now(timezone.utc),
+    )
+    if not sf.people:
+        people = load_org_chart(org_chart)
+        merge_extraction_into_skills_file(sf, people=people)
+        sf.coverage.total_employees = len(sf.people)
+
+    for path in sorted(interviews_dir.glob("interview_*.json")):
+        payload = _json.loads(path.read_text(encoding="utf-8"))
+        existing = sf.person(payload.get("employee_id", ""))
+        skeleton = (
+            existing.model_dump(include={"id", "name", "role", "area", "email"})
+            if existing
+            else {"id": payload.get("employee_id", ""), "name": payload.get("employee_name", "")}
+        )
+        await process_interview(
+            call_id=payload["call_id"],
+            employee_skeleton=skeleton,
+            transcript=payload["transcript"],
+            skills_file=sf,
+        )
+        sb.save_skills_file(sf)
+        sb.save_interview(
+            call_id=payload["call_id"],
+            org_id=settings.default_org_id,
+            employee_id=payload.get("employee_id", ""),
+            transcript=payload["transcript"],
+            duration_sec=float(payload.get("duration_sec", 0)),
+            completed_at=payload.get("completed_at"),
+        )
 
 
 @app.post("/api/build-brain")
