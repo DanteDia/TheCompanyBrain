@@ -142,19 +142,16 @@ class BuildBrainRequest(BaseModel):
 
 
 @app.post("/api/seed-from-sample")
-async def seed_from_sample(background: BackgroundTasks) -> dict[str, Any]:
-    """Process the bundled sample_data/ in the background → Skills File in Supabase.
+async def seed_from_sample(only: Optional[str] = None) -> dict[str, Any]:
+    """Process bundled sample_data/ → Skills File in Supabase.
 
-    Returns 202 immediately. Runs ~90s in background (3 Opus calls). Poll
-    /api/skills-file to check when it's done.
+    SYNCHRONOUS — returns after the work is done. Caller can pass
+    ?only=ana_lopez|tomas_ledesma|roberto_pascual to process one transcript
+    at a time. With no `only`, processes whichever isn't yet done (one per call).
 
-    Idempotent — re-running merges with existing Skills File.
+    Why one-at-a-time: Render starter plans recycle workers on long-running
+    background tasks. Sync per-call eliminates that. Each call ~30s.
     """
-    background.add_task(_seed_from_sample_bg)
-    return {"ok": True, "queued": True, "note": "Skills File will be ready in ~90s. Poll /api/skills-file."}
-
-
-async def _seed_from_sample_bg() -> None:
     import json as _json
 
     from backend.utils.org_chart_loader import load_org_chart
@@ -169,34 +166,78 @@ async def _seed_from_sample_bg() -> None:
         organization_name="Banco Demo",
         generated_at=datetime.now(timezone.utc),
     )
+    seeded_org_chart = False
     if not sf.people:
         people = load_org_chart(org_chart)
         merge_extraction_into_skills_file(sf, people=people)
         sf.coverage.total_employees = len(sf.people)
-
-    for path in sorted(interviews_dir.glob("interview_*.json")):
-        payload = _json.loads(path.read_text(encoding="utf-8"))
-        existing = sf.person(payload.get("employee_id", ""))
-        skeleton = (
-            existing.model_dump(include={"id", "name", "role", "area", "email"})
-            if existing
-            else {"id": payload.get("employee_id", ""), "name": payload.get("employee_name", "")}
-        )
-        await process_interview(
-            call_id=payload["call_id"],
-            employee_skeleton=skeleton,
-            transcript=payload["transcript"],
-            skills_file=sf,
-        )
+        seeded_org_chart = True
         sb.save_skills_file(sf)
-        sb.save_interview(
-            call_id=payload["call_id"],
-            org_id=settings.default_org_id,
-            employee_id=payload.get("employee_id", ""),
-            transcript=payload["transcript"],
-            duration_sec=float(payload.get("duration_sec", 0)),
-            completed_at=payload.get("completed_at"),
-        )
+
+    # Pick the transcript: explicit or first unprocessed
+    candidates = sorted(interviews_dir.glob("interview_*.json"))
+    target_path = None
+    if only:
+        for p in candidates:
+            if only in p.name:
+                target_path = p
+                break
+        if not target_path:
+            return {"ok": False, "reason": f"no interview matches {only!r}"}
+    else:
+        # Process the first one whose employee has no last_interviewed_at
+        for p in candidates:
+            payload = _json.loads(p.read_text(encoding="utf-8"))
+            person = sf.person(payload.get("employee_id", ""))
+            if not person or not person.last_interviewed_at:
+                target_path = p
+                break
+
+    if not target_path:
+        return {
+            "ok": True,
+            "done": True,
+            "seeded_org_chart": seeded_org_chart,
+            "message": "All transcripts already processed.",
+            "coverage": sf.coverage.model_dump(),
+        }
+
+    payload = _json.loads(target_path.read_text(encoding="utf-8"))
+    employee_id = payload.get("employee_id", "")
+    existing = sf.person(employee_id)
+    skeleton = (
+        existing.model_dump(include={"id", "name", "role", "area", "email"})
+        if existing
+        else {"id": employee_id, "name": payload.get("employee_name", "")}
+    )
+
+    result = await process_interview(
+        call_id=payload["call_id"],
+        employee_skeleton=skeleton,
+        transcript=payload["transcript"],
+        skills_file=sf,
+    )
+    sb.save_skills_file(sf)
+    sb.save_interview(
+        call_id=payload["call_id"],
+        org_id=settings.default_org_id,
+        employee_id=employee_id,
+        transcript=payload["transcript"],
+        duration_sec=float(payload.get("duration_sec", 0)),
+        completed_at=payload.get("completed_at"),
+    )
+
+    extracted = result["extraction"]
+    return {
+        "ok": True,
+        "processed": target_path.name,
+        "seeded_org_chart": seeded_org_chart,
+        "extracted": {k: len(extracted.get(k, [])) for k in [
+            "people", "tools", "access_paths", "processes",
+            "ticket_types", "glossary", "informal_rules", "relationships"
+        ]},
+        "coverage": sf.coverage.model_dump(),
+    }
 
 
 @app.post("/api/build-brain")

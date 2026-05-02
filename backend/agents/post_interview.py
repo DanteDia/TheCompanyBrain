@@ -128,10 +128,12 @@ async def process_interview(
     # Anthropic constraint: extended thinking is incompatible with forced
     # tool_choice. Extraction is a structured pass — we don't need thinking,
     # we need a clean tool call. So: force the tool, no thinking.
+    # max_tokens 6000 keeps each call <30s — fits in Render request window
+    # and reduces tail latency that triggers worker recycles on starter plan.
     message = call_with_retry(
         model=settings.model_extractor,
         fallback_model=settings.model_qa_fallback,
-        max_tokens=12000,
+        max_tokens=6000,
         system=[cached_system(POST_INTERVIEW_SYSTEM)],
         tools=[EXTRACT_FROM_INTERVIEW_TOOL],
         tool_choice={"type": "tool", "name": "extract_from_interview"},
