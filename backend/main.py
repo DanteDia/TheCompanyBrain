@@ -400,14 +400,16 @@ async def api_initiate_web_call(req: InitiateCallRequest) -> dict[str, Any]:
     )
     call_id = result.get("call_id", "")
     access_token = result.get("access_token", "")
-    # Retell-hosted call page (works in any modern browser, mic required):
-    call_url = f"https://app.retellai.com/conversation?call_id={call_id}&access_token={access_token}"
+    # NOTE: Retell does NOT provide a public hosted call page. The previous
+    # `https://app.retellai.com/conversation?...` URL is the internal Retell
+    # dashboard and is not reachable for end users (ERR_TUNNEL_CONNECTION_FAILED).
+    # The frontend must instantiate `retell-client-js-sdk` and call
+    # `client.startCall({ accessToken })` from inside our own modal/page.
     return {
         "ok": True,
         "call_id": call_id,
         "agent_id": agent_id,
         "access_token": access_token,
-        "call_url": call_url,
     }
 
 
