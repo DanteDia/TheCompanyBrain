@@ -41,6 +41,10 @@ class Settings(BaseSettings):
     # ── Models (work with both providers — names are normalized internally) ──
     model_qa: str = "claude-opus-4-7"
     model_qa_fallback: str = "claude-opus-4-6"
+    # Fast Q&A model for low-latency channels (Slack, WhatsApp). ~3x faster
+    # than Opus, no extended thinking. Used when answer_query(fast=True).
+    model_qa_fast: str = "claude-haiku-4-5"
+    model_qa_fast_fallback: str = "claude-sonnet-4-6"
     model_extractor: str = "claude-opus-4-7"
     model_interview: str = "claude-sonnet-4-6"
     model_router: str = "claude-haiku-4-5"

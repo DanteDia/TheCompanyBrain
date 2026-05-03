@@ -81,8 +81,18 @@ async def answer_query(
     query: str,
     skills_file: SkillsFile,
     cache_key: str = "v1",
+    fast: bool = False,
 ) -> dict[str, Any]:
-    """Answer a natural-language query against the Skills File."""
+    """Answer a natural-language query against the Skills File.
+
+    `fast=True` switches to Haiku and drops extended thinking — used for
+    low-latency channels like Slack DMs where 1.5s feels right and 8s
+    feels broken. Quality dip is small for typical onboarding queries
+    ("¿a quién le pido acceso a X?", "¿quién es dueño de Y?") since the
+    answer comes mostly from the sub-brain we hand to the model.
+    Use the default (Opus + thinking) for the web UI where users wait
+    happily for a deeper answer.
+    """
     selection = await route_entities(skills_file, query)
     sub_brain = build_sub_skills_file(skills_file, selection)
 
@@ -109,7 +119,22 @@ async def answer_query(
         sub_brain_people=len(sub_brain["people"]),
         sub_brain_tools=len(sub_brain["tools"]),
         sub_brain_rules=len(sub_brain["informal_rules"]),
+        fast=fast,
     )
+
+    # Pick model + features. Haiku doesn't support extended thinking, so we
+    # drop it in fast mode. Lower max_tokens too — answers from Slack are
+    # typically <500 tokens of structured output anyway.
+    if fast:
+        model = settings.model_qa_fast
+        fallback = settings.model_qa_fast_fallback
+        max_tokens = 2000
+        thinking_kw: dict[str, Any] = {}
+    else:
+        model = settings.model_qa
+        fallback = settings.model_qa_fallback
+        max_tokens = 10000
+        thinking_kw = {"thinking": {"type": "enabled", "budget_tokens": 4000}}
 
     # Sync Anthropic SDK in an async endpoint → run in threadpool to keep
     # the event loop responsive (otherwise Render's health probe blocks
@@ -119,10 +144,10 @@ async def answer_query(
     message = await loop.run_in_executor(
         None,
         lambda: call_with_retry(
-            model=settings.model_qa,
-            fallback_model=settings.model_qa_fallback,
-            max_tokens=10000,
-            thinking={"type": "enabled", "budget_tokens": 4000},
+            model=model,
+            fallback_model=fallback,
+            max_tokens=max_tokens,
+            **thinking_kw,
             system=[cached_system(QA_SYSTEM)],
             tools=[SUBMIT_ANSWER_TOOL],
             tool_choice={"type": "auto"},
