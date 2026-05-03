@@ -1,0 +1,82 @@
+id,name,email,role,area,manager_id,phone
+p001,Romina Cavallo,romina.cavallo@bind.com.ar,CEO,Direccion Grupo,,+549112001001
+p002,Felipe Iriarte,felipe.iriarte@bind.com.ar,Chairman Grupo BIND,Presidencia Grupo,p001,+549112001002
+p003,Isabella Tagle,isabella.tagle@bind.com.ar,CEO Bind Inversiones,Bind Inversiones,p002,+549112001003
+p004,Hernan Wong,hernan.wong@bind.com.ar,Director,Direccion Grupo,p002,+549112001004
+p005,Nicolas Donsanti,nicolas.donsanti@bind.com.ar,Director,Direccion Grupo,p002,+549112001005
+p006,Amparo Echeverria,amparo.echeverria@bind.com.ar,Gerente General,Direccion General,p002,+549112001006
+p007,Diego Mendoza,diego.mendoza@bind.com.ar,CEO Bind Seguros,Bind Seguros,p002,+549112001007
+p008,Sebastian Garcia,sebastian.garcia@bind.com.ar,Director,Direccion Grupo,p002,+549112001008
+p009,Sara Frangi,sara.frangi@bind.com.ar,Director,Direccion Grupo,p002,+549112001009
+p010,Diego Zorrilla,diego.zorrilla@bind.com.ar,Director,Direccion Grupo,p002,+549112001010
+p011,Ricardo Wong,ricardo.wong@bind.com.ar,CEO Bind Pagos,Bind Pagos,p002,+549112001011
+p012,Paloma Fonseca,paloma.fonseca@bind.com.ar,Presidente Bind Garantias y Directora de Grupo Bind,Bind Garantias,p002,+549112001012
+p013,Lautaro Donsanti,lautaro.donsanti@bind.com.ar,Presidente,Direccion Grupo,p002,+549112001013
+p014,Felipe Acevedo,felipe.acevedo@bind.com.ar,Adscripto a la Presidencia,Presidencia Grupo,p002,+549112001014
+p020,Luciana Fernandez,luciana.fernandez@bind.com.ar,Embajadora de Grupo Bind,Bind Inversiones,p003,+549112001020
+p021,Cesar Mendizabal,cesar.mendizabal@bind.com.ar,CIO,Bind Inversiones,p003,+549112001021
+p022,Gonzalo Espina,gonzalo.espina@bind.com.ar,Head Compliance & PLD,Bind Inversiones,p003,+549112001022
+p023,Cesar Paz,cesar.paz@bind.com.ar,COO Bind Inversiones,Bind Inversiones,p003,+549112001023
+p024,Nicolas Zaccone,nicolas.zaccone@bind.com.ar,Gerente Comercial Inversiones,Bind Inversiones,p003,+549112001024
+p025,Valeria Wachsman,valeria.wachsman@bind.com.ar,Head Trader,Bind Inversiones,p003,+549112001025
+p026,Lourdes Frangi,lourdes.frangi@bind.com.ar,Head de Mercado de Capitales,Bind Inversiones,p003,+549112001026
+p030,Bruno Falcon,bruno.falcon@bind.com.ar,Gerente de Creditos,Riesgos,p005,+549112001030
+p031,Belen Velez,belen.velez@bind.com.ar,Gte. de Creditos Individuos,Riesgos,p005,+549112001031
+p032,Esteban Zaccone,esteban.zaccone@bind.com.ar,Gerente,Riesgos,p005,+549112001032
+p040,Sofia Xirau,sofia.xirau@bind.com.ar,Gerente de Administracion,Administracion,p006,+549112001040
+p041,Octavio Higueras,octavio.higueras@bind.com.ar,Secretaria de Presidencia,Direccion General,p006,+549112001041
+p042,Rocio Bordon,rocio.bordon@bind.com.ar,Head Banking as a Service,Banking as a Service,p006,+549112001042
+p043,Magdalena Iturbe,magdalena.iturbe@bind.com.ar,Gerencia de Relaciones Institucionales y RSE,RRII y RSE,p006,+549112001043
+p044,Martin Garcia,martin.garcia@bind.com.ar,Asistente de Presidencia,Direccion General,p006,+549112001044
+p045,Octavio Larrain,octavio.larrain@bind.com.ar,Gerente Ejecutivo de Finanzas,Finanzas,p006,+549112001045
+p046,Maximiliano Otamendi,maximiliano.otamendi@bind.com.ar,Head de Diseño de Productos y Negocios,Productos,p006,+549112001046
+p047,Constanza Mendizabal,constanza.mendizabal@bind.com.ar,Team Leader Banca Empresa,Banca Empresa,p006,+549112001047
+p048,Belen Xavier,belen.xavier@bind.com.ar,Jefe de Compras,Compras,p006,+549112001048
+p049,Luciana Yapura,luciana.yapura@bind.com.ar,Secretaria de Presidencia,Direccion General,p006,+549112001049
+p050,Alejo Dominguez,alejo.dominguez@bind.com.ar,Gerente,Operaciones,p006,+549112001050
+p051,Agustina Jauregui,agustina.jauregui@bind.com.ar,Gerente Ejecutivo de Tecnologia y Sistemas,Tecnologia,p006,+549112001051
+p052,Olivia Yanez,olivia.yanez@bind.com.ar,Gerente de RRHH,RRHH,p006,+549112001052
+p060,Wenceslao Iriarte,wenceslao.iriarte@bind.com.ar,Gerente General Bind Seguros,Bind Seguros,p007,+549112001060
+p061,Luciana Lange,luciana.lange@bind.com.ar,Principal de Venture Capital,Bind Seguros,p007,+549112001061
+p070,Constanza Lozano,constanza.lozano@bind.com.ar,Gerente de PLAFT y Cumplimiento,Compliance,p008,+549112001070
+p071,Zaira Fonseca,zaira.fonseca@bind.com.ar,Gerente de Seguridad de la Informacion,Seguridad,p008,+549112001071
+p072,Jeronimo Hernandez,jeronimo.hernandez@bind.com.ar,Gerente de Riesgos y Control de Creditos,Riesgos,p008,+549112001072
+p073,Maximiliano Echeverria,maximiliano.echeverria@bind.com.ar,Gerente de Auditoria,Auditoria,p008,+549112001073
+p080,Maria Cabrera,maria.cabrera@bind.com.ar,Jefe de Operaciones,Operaciones,p010,+549112001080
+p090,Agustina Iturbe,agustina.iturbe@bind.com.ar,Analista de Operaciones Jr,Bind Pagos,p011,+549112001090
+p091,Sebastian Albornoz,sebastian.albornoz@bind.com.ar,Lider Operaciones Bind Pagos,Bind Pagos,p011,+549112001091
+p092,Maria Espina,maria.espina@bind.com.ar,Gerente Comercial Bind Pagos,Bind Pagos,p011,+549112001092
+p100,Ramiro Bermejo,ramiro.bermejo@bind.com.ar,Gerente de Administracion y Finanzas Garantias,Bind Garantias,p012,+549112001100
+p101,Belen Urquiza,belen.urquiza@bind.com.ar,CEO Bind Garantias,Bind Garantias,p012,+549112001101
+p102,Bruno Tagle,bruno.tagle@bind.com.ar,Gerente de Legales y Operaciones,Bind Garantias,p012,+549112001102
+p103,Ignacio Zorrilla,ignacio.zorrilla@bind.com.ar,Gerente de Innovacion y Transformacion Digital,Bind Garantias,p012,+549112001103
+p104,Wenceslao Kuhl,wenceslao.kuhl@bind.com.ar,Gerente de Monetizadores,Bind Garantias,p012,+549112001104
+p105,Damian Fernandez,damian.fernandez@bind.com.ar,Gerente de Creditos Garantias,Bind Garantias,p012,+549112001105
+p110,Damian Cabrera,damian.cabrera@bind.com.ar,Comercial,Bind Inversiones,p024,+549112001110
+p111,Rocio Fonseca,rocio.fonseca@bind.com.ar,Ejecutivo de Inversiones,Bind Inversiones,p024,+549112001111
+p112,Matias Solano,matias.solano@bind.com.ar,Asistente Comercial,Bind Inversiones,p024,+549112001112
+p113,Ramiro Mendoza,ramiro.mendoza@bind.com.ar,Oficial Comercial Juridico,Bind Inversiones,p024,+549112001113
+p114,Florencia Quesada,florencia.quesada@bind.com.ar,Oficial Comercial Individuos,Bind Inversiones,p024,+549112001114
+p115,Gonzalo Wagner,gonzalo.wagner@bind.com.ar,Comercial,Bind Inversiones,p024,+549112001115
+p116,Amparo Eyras,amparo.eyras@bind.com.ar,Ejecutivo de Inversiones,Bind Inversiones,p024,+549112001116
+p117,Camila Aceval,camila.aceval@bind.com.ar,Comercial,Bind Inversiones,p024,+549112001117
+p118,Constanza Eyras,constanza.eyras@bind.com.ar,"Jefe de Productos, Gestion de datos y Marketing",Bind Inversiones,p024,+549112001118
+p119,Emiliano Urzua,emiliano.urzua@bind.com.ar,Lider de Negocios Digitales,Bind Inversiones,p024,+549112001119
+p120,Renata Xirau,renata.xirau@bind.com.ar,Aprendiz,Bind Inversiones,p024,+549112001120
+p130,Federico Quesada,federico.quesada@bind.com.ar,Responsable de Conciliaciones y Operaciones,Bind Pagos,p091,+549112001130
+p131,Wenceslao Lozano,wenceslao.lozano@bind.com.ar,Soporte Operativo,Bind Pagos,p091,+549112001131
+p132,Cesar Quesada,cesar.quesada@bind.com.ar,Analista,Bind Pagos,p091,+549112001132
+p133,Octavio Gomez,octavio.gomez@bind.com.ar,Auxiliar Administrativa,Bind Pagos,p091,+549112001133
+p134,Luciana Jorge,luciana.jorge@bind.com.ar,Team Lider Mesa de Ayuda,Bind Pagos,p091,+549112001134
+p135,Mariana Kuhl,mariana.kuhl@bind.com.ar,Responsable de Mesa de Ayuda,Bind Pagos,p091,+549112001135
+p136,Sara Zamudio,sara.zamudio@bind.com.ar,Lider QA,Bind Pagos,p091,+549112001136
+p137,Sara Paz,sara.paz@bind.com.ar,Soporte Operaciones y Compliance,Bind Pagos,p091,+549112001137
+p138,Gabriela Rosales,gabriela.rosales@bind.com.ar,Soporte de MDA de Bind PSP,Bind Pagos,p091,+549112001138
+p139,Olivia Carrizo,olivia.carrizo@bind.com.ar,Analista de Conciliaciones,Bind Pagos,p091,+549112001139
+p140,Gonzalo Yapura,gonzalo.yapura@bind.com.ar,Lider de Proyectos de Medios de Pago,Bind Pagos,p091,+549112001140
+p141,Luciana Wong,luciana.wong@bind.com.ar,Analista,Bind Pagos,p091,+549112001141
+p142,Vicente Acevedo,vicente.acevedo@bind.com.ar,Analista Contable,Bind Pagos,p091,+549112001142
+p143,Mateo Sanguinetti,mateo.sanguinetti@bind.com.ar,Soporte Mesa de Ayuda,Bind Pagos,p091,+549112001143
+p144,Malena Beltran,malena.beltran@bind.com.ar,Soporte Operativo,Bind Pagos,p091,+549112001144
+p145,Romina Xavier,romina.xavier@bind.com.ar,Soporte Operativo,Bind Pagos,p091,+549112001145
+p146,Santiago Hidalgo,santiago.hidalgo@bind.com.ar,Analista,Bind Pagos,p091,+549112001146
