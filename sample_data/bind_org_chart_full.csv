@@ -208,3 +208,130 @@ p415,Paula Wachsman,paula.wachsman@bind.com.ar,Analista PLAFT,Compliance,p226,+5
 p430,Walter Higueras,walter.higueras@bind.com.ar,Gerente de Contabilidad,Administracion,p040,+549110010430
 p431,Santiago Hidalgo,santiago.hidalgo@bind.com.ar,Responsable Ctas a Pagar,Administracion,p040,+549110010431
 p432,Jeronimo Zamudio,jeronimo.zamudio@bind.com.ar,Gerente de Empresas Vinculadas,Administracion,p040,+549110010432
+p433,Tobias Martinez,tobias.martinez@bind.com.ar,Jefe de Satelites y RRII,Tecnologia,p300,+549110000433
+p434,Mia Costa,mia.costa@bind.com.ar,Jefe de CPD,Tecnologia,p300,+549110000434
+p435,Claudio Casas,claudio.casas@bind.com.ar,Jefe de Servicios y Cash,Tecnologia,p300,+549110000435
+p436,Joaquin Barrios,joaquin.barrios@bind.com.ar,Jefe de Mesa de Ayuda y Microinformatica,Tecnologia,p300,+549110000436
+p437,Florencia Sanchez,florencia.sanchez@bind.com.ar,Jefe de Infraestructura y Aplicaciones,Tecnologia,p300,+549110000437
+p438,Marco Guerra,marco.guerra@bind.com.ar,Jefe de Satelites de Negocio,Tecnologia,p300,+549110000438
+p439,Claudio Ramirez,claudio.ramirez@bind.com.ar,Jefe de Desarrollo Bantotal,Tecnologia,p300,+549110000439
+p440,Beatriz Martinez,beatriz.martinez@bind.com.ar,Analista Satelites RRII,Tecnologia,p433,+549110000440
+p441,Lucas Forni,lucas.forni@bind.com.ar,Analista Satelites RRII,Tecnologia,p433,+549110000441
+p442,Angel Martinez,angel.martinez@bind.com.ar,Analista Satelites RRII,Tecnologia,p433,+549110000442
+p443,Andrea Costa,andrea.costa@bind.com.ar,Analista Satelites RRII,Tecnologia,p433,+549110000443
+p444,Antonia Otero,antonia.otero@bind.com.ar,Supervisor CPD,Tecnologia,p434,+549110000444
+p445,Camilo Manzano,camilo.manzano@bind.com.ar,Administrador de BackUp,Tecnologia,p434,+549110000445
+p446,Damian Toledo,damian.toledo@bind.com.ar,Implementador,Tecnologia,p434,+549110000446
+p447,Silvia Carballo,silvia.carballo@bind.com.ar,Operador CPD,Tecnologia,p434,+549110000447
+p448,Federico Palacios,federico.palacios@bind.com.ar,Operador CPD,Tecnologia,p434,+549110000448
+p449,Benjamin Bertolucci,benjamin.bertolucci@bind.com.ar,Supervisor CPD Nocturno,Tecnologia,p434,+549110000449
+p450,Andres Carballo,andres.carballo@bind.com.ar,Analista de Servicios y Cash,Tecnologia,p435,+549110000450
+p451,Ezequiel Pereyra,ezequiel.pereyra@bind.com.ar,Analista Mesa de Ayuda Senior,Tecnologia,p436,+549110000451
+p452,Romina Forni,romina.forni@bind.com.ar,Analista Mesa de Ayuda,Tecnologia,p436,+549110000452
+p453,Mariana Marquez,mariana.marquez@bind.com.ar,Analista Mesa de Ayuda,Tecnologia,p436,+549110000453
+p454,Benjamin Yebra,benjamin.yebra@bind.com.ar,Analista Mesa de Ayuda,Tecnologia,p436,+549110000454
+p455,Claudio Luna,claudio.luna@bind.com.ar,Analista Microinformatica,Tecnologia,p436,+549110000455
+p456,Silvia Marquez,silvia.marquez@bind.com.ar,Analista Microinformatica,Tecnologia,p436,+549110000456
+p457,Marco Jimenez,marco.jimenez@bind.com.ar,Administrador de Telefonia,Tecnologia,p436,+549110000457
+p458,Mateo Larroude,mateo.larroude@bind.com.ar,Analista de Soporte de Aplicaciones,Tecnologia,p436,+549110000458
+p459,Walter Pinto,walter.pinto@bind.com.ar,Analista MDA Junior,Tecnologia,p436,+549110000459
+p460,Mariana Vazquez,mariana.vazquez@bind.com.ar,DBA Senior,Tecnologia,p437,+549110000460
+p461,Walter Iglesias,walter.iglesias@bind.com.ar,DBA,Tecnologia,p437,+549110000461
+p462,Cesar Rocca,cesar.rocca@bind.com.ar,SysAdmin Linux,Tecnologia,p437,+549110000462
+p463,Mia Luna,mia.luna@bind.com.ar,SysAdmin Windows y Virtualizacion,Tecnologia,p437,+549110000463
+p464,Claudio Manzano,claudio.manzano@bind.com.ar,Administrador de Tecnologia,Tecnologia,p437,+549110000464
+p465,Hernan Vera,hernan.vera@bind.com.ar,Lider IBMi,Tecnologia,p437,+549110000465
+p466,Florencia Espinoza,florencia.espinoza@bind.com.ar,Administrador de Storage,Tecnologia,p437,+549110000466
+p467,Felipe Blanco,felipe.blanco@bind.com.ar,Administrador de Redes,Tecnologia,p437,+549110000467
+p468,Diego Forni,diego.forni@bind.com.ar,Analista Satelites de Negocio,Tecnologia,p438,+549110000468
+p469,Hernan Villanueva,hernan.villanueva@bind.com.ar,Analista Satelites de Negocio,Tecnologia,p438,+549110000469
+p470,Silvia Villanueva,silvia.villanueva@bind.com.ar,Analista Satelites de Negocio,Tecnologia,p438,+549110000470
+p471,Matias Maidana,matias.maidana@bind.com.ar,Analista Satelites de Negocio,Tecnologia,p438,+549110000471
+p472,Lucas Cruz,lucas.cruz@bind.com.ar,Desarrollador Bantotal Senior,Tecnologia,p439,+549110000472
+p473,Claudio Marquez,claudio.marquez@bind.com.ar,Desarrollador Bantotal,Tecnologia,p439,+549110000473
+p474,Angel Cruz,angel.cruz@bind.com.ar,Desarrollador Bantotal,Tecnologia,p439,+549110000474
+p475,Julieta Rocca,julieta.rocca@bind.com.ar,Analista QA Bantotal,Tecnologia,p439,+549110000475
+p476,Jimena Sanchez,jimena.sanchez@bind.com.ar,Analista PMO,Tecnologia,p301,+549110000476
+p477,Eduardo Costa,eduardo.costa@bind.com.ar,Analista PMO Junior,Tecnologia,p301,+549110000477
+p478,Leandro Sanchez,leandro.sanchez@bind.com.ar,Data Engineer Senior,Tecnologia,p302,+549110000478
+p479,Diego Paredes,diego.paredes@bind.com.ar,Data Engineer,Tecnologia,p302,+549110000479
+p480,Claudio Suarez,claudio.suarez@bind.com.ar,ML Engineer,Tecnologia,p302,+549110000480
+p481,Camilo Naranjo,camilo.naranjo@bind.com.ar,Desarrollador Full Stack,Tecnologia,p303,+549110000481
+p482,Agustin Palacios,agustin.palacios@bind.com.ar,Desarrollador Full Stack,Tecnologia,p303,+549110000482
+p483,Leandro Lopez,leandro.lopez@bind.com.ar,Desarrollador Full Stack,Tecnologia,p303,+549110000483
+p484,Monica Carballo,monica.carballo@bind.com.ar,Desarrollador Full Stack,Tecnologia,p303,+549110000484
+p485,Estela Cabrera,estela.cabrera@bind.com.ar,Analista PLAFT Banco,Compliance,p228,+549110000485
+p486,Claudio Diaz,claudio.diaz@bind.com.ar,Analista PLAFT Banco,Compliance,p228,+549110000486
+p487,Alicia Valdez,alicia.valdez@bind.com.ar,Analista PLAFT Banco,Compliance,p228,+549110000487
+p488,Marcela Yebra,marcela.yebra@bind.com.ar,Analista PLAFT Banco,Compliance,p228,+549110000488
+p489,Mariana Torres,mariana.torres@bind.com.ar,Analista PLAFT Banco,Compliance,p228,+549110000489
+p490,Gonzalo Morales,gonzalo.morales@bind.com.ar,Analista PLAFT Activos,Compliance,p224,+549110000490
+p491,Romina Rios,romina.rios@bind.com.ar,Analista PLAFT Activos,Compliance,p224,+549110000491
+p492,Ariel De Luca,ariel.deluca@bind.com.ar,Analista PLAFT Activos,Compliance,p224,+549110000492
+p493,Martina Nuñez,martina.nuñez@bind.com.ar,Analista PLAFT Activos,Compliance,p224,+549110000493
+p494,Alejandra Larroude,alejandra.larroude@bind.com.ar,Analista PLAFT Activos,Compliance,p224,+549110000494
+p495,Lucas Calabrese,lucas.calabrese@bind.com.ar,Analista PLAFT Mercado Fondo,Compliance,p223,+549110000495
+p496,Camila Navarro,camila.navarro@bind.com.ar,Analista PLAFT Mercado Fondo,Compliance,p223,+549110000496
+p497,Gabriela Martinez,gabriela.martinez@bind.com.ar,Analista PLAFT Mercado Fondo,Compliance,p223,+549110000497
+p498,Pablo Torres,pablo.torres@bind.com.ar,Analista PLAFT Mercado Fondo,Compliance,p223,+549110000498
+p499,Monica Vega,monica.vega@bind.com.ar,Analista PLAFT Mercado Fondo,Compliance,p223,+549110000499
+p500,Roberto Quiroga,roberto.quiroga@bind.com.ar,Analista PLAFT Mercado Fondo,Compliance,p223,+549110000500
+p501,Antonia Reyes,antonia.reyes@bind.com.ar,Analista PLAFT Mercado Fondo,Compliance,p223,+549110000501
+p502,Veronica Rodriguez,veronica.rodriguez@bind.com.ar,Analista Back Office Clientes,Compliance,p225,+549110000502
+p503,Mateo Cerda,mateo.cerda@bind.com.ar,Analista Back Office Clientes,Compliance,p225,+549110000503
+p504,Daniela Toledo,daniela.toledo@bind.com.ar,Analista Back Office Clientes,Compliance,p225,+549110000504
+p505,Adriana Gimenez,adriana.gimenez@bind.com.ar,Analista Back Office Clientes,Compliance,p225,+549110000505
+p506,Gabriela Calabrese,gabriela.calabrese@bind.com.ar,Analista Back Office Clientes,Compliance,p225,+549110000506
+p507,Alejandra Cerda,alejandra.cerda@bind.com.ar,Gerente Comercial Bind Seguros,Bind Seguros,p060,+549110000507
+p508,Susana Alvarez,susana.alvarez@bind.com.ar,Ejecutivo Comercial Seguros,Bind Seguros,p507,+549110000508
+p509,Hugo Gallardo,hugo.gallardo@bind.com.ar,Ejecutivo Comercial Seguros,Bind Seguros,p507,+549110000509
+p510,Alicia Iglesias,alicia.iglesias@bind.com.ar,Ejecutivo Comercial Seguros,Bind Seguros,p507,+549110000510
+p511,Mateo Gallardo,mateo.gallardo@bind.com.ar,Ejecutivo Comercial Seguros,Bind Seguros,p507,+549110000511
+p512,Silvia Manzano,silvia.manzano@bind.com.ar,Ejecutivo Comercial Seguros,Bind Seguros,p507,+549110000512
+p513,Damian Medina,damian.medina@bind.com.ar,Ejecutivo Comercial Seguros,Bind Seguros,p507,+549110000513
+p514,Alejandra Rosales,alejandra.rosales@bind.com.ar,Ejecutivo Comercial Seguros,Bind Seguros,p507,+549110000514
+p515,Laura Iglesias,laura.iglesias@bind.com.ar,Ejecutivo Comercial Seguros,Bind Seguros,p507,+549110000515
+p516,Ulises Torres,ulises.torres@bind.com.ar,Gerente de Lineas Personales,Bind Seguros,p060,+549110000516
+p517,Valeria Bracco,valeria.bracco@bind.com.ar,Analista Lineas Personales,Bind Seguros,p516,+549110000517
+p518,Alicia Sanchez,alicia.sanchez@bind.com.ar,Analista Lineas Personales,Bind Seguros,p516,+549110000518
+p519,Matias Forni,matias.forni@bind.com.ar,Analista Lineas Personales,Bind Seguros,p516,+549110000519
+p520,Liliana Carballo,liliana.carballo@bind.com.ar,Analista Lineas Personales,Bind Seguros,p516,+549110000520
+p521,Benjamin Villanueva,benjamin.villanueva@bind.com.ar,Analista Lineas Personales,Bind Seguros,p516,+549110000521
+p522,Gabriela Pinto,gabriela.pinto@bind.com.ar,Gerente de Operaciones Sistemas y Transformacion,Bind Seguros,p060,+549110000522
+p523,Monica Luna,monica.luna@bind.com.ar,Team Leader Siniestros,Bind Seguros,p522,+549110000523
+p524,Joaquin Zalazar,joaquin.zalazar@bind.com.ar,Analista de Siniestros,Bind Seguros,p523,+549110000524
+p525,Beatriz Vazquez,beatriz.vazquez@bind.com.ar,Analista de Siniestros,Bind Seguros,p523,+549110000525
+p526,Mariano Herrera,mariano.herrera@bind.com.ar,Team Leader de Administracion,Bind Seguros,p522,+549110000526
+p527,Walter Lopez,walter.lopez@bind.com.ar,Analista de Administracion,Bind Seguros,p526,+549110000527
+p528,Mia Molina,mia.molina@bind.com.ar,Analista de Administracion,Bind Seguros,p526,+549110000528
+p529,Benjamin Alvarez,benjamin.alvarez@bind.com.ar,Lider de Auditoria de Procesos,Auditoria,p073,+549110000529
+p530,Tadeo Cerda,tadeo.cerda@bind.com.ar,Auditor,Auditoria,p529,+549110000530
+p531,Mariana Sanchez,mariana.sanchez@bind.com.ar,Auditor,Auditoria,p529,+549110000531
+p532,Carolina Cabrera,carolina.cabrera@bind.com.ar,Auditor,Auditoria,p529,+549110000532
+p533,Sebastian Medina,sebastian.medina@bind.com.ar,Lider de Auditoria de Sistemas,Auditoria,p073,+549110000533
+p534,Susana Molina,susana.molina@bind.com.ar,Auditor de Sistemas,Auditoria,p533,+549110000534
+p535,Matias Alvarez,matias.alvarez@bind.com.ar,Auditor de Sistemas,Auditoria,p533,+549110000535
+p536,Marco Molina,marco.molina@bind.com.ar,Lider de Riesgos Operativos,Riesgos,p072,+549110000536
+p537,Ezequiel Espinoza,ezequiel.espinoza@bind.com.ar,Analista Riesgos Operativos,Riesgos,p536,+549110000537
+p538,Antonia Valdez,antonia.valdez@bind.com.ar,Analista Riesgos Operativos,Riesgos,p536,+549110000538
+p539,Laura Yebra,laura.yebra@bind.com.ar,Analista de Creditos,Riesgos,p072,+549110000539
+p540,Andrea Herrera,andrea.herrera@bind.com.ar,Analista de Creditos,Riesgos,p072,+549110000540
+p541,Mariano Sanchez,mariano.sanchez@bind.com.ar,Analista de Creditos,Riesgos,p072,+549110000541
+p542,Mateo Casas,mateo.casas@bind.com.ar,Analista de Creditos,Riesgos,p072,+549110000542
+p543,Juan Bertolucci,juan.bertolucci@bind.com.ar,Lider Pentesting,Seguridad,p071,+549110000543
+p544,Mia Manzano,mia.manzano@bind.com.ar,Analista de Seguridad,Seguridad,p071,+549110000544
+p545,Natalia Valdez,natalia.valdez@bind.com.ar,Analista de Seguridad,Seguridad,p071,+549110000545
+p546,Marco Alvarez,marco.alvarez@bind.com.ar,Analista de Seguridad,Seguridad,p071,+549110000546
+p547,Renata Torres,renata.torres@bind.com.ar,Lider de Operaciones Cuentas,Operaciones,p052,+549110000547
+p548,Romina Vera,romina.vera@bind.com.ar,Analista de Operaciones,Operaciones,p547,+549110000548
+p549,Hernan Diaz,hernan.diaz@bind.com.ar,Analista de Operaciones,Operaciones,p547,+549110000549
+p550,Romina Bertolucci,romina.bertolucci@bind.com.ar,Lider de Operaciones de Comercio Exterior,Operaciones,p052,+549110000550
+p551,Pablo Luna,pablo.luna@bind.com.ar,Analista de Comercio Exterior,Operaciones,p550,+549110000551
+p552,Alejandro Vargas,alejandro.vargas@bind.com.ar,Analista de Comercio Exterior,Operaciones,p550,+549110000552
+p553,Pedro Zalazar,pedro.zalazar@bind.com.ar,Analista de Comercio Exterior,Operaciones,p550,+549110000553
+p554,Hugo Forni,hugo.forni@bind.com.ar,Lider de Operaciones de Pagos,Operaciones,p052,+549110000554
+p555,Esteban Quiroga,esteban.quiroga@bind.com.ar,Analista de Pagos,Operaciones,p554,+549110000555
+p556,Andrea Quiroga,andrea.quiroga@bind.com.ar,Analista de Pagos,Operaciones,p554,+549110000556
+p557,Hugo Marquez,hugo.marquez@bind.com.ar,Analista de Pagos,Operaciones,p554,+549110000557
+p558,Antonia Pereyra,antonia.pereyra@bind.com.ar,Analista Banking aaS,Banking as a Service,p042,+549110000558
+p559,Roberto Jimenez,roberto.jimenez@bind.com.ar,Analista de Onboarding aaS,Banking as a Service,p042,+549110000559
