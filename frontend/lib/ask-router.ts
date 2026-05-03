@@ -13,6 +13,59 @@ import type { Answer as BackendAnswer } from "./types-backend";
 import { DEMO_QUERIES, SUGGESTED_QUERIES, matchDemoQuery } from "./mock-data";
 import type { QAAnswer, AnswerType, ReferencedEntity, Citation } from "./types";
 
+
+// ─── Static FAQ — answered without burning LLM tokens ──────────────────
+// These are questions every employee asks first; the answer is hand-crafted
+// once and served instantly. Cheaper, faster, and a more polished demo.
+
+const FAQ_NORMALIZE = (s: string) =>
+  s
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[¿?¡!.,;:]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+const FAQ: Array<{ keys: string[]; answer: QAAnswer }> = [
+  {
+    keys: [
+      "como funciona the company brain",
+      "como funciona company brain",
+      "que es the company brain",
+      "que es company brain",
+      "como funciona el brain",
+      "que es el brain",
+      "how does the company brain work",
+      "what is the company brain",
+    ],
+    answer: {
+      answer:
+        "The Company Brain entrevista a cada empleado de tu empresa durante ~7 minutos y de ahí extrae el mapa real de cómo funciona internamente: quién es dueño de qué proceso, a quién pedirle acceso a cada sistema, y las reglas no escritas que nadie te cuenta cuando entrás.\n\n**Cómo lo hace** un agente de voz (Claude + Retell) llama a cada empleado, le hace 13 preguntas cortas, y un segundo agente (Claude Opus con extended thinking) procesa el transcript y arma un knowledge graph con citas textuales.\n\n**Para qué sirve** cualquier empleado pregunta en lenguaje natural — *\"¿a quién le pido acceso a Salesforce?\"*, *\"¿quién maneja reclamos?\"*, *\"¿cuál es el SLA real de altas?\"* — y obtiene la persona correcta, su contacto, y el procedimiento. En segundos. Sin escribir un Confluence.",
+      answer_type: "definition",
+      entities_referenced: [],
+      citations: [],
+      confidence: 1,
+      insufficient_information: false,
+      follow_up_suggestions: [
+        "Necesito acceso a Salesforce, ¿a quién le pido?",
+        "¿Quién maneja reclamos de clientes?",
+        "¿Qué reglas no escritas captura?",
+      ],
+    },
+  },
+];
+
+function matchFaq(question: string): QAAnswer | null {
+  const norm = FAQ_NORMALIZE(question);
+  for (const entry of FAQ) {
+    if (entry.keys.some((k) => norm.includes(FAQ_NORMALIZE(k)))) {
+      return entry.answer;
+    }
+  }
+  return null;
+}
+
 export type AskMode = "auto" | "demo" | "live";
 
 export function getAskMode(): AskMode {
@@ -96,6 +149,12 @@ export async function askBrain(question: string, opts?: { user_email?: string })
   answer: QAAnswer;
   source: "live" | "mock";
 }> {
+  // FAQ shortcut — applies in every mode so we never waste tokens on it
+  const faq = matchFaq(question);
+  if (faq) {
+    return { answer: faq, source: "mock" };
+  }
+
   const mode = getAskMode();
 
   if (mode === "demo") {

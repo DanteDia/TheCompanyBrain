@@ -168,6 +168,286 @@ export function activeUser(): Person {
   return PEOPLE.find((p) => p.id === "analyst_jr")!;
 }
 
+// ─── SISTEMAS / TOOLS de BIND Bank ──────────────────────────────────
+
+export interface ToolEntity {
+  id: string;
+  name: string;
+  category: string;
+  purpose: string;
+  owner_id: string;
+  used_by_areas: string[];
+  access_path: string;
+  sla: string;
+}
+
+export const TOOLS: ToolEntity[] = [
+  {
+    id: "salesforce_creditos",
+    name: "Salesforce — módulo Créditos",
+    category: "CRM",
+    purpose: "Gestión de solicitudes y aprobaciones crediticias",
+    owner_id: "gte_credit",
+    used_by_areas: ["Riesgos", "Operaciones"],
+    access_path: "Email a Ana López con manager en CC",
+    sla: "24-48 hs",
+  },
+  {
+    id: "sharepoint_clientes",
+    name: "SharePoint — Carpeta Clientes",
+    category: "Documentos",
+    purpose: "Expedientes legales y documentación de clientes",
+    owner_id: "sysadmin",
+    used_by_areas: ["Operaciones", "Legales"],
+    access_path: "Ticket en JIRA con manager en CC",
+    sla: "Mismo día",
+  },
+  {
+    id: "veraz_api",
+    name: "Veraz API",
+    category: "External",
+    purpose: "Consulta de score crediticio externo",
+    owner_id: "analyst_sr",
+    used_by_areas: ["Riesgos"],
+    access_path: "Auto-provisioning vía Salesforce",
+    sla: "Inmediato",
+  },
+  {
+    id: "score_bind",
+    name: "Score BIND",
+    category: "Internal scoring",
+    purpose: "Score crediticio interno (Veraz × 0.6 + Antigüedad × 0.3 + Saldo × 0.1)",
+    owner_id: "vp_risk",
+    used_by_areas: ["Riesgos"],
+    access_path: "Built into Salesforce módulo Créditos",
+    sla: "—",
+  },
+  {
+    id: "jira",
+    name: "JIRA",
+    category: "Tickets",
+    purpose: "Tickets de IT, bugs, requerimientos operativos",
+    owner_id: "sysadmin",
+    used_by_areas: ["Tecnología", "Operaciones"],
+    access_path: "Auto-provisioning con email @bind.com.ar",
+    sla: "Inmediato",
+  },
+  {
+    id: "google_workspace",
+    name: "Google Workspace",
+    category: "Productividad",
+    purpose: "Gmail, Drive, Calendar, Meet — productividad general",
+    owner_id: "sysadmin",
+    used_by_areas: ["Todas"],
+    access_path: "Provisioning automático en onboarding",
+    sla: "Día 1",
+  },
+  {
+    id: "aws_console",
+    name: "AWS Console",
+    category: "Infra",
+    purpose: "Infraestructura cloud — ECS, RDS, S3, IAM",
+    owner_id: "cto_01",
+    used_by_areas: ["Tecnología"],
+    access_path: "Solicitud al CTO + curso de seguridad",
+    sla: "3-5 días",
+  },
+  {
+    id: "notion",
+    name: "Notion",
+    category: "Wiki",
+    purpose: "Documentación interna, notas de reuniones, runbooks",
+    owner_id: "ceo_01",
+    used_by_areas: ["Todas"],
+    access_path: "Email a admin de workspace",
+    sla: "Mismo día",
+  },
+  {
+    id: "salesforce_crm",
+    name: "Salesforce CRM",
+    category: "CRM",
+    purpose: "Cuentas, oportunidades, pipeline comercial",
+    owner_id: "gte_ops",
+    used_by_areas: ["Comercial", "Operaciones"],
+    access_path: "Solicitud al Gerente de Operaciones",
+    sla: "24 hs",
+  },
+  {
+    id: "workday",
+    name: "Workday",
+    category: "RRHH",
+    purpose: "Sistema de RRHH — licencias, beneficios, payroll",
+    owner_id: "hr_lead",
+    used_by_areas: ["Todas"],
+    access_path: "Provisioning automático en onboarding",
+    sla: "Día 1",
+  },
+  {
+    id: "slack_workspace",
+    name: "Slack",
+    category: "Comunicación",
+    purpose: "Comunicación interna y canales de operación",
+    owner_id: "cto_01",
+    used_by_areas: ["Todas"],
+    access_path: "Invite automático con email corporativo",
+    sla: "Inmediato",
+  },
+  {
+    id: "datadog",
+    name: "Datadog",
+    category: "Observability",
+    purpose: "Monitoreo de infraestructura y aplicaciones",
+    owner_id: "sysadmin",
+    used_by_areas: ["Tecnología"],
+    access_path: "Solicitud al Sysadmin",
+    sla: "1-2 días",
+  },
+];
+
+// ─── PROCESOS de BIND Bank ──────────────────────────────────────────
+
+export interface ProcessEntity {
+  id: string;
+  name: string;
+  description: string;
+  owner_id: string;
+  participants: string[];
+  area: string;
+  steps: number;
+  sla: string;
+}
+
+export const PROCESSES: ProcessEntity[] = [
+  {
+    id: "credit_approval",
+    name: "Aprobación crediticia personal",
+    description: "Evaluación y aprobación de créditos personales bajo $5M ARS",
+    owner_id: "gte_credit",
+    participants: ["analyst_sr", "analyst_jr", "account_off"],
+    area: "Riesgos",
+    steps: 7,
+    sla: "72 hs hábiles",
+  },
+  {
+    id: "client_onboarding_pyme",
+    name: "Onboarding cliente PyME",
+    description: "Alta de clientes empresa — KYC + apertura de cuenta + asignación de oficial",
+    owner_id: "gte_ops",
+    participants: ["account_off", "backoffice"],
+    area: "Operaciones",
+    steps: 9,
+    sla: "5 días hábiles",
+  },
+  {
+    id: "vendor_contract_approval",
+    name: "Aprobación contratos de proveedores",
+    description: "Revisión legal y financiera de contratos. Firma CFO + CEO si > USD 50K",
+    owner_id: "cfo_01",
+    participants: ["ceo_01", "vp_risk"],
+    area: "Finanzas",
+    steps: 5,
+    sla: "10 días hábiles",
+  },
+  {
+    id: "complaint_handling",
+    name: "Gestión de reclamos de clientes",
+    description: "Atención de reclamos formales — script estándar, escalamiento a Compliance/Legales",
+    owner_id: "account_off",
+    participants: ["gte_ops", "vp_risk"],
+    area: "Operaciones",
+    steps: 6,
+    sla: "48 hs primer contacto",
+  },
+  {
+    id: "user_onboarding_it",
+    name: "Alta de usuario IT",
+    description: "Provisioning de cuentas (email, Salesforce, SharePoint, VPN) para empleado nuevo",
+    owner_id: "sysadmin",
+    participants: ["hr_lead"],
+    area: "Tecnología",
+    steps: 8,
+    sla: "Día 1 (oficial), 2-3 días en práctica",
+  },
+  {
+    id: "document_verification",
+    name: "Verificación documental",
+    description: "Validación de DNI, CUIT, recibos de sueldo, declaraciones AFIP",
+    owner_id: "backoffice",
+    participants: ["analyst_jr"],
+    area: "Operaciones",
+    steps: 4,
+    sla: "24 hs",
+  },
+  {
+    id: "exception_approval",
+    name: "Aprobación de excepciones crediticias",
+    description: "Casos fuera de política estándar — discreción del Gerente de Créditos",
+    owner_id: "gte_credit",
+    participants: ["vp_risk", "analyst_sr"],
+    area: "Riesgos",
+    steps: 3,
+    sla: "Mismo día",
+  },
+  {
+    id: "refinancing",
+    name: "Refinanciación de deuda",
+    description: "Renegociación de créditos vigentes con clientes con historial impecable",
+    owner_id: "analyst_sr",
+    participants: ["gte_credit", "account_off"],
+    area: "Riesgos",
+    steps: 5,
+    sla: "5 días hábiles",
+  },
+  {
+    id: "employee_onboarding",
+    name: "Onboarding empleado nuevo",
+    description: "Proceso de RRHH para nuevos empleados — contratación, beneficios, capacitación inicial",
+    owner_id: "hr_lead",
+    participants: ["sysadmin", "ceo_01"],
+    area: "RRHH",
+    steps: 12,
+    sla: "Primera semana",
+  },
+  {
+    id: "monthly_close",
+    name: "Cierre mensual contable",
+    description: "Conciliación de cuentas, reportes BCRA, balance interno",
+    owner_id: "cfo_01",
+    participants: [],
+    area: "Finanzas",
+    steps: 14,
+    sla: "5 días hábiles después del cierre",
+  },
+  {
+    id: "vendor_payments",
+    name: "Pagos a proveedores",
+    description: "Procesamiento de facturas, aprobaciones y transferencias",
+    owner_id: "cfo_01",
+    participants: ["backoffice"],
+    area: "Finanzas",
+    steps: 6,
+    sla: "30 días desde recepción factura",
+  },
+  {
+    id: "incident_response",
+    name: "Respuesta a incidentes IT",
+    description: "Triage, escalamiento y resolución de incidentes de infraestructura",
+    owner_id: "sysadmin",
+    participants: ["cto_01"],
+    area: "Tecnología",
+    steps: 5,
+    sla: "P1: 1h · P2: 4h · P3: 24h",
+  },
+];
+
+export function findTool(id: string): ToolEntity | undefined {
+  return TOOLS.find((t) => t.id === id);
+}
+
+export function findProcess(id: string): ProcessEntity | undefined {
+  return PROCESSES.find((p) => p.id === id);
+}
+
 // ─── INTEGRACIONES ──────────────────────────────────────────────────
 
 type IntegrationDef = Omit<Integration, "description"> & {
@@ -558,6 +838,7 @@ export function matchDemoQuery(input: string): string | null {
 // ─── Suggestion chips (empty state del /ask) ────────────────────────
 
 export const SUGGESTED_QUERIES = [
+  "¿Cómo funciona The Company Brain?",
   "Necesito acceso a Salesforce, ¿a quién le pido?",
   "¿Quién maneja reclamos de clientes?",
   "¿Cuánto tarda en la práctica el alta de un usuario?",

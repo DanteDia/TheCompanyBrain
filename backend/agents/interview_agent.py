@@ -109,7 +109,13 @@ def create_or_update_agent(employee_name: str) -> dict[str, Any]:
 
 
 def initiate_phone_call(
-    *, agent_id: str, to_number: str, employee_id: str, employee_name: str
+    *,
+    agent_id: str,
+    to_number: str,
+    employee_id: str,
+    employee_name: str,
+    employee_role: str = "",
+    employee_area: str = "",
 ) -> dict[str, Any]:
     """Trigger an outbound call. Retell + Twilio handle the rest."""
     payload = {
@@ -123,6 +129,8 @@ def initiate_phone_call(
         },
         "retell_llm_dynamic_variables": {
             "nombre": employee_name.split()[0] if employee_name else "",
+            "rol": employee_role or "empleado",
+            "area": employee_area or "su area",
         },
     }
     with _client() as c:
@@ -138,7 +146,14 @@ def initiate_phone_call(
     return data
 
 
-def initiate_web_call(*, agent_id: str, employee_id: str, employee_name: str) -> dict[str, Any]:
+def initiate_web_call(
+    *,
+    agent_id: str,
+    employee_id: str,
+    employee_name: str,
+    employee_role: str = "",
+    employee_area: str = "",
+) -> dict[str, Any]:
     """Create a web-call (browser-based) — for testing without Twilio."""
     payload = {
         "agent_id": agent_id,
@@ -149,6 +164,8 @@ def initiate_web_call(*, agent_id: str, employee_id: str, employee_name: str) ->
         },
         "retell_llm_dynamic_variables": {
             "nombre": employee_name.split()[0] if employee_name else "",
+            "rol": employee_role or "empleado",
+            "area": employee_area or "su area",
         },
     }
     with _client() as c:

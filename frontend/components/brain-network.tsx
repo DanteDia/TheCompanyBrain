@@ -107,8 +107,8 @@ export function BrainNetwork() {
               </div>
             </div>
           }
-          subtitle="Company Brain"
-          captionMono
+          title="Company Brain"
+          subtitle="Knowledge graph"
         />
 
         {/* Right — Tools */}
@@ -124,8 +124,7 @@ export function BrainNetwork() {
             </div>
           }
           title="Connected to"
-          subtitle="Your Tools"
-          larger
+          subtitle="Your tools"
         />
       </div>
     </div>
@@ -134,35 +133,17 @@ export function BrainNetwork() {
 
 interface NodeColumnProps {
   icon: React.ReactNode;
-  title?: string;
+  title: string;
   subtitle: string;
-  captionMono?: boolean;
-  larger?: boolean;
 }
 
-function NodeColumn({ icon, title, subtitle, captionMono, larger }: NodeColumnProps) {
+function NodeColumn({ icon, title, subtitle }: NodeColumnProps) {
   return (
     <div className="flex flex-col items-center gap-3">
       {icon}
       <div className="text-center leading-tight">
-        {title && (
-          <div
-            className={`font-medium text-stone-900 ${
-              larger ? "text-sm" : "text-xs"
-            }`}
-          >
-            {title}
-          </div>
-        )}
-        <div
-          className={
-            captionMono
-              ? "text-[10px] uppercase tracking-wider text-stone-500 font-mono"
-              : `text-stone-500 mt-0.5 ${larger ? "text-sm" : "text-xs"}`
-          }
-        >
-          {subtitle}
-        </div>
+        <div className="text-sm font-medium text-stone-900">{title}</div>
+        <div className="text-sm text-stone-500 mt-0.5">{subtitle}</div>
       </div>
     </div>
   );

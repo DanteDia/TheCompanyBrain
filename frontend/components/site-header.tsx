@@ -18,9 +18,6 @@ export function SiteHeader() {
             <a href="#producto" className="hover:text-stone-900 transition-colors">
               {t("nav.product", locale)}
             </a>
-            <a href="#como-funciona" className="hover:text-stone-900 transition-colors">
-              {t("nav.how_it_works", locale)}
-            </a>
             <a href="#integraciones" className="hover:text-stone-900 transition-colors">
               {t("nav.integrations", locale)}
             </a>

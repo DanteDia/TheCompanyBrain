@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import {
   Users,
@@ -22,7 +21,6 @@ import { HeroChatMock } from "@/components/hero-chat-mock";
 import { BeforeAfterAnimation } from "@/components/before-after-animation";
 import { IntegrationCard } from "@/components/integration-card";
 import { BrainNetwork } from "@/components/brain-network";
-import { ScheduleDemoModal } from "@/components/schedule-demo-modal";
 import { RotatingWord } from "@/components/rotating-word";
 import { INTEGRATIONS } from "@/lib/mock-data";
 import { useLocale } from "@/components/locale-toggle";
@@ -30,7 +28,6 @@ import { t } from "@/lib/i18n";
 
 export default function LandingPage() {
   const [locale] = useLocale();
-  const [bookingOpen, setBookingOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-stone-50">
@@ -62,11 +59,7 @@ export default function LandingPage() {
                     <ArrowRight className="h-4 w-4" />
                   </Button>
                 </Link>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={() => setBookingOpen(true)}
-                >
+                <Button variant="outline" size="lg">
                   {t("hero.cta_secondary", locale)}
                 </Button>
               </div>
@@ -98,55 +91,6 @@ export default function LandingPage() {
             </p>
           </div>
           <BeforeAfterAnimation locale={locale} />
-        </div>
-      </section>
-
-      {/* CÓMO FUNCIONA */}
-      <section id="como-funciona" className="border-t border-stone-200/80 py-20">
-        <div className="mx-auto max-w-6xl px-6 md:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <div className="text-[11px] uppercase tracking-wider text-accent-600 font-medium mb-3">
-              Cómo funciona
-            </div>
-            <h2 className="text-3xl md:text-4xl tracking-tight font-medium text-stone-900">
-              Sin consultoras. Sin proyecto interno de 6 meses.
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                num: "01",
-                title: t("how.step1_title", locale),
-                desc: t("how.step1_desc", locale),
-              },
-              {
-                num: "02",
-                title: t("how.step2_title", locale),
-                desc: t("how.step2_desc", locale),
-              },
-              {
-                num: "03",
-                title: t("how.step3_title", locale),
-                desc: t("how.step3_desc", locale),
-              },
-            ].map((step, i) => (
-              <motion.div
-                key={step.num}
-                initial={{ opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="relative rounded-xl border border-stone-200 bg-white p-6"
-              >
-                <div className="text-xs font-mono text-accent-600 mb-3">{step.num}</div>
-                <h3 className="text-lg font-medium text-stone-900 mb-2">
-                  {step.title}
-                </h3>
-                <p className="text-sm text-stone-600 leading-relaxed">{step.desc}</p>
-              </motion.div>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -285,12 +229,6 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
-
-      {/* Schedule demo modal */}
-      <ScheduleDemoModal
-        open={bookingOpen}
-        onClose={() => setBookingOpen(false)}
-      />
     </div>
   );
 }

@@ -365,6 +365,8 @@ async def api_initiate_call(req: InitiateCallRequest) -> dict[str, Any]:
         to_number=person.phone,
         employee_id=person.id,
         employee_name=person.name,
+        employee_role=person.role or "",
+        employee_area=person.area or "",
     )
     return {"ok": True, "call_id": result.get("call_id"), "agent_id": agent_id}
 
@@ -397,6 +399,8 @@ async def api_initiate_web_call(req: InitiateCallRequest) -> dict[str, Any]:
         agent_id=agent_id,
         employee_id=person.id,
         employee_name=person.name,
+        employee_role=person.role or "",
+        employee_area=person.area or "",
     )
     call_id = result.get("call_id", "")
     access_token = result.get("access_token", "")
