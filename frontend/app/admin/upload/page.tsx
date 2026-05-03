@@ -62,7 +62,7 @@ export default function UploadPage() {
       const r = await schedule(orgId);
       setScheduled({
         count: (r.scheduled || []).length,
-        meet_links: (r.scheduled || []).map((s: { meet_link: string }) => s.meet_link).filter(Boolean),
+        meet_links: (r.scheduled || []).map((s: { meet_link?: string }) => s.meet_link).filter((u): u is string => Boolean(u)),
       });
       setStep("done");
     } catch (e) {
