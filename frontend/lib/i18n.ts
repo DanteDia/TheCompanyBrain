@@ -43,8 +43,8 @@ export const STRINGS: Dict = {
     en: "It lives in your team's heads — not in Confluence, not in Slack, not in any manual.",
   },
   "problem.subtitle2": {
-    es: "Una pregunta operativa simple rebota 3 veces antes de llegar a la persona correcta.",
-    en: "A simple operational question bounces 3 times before reaching the right person.",
+    es: "Combiná el conocimiento de tu equipo con la data de tus herramientas.",
+    en: "Combine your team's knowledge with the data from your tools.",
   },
   "problem.before_label": { es: "Hoy", en: "Today" },
   "problem.after_label": { es: "Con Company Brain", en: "With Company Brain" },

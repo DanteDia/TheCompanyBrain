@@ -19,11 +19,12 @@ export default function UploadPage() {
           Discovery
         </div>
         <h1 className="text-3xl tracking-tight font-medium text-stone-900 mt-1">
-          Subir organigrama
+          Cargar datos al Brain
         </h1>
         <p className="mt-2 text-stone-600 max-w-2xl">
-          Cargá un CSV con la lista de empleados y agendamos automáticamente las
-          entrevistas con cada uno.
+          Cargá cualquier tipo de documento con el que quieras alimentar tu Company
+          Brain. PDFs, Word, Excel, slides, CSVs, transcripts — el Brain los analiza,
+          los integra al grafo de conocimiento y los deja consultables en segundos.
         </p>
       </header>
 
@@ -50,17 +51,17 @@ export default function UploadPage() {
         >
           <Upload className="h-10 w-10 mx-auto text-stone-400 mb-4" strokeWidth={1.5} />
           <div className="text-lg font-medium text-stone-900">
-            Arrastrá tu organigrama acá
+            Arrastrá cualquier documento acá
           </div>
           <div className="text-sm text-stone-500 mt-1">
-            CSV con columnas: name, email, role, area, manager_id, phone
+            PDF · Word · Excel · CSV · slides · transcripts · cualquier formato
           </div>
           <Button variant="outline" className="mt-6">
             <FileText className="h-4 w-4" />
             Seleccionar archivo
           </Button>
           <div className="mt-8 text-xs text-stone-400 font-mono">
-            Demo · clickear simula carga del organigrama de BIND
+            Demo · clickeá para simular carga al Brain de BIND Bank
           </div>
         </div>
       )}
