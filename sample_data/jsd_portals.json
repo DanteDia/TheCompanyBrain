@@ -1,0 +1,192 @@
+{
+  "_meta": {
+    "source": "https://bindtm.atlassian.net/servicedesk/customer/portals",
+    "extracted_via": "GET /rest/servicedeskapi/servicedesk + /rest/servicedeskapi/servicedesk/{id}/requesttype",
+    "total_portals": 25,
+    "total_request_types": 199,
+    "captured_at": "2026-05-03"
+  },
+  "portals": [
+    {
+      "id": "23", "key": "AD", "name": "Administración",
+      "purpose": "Transacciones de administración: modificaciones y solicitudes de transacción con/sin impacto en cuenta cliente, transacciones de emergencia.",
+      "owner_area": "Administración",
+      "url": "https://bindtm.atlassian.net/servicedesk/customer/portal/23",
+      "request_types": ["Modificación de Transacciones", "Solicitud de Transacción", "Solicitud de transacción SIN impacto en Cuenta Cliente", "Transacción de Emergencia"]
+    },
+    {
+      "id": "31", "key": "GBI", "name": "BI - Datos: Gestión de la demanda",
+      "purpose": "Pedidos de información, capacitación de tableros, problemas de datos, pruebas de usuario.",
+      "owner_area": "BI / Datos",
+      "url": "https://bindtm.atlassian.net/servicedesk/customer/portal/31",
+      "request_types": ["Nuevo pedido de Información", "Pedido de capacitación o soporte de uso", "Problema de datos o de tablero", "Solicitud por pruebas de usuario", "Emailed request"]
+    },
+    {
+      "id": "70", "key": "BP", "name": "Bind PSP",
+      "purpose": "Pagos: alta/baja de clientes, dispositivos POS, integraciones, QRI, consultas y reclamos.",
+      "owner_area": "Bind Pagos",
+      "url": "https://bindtm.atlassian.net/servicedesk/customer/portal/70",
+      "request_types": ["Alta de Cliente", "Alta de Dispositivo POS", "Baja de Cliente", "Baja de Dispositivo POS", "Consultas y Reclamos", "Integraciones", "Nuevo requerimiento", "Solicitud de QRI"]
+    },
+    {
+      "id": "64", "key": "CHB", "name": "Capital Humano",
+      "purpose": "Búsqueda y solicitud de incorporación de nuevos colaboradores. Entrada principal para hiring requests.",
+      "owner_area": "RRHH / Capital Humano",
+      "url": "https://bindtm.atlassian.net/servicedesk/customer/portal/64",
+      "request_types": ["Búsqueda de nuevo colaborador", "Solicitud de incorporación de nuevos colaboradores"]
+    },
+    {
+      "id": "87", "key": "CAC", "name": "Control Aperturas de Cuenta",
+      "purpose": "Formulario de control de apertura de cuenta (compliance/onboarding clientes).",
+      "owner_area": "Compliance",
+      "url": "https://bindtm.atlassian.net/servicedesk/customer/portal/87",
+      "request_types": ["FORM Control Apertura de Cuenta"]
+    },
+    {
+      "id": "37", "key": "DC", "name": "Demandas Centralizadas",
+      "purpose": "Operatoria diaria del banco: adelantos, alta/baja productos (Bind24, comitente, Júbilo), consultas, autorizaciones, anulaciones, balanceo, beneficios, bonificaciones, certificación de saldos, cobranzas, COMEX, etc. (50 tipos).",
+      "owner_area": "Operaciones",
+      "url": "https://bindtm.atlassian.net/servicedesk/customer/portal/37",
+      "request_types_count": 50,
+      "request_types_sample": ["Acreditación Duplicado prestamos", "Actualización de Clientes", "Adelanto", "Adelantos", "Alta Bind24 empresas/zafiro", "Alta cuenta comitente", "Alta cuenta GALLO - FPA", "Apoderados", "Atención de Derecho de titulares de Datos", "Aumento de límite de extracción", "Autorizaciones", "Baja BIND24", "Beneficio Discapacidad", "Bloqueo telefónico", "Bonificaciones", "Cambio de Sucursal", "Certificación de Saldos", "Cobranzas Préstamo", "Coelsa", "COMEX - Consultas", "Consulta SNP", "Consultas Urgentes"]
+    },
+    {
+      "id": "20", "key": "GD", "name": "Gestión Documental (GD)",
+      "purpose": "BAU/cambios, normativos, observaciones, requerimientos GeDe (gestión documental electrónica).",
+      "owner_area": "Procesos / GeDe",
+      "url": "https://bindtm.atlassian.net/servicedesk/customer/portal/20",
+      "request_types": ["BAU - Cambio de Parametría", "GD - Actualización aplicativo", "GD - Normativo", "GD - Observación", "GD - Requerimiento General", "GeDe por Observación", "GeDe Regulatorio - Comunicación", "Nuevo pedido GeDe"]
+    },
+    {
+      "id": "81", "key": "GCB", "name": "Gestión de Contratos BIND",
+      "purpose": "Alta de nuevos contratos (form único).",
+      "owner_area": "Legales / Contratos",
+      "url": "https://bindtm.atlassian.net/servicedesk/customer/portal/81",
+      "request_types": ["FORM de Nuevo Contrato"]
+    },
+    {
+      "id": "51", "key": "GDF", "name": "Gestión de Fraudes",
+      "purpose": "Investigación de potenciales fraudes (form único).",
+      "owner_area": "Riesgos / Fraude",
+      "url": "https://bindtm.atlassian.net/servicedesk/customer/portal/51",
+      "request_types": ["Formulario de Gestión de Fraude"]
+    },
+    {
+      "id": "53", "key": "GDPYAB", "name": "Gestión de Préstamos y Adelantos BIND (RRHH)",
+      "purpose": "Beneficios para colaboradores: anticipos de sueldo, préstamos personales, aumento límite TC, cambios de domicilio, cobertura de puesto, rotaciones.",
+      "owner_area": "Capital Humano",
+      "url": "https://bindtm.atlassian.net/servicedesk/customer/portal/53",
+      "request_types": ["Cobertura de Puesto", "Formulario de cambio de domicilio", "Rotación", "Solicitud de Anticipo de Sueldo", "Solicitud de Aumento de Límite de TC", "Solicitud de Préstamo Personal"]
+    },
+    {
+      "id": "29", "key": "IDC", "name": "IDCheques",
+      "purpose": "Solicitud de ID para cheques.",
+      "owner_area": "Operaciones",
+      "url": "https://bindtm.atlassian.net/servicedesk/customer/portal/29",
+      "request_types": ["Solicitud ID Cheque"]
+    },
+    {
+      "id": "39", "key": "KU", "name": "KYC-USD",
+      "purpose": "Desbloqueo de cuenta en U$S — review de documentación patrimonial por compliance.",
+      "owner_area": "Compliance",
+      "url": "https://bindtm.atlassian.net/servicedesk/customer/portal/39",
+      "request_types": ["KYC-USD"]
+    },
+    {
+      "id": "33", "key": "OPRTC", "name": "OPR-TC (Operaciones de Productos)",
+      "purpose": "Operaciones especializadas: cambios y modificaciones, ABM cuentas comitentes/empleados, tarjetas virtuales, B24, Datanet, MEP, Swift, GDH, TC, TD, Títulos, TR. (50 tipos).",
+      "owner_area": "Operaciones",
+      "url": "https://bindtm.atlassian.net/servicedesk/customer/portal/33",
+      "request_types_count": 50,
+      "request_types_sample": ["Cambios.Baja", "Cambios.Modificación", "Clientes.ABM de Cuentas Comitentes", "Clientes.ABM de Empleados BIND", "Clientes.ABM de Tarjetas Virtuales y B24", "Clientes.Solicitud de Auditoria", "Clientes.Solicitud de Bonificaciones", "Clientes.Solicitud de Certificaciones de Saldos", "Clientes.Solicitud de legajo digital", "Clientes.Solicitud de Remuneracion de Cuentas", "Com.Alta de comercio", "Com.Pagos a comercio no acreditados", "Datanet.Alta Cuenta Relacionada", "Datanet.Alta Servicio", "Datanet.Devoluciones", "GDH - Alta", "GDH - Aumento de límite", "MEP.Devolución", "MEP.Devolución Transferencia Inmediata", "Swift.ALTA MT940", "TC.ABM línea anticipo de cupones", "TC.Aplicación de Pago", "TD.Balanceo ATM", "TR.Pedido Tarjeta Regalo"]
+    },
+    {
+      "id": "85", "key": "OMI1021", "name": "Opsgenie Migrated Incidents (LEGACY)",
+      "purpose": "Portal heredado de migración Opsgenie. Posiblemente deprecado — usar Servicios IT (id 6) en su lugar.",
+      "owner_area": "Tecnología (legacy)",
+      "url": "https://bindtm.atlassian.net/servicedesk/customer/portal/85",
+      "deprecated": true,
+      "request_types": ["Configurar VPN", "Incorporación de nuevos empleados", "Informar de hardware dañado", "Informar de un problema del sistema", "Nuevo dispositivo móvil", "Solicitar nuevo hardware", "Solicitar nuevo software", "Solicitar privilegios de administrador", "Solicitar un cambio", "Solicitar una nueva cuenta", "Investigar un problema"]
+    },
+    {
+      "id": "124", "key": "GTP", "name": "Portal Compliance (Gestor de Tareas PLD)",
+      "purpose": "Consultas a Cumplimiento y consultas normativas.",
+      "owner_area": "Compliance / PLD",
+      "url": "https://bindtm.atlassian.net/servicedesk/customer/portal/124",
+      "request_types": ["Consulta a Cumplimiento", "Consulta Normativa"]
+    },
+    {
+      "id": "32", "key": "MKT", "name": "Portal Marketing",
+      "purpose": "Pedidos de la red de sucursales y auditoría mensual de imagen. Mudanzas, refacciones, pedidos urgentes, nuevos cajeros/cash.",
+      "owner_area": "Marketing / Sucursales",
+      "url": "https://bindtm.atlassian.net/servicedesk/customer/portal/32",
+      "request_types": ["AUDITORÍA MENSUAL - SUCURSAL CON REQUERIMIENTOS", "AUDITORÍA MENSUAL - SUCURSAL SIN REQUERIMIENTOS", "IMAGEN SUCURSAL: NUEVOS CAJEROS / NUEVOS CASH", "IMAGEN SUCURSAL: SOLICITUD MUDANZA/REFACCIÓN/URGENTES", "Solicitud MKT - Sucursal", "Sucursal sin requerimientos"]
+    },
+    {
+      "id": "86", "key": "PSB", "name": "Portal Seguros BIND",
+      "purpose": "Operatoria de Bind Seguros: cobro cuotas, copias de pólizas, devoluciones, legales, modificaciones de asegurados/coberturas, reclamos.",
+      "owner_area": "Bind Seguros",
+      "url": "https://bindtm.atlassian.net/servicedesk/customer/portal/86",
+      "request_types": ["Cobro Cuotas Manual", "Copias de Pólizas/Certificados", "Devoluciones", "Legales", "Modificación de Asegurados", "Modificación de Cobertura", "Reclamo"]
+    },
+    {
+      "id": "80", "key": "PRO", "name": "Procesos",
+      "purpose": "Portal redirige a Google Form externo: https://docs.google.com/forms/d/e/1FAIpQLScCtzwXflH61yYL7FqiYMFbtsUjjRE8l1GEm44C4Q8wpDffwA/viewform",
+      "owner_area": "Procesos",
+      "url": "https://bindtm.atlassian.net/servicedesk/customer/portal/80",
+      "external_form_url": "https://docs.google.com/forms/d/e/1FAIpQLScCtzwXflH61yYL7FqiYMFbtsUjjRE8l1GEm44C4Q8wpDffwA/viewform",
+      "request_types": []
+    },
+    {
+      "id": "223", "key": "PRUEBARPA", "name": "Prueba RPA (TEST)",
+      "purpose": "Portal de pruebas RPA — no productivo.",
+      "owner_area": "Tecnología (test)",
+      "url": "https://bindtm.atlassian.net/servicedesk/customer/portal/223",
+      "test_only": true,
+      "request_types": ["Solicitud de correo electrónico"]
+    },
+    {
+      "id": "34", "key": "REM", "name": "Remuneración de Cuentas",
+      "purpose": "Solicitud de remuneración de cuentas.",
+      "owner_area": "Operaciones",
+      "url": "https://bindtm.atlassian.net/servicedesk/customer/portal/34",
+      "request_types": ["Solicitud de Remuneración de Cuentas"]
+    },
+    {
+      "id": "72", "key": "SISD", "name": "Seguridad de la Información (SegInfo)",
+      "purpose": "ABM de colaboradores BIND y externos, cambios de puesto definitivos, ABM de perfiles. Punto único para alta y baja de usuarios y permisos.",
+      "owner_area": "Seguridad de la Información",
+      "url": "https://bindtm.atlassian.net/servicedesk/customer/portal/72",
+      "request_types": ["Alta Colaborador/a BIND", "Alta Colaborador/a Externo/a Consultora", "Alta Colaborador/a Externo/a Directo", "Baja Colaborador/a BIND", "Baja Colaborador/a Externo/a Consultora", "Baja Colaborador/a Externo/a Directo", "Cambio de Puesto Definitivo de Colaboradores/as", "Requerimiento ABM de Perfiles"]
+    },
+    {
+      "id": "6", "key": "MDA", "name": "Servicios IT (Mesa de Ayuda)",
+      "purpose": "Portal IT principal: blanqueo de contraseña, hardware (mouse/teclado/monitor), instalación de software, impresoras, mudanzas/migraciones. Soporte para colaboradores, clientes (Cash Dispenser, Banca, Bcollect), call centers y proveedores.",
+      "owner_area": "Tecnología / Mesa de Ayuda",
+      "url": "https://bindtm.atlassian.net/servicedesk/customer/portal/6",
+      "request_types": ["Call Centers: Soporte a incidentes/solicitudes de clientes", "Clientes: Cash Dispenser", "Clientes: Solicitudes para Bcollect", "Clientes: Soporte Banca", "Colaboradores: Problema con un sistema, servicio o microinformatica", "Colaboradores: Solicitud de servicio IT", "Proveedores: Solicitud de Soporte IT"]
+    },
+    {
+      "id": "25", "key": "SDVYA", "name": "Solicitud de Viajes y Alojamiento",
+      "purpose": "Solicitud de viajes y/o alojamiento.",
+      "owner_area": "Administración",
+      "url": "https://bindtm.atlassian.net/servicedesk/customer/portal/25",
+      "request_types": ["Solicitud de Viajes y Alojamiento"]
+    },
+    {
+      "id": "11", "key": "SYGP", "name": "Soporte y Gestión Previsional",
+      "purpose": "Consultas y problemas operativos del módulo previsional.",
+      "owner_area": "Operaciones / Previsional",
+      "url": "https://bindtm.atlassian.net/servicedesk/customer/portal/11",
+      "request_types": ["Consulta", "Problema Operativo"]
+    },
+    {
+      "id": "1323", "key": "TSTGB", "name": "testgbi (TEST)",
+      "purpose": "Portal de prueba — no productivo.",
+      "owner_area": "Tecnología (test)",
+      "url": "https://bindtm.atlassian.net/servicedesk/customer/portal/1323",
+      "test_only": true,
+      "request_types": ["Informar sobre una incidencia", "Solicitar un cambio", "Solicitar una nueva cuenta", "Solicitud de compra con aprobación", "Problema", "Solicitud de correo electrónico"]
+    }
+  ]
+}

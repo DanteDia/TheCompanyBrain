@@ -9,6 +9,7 @@
 // The component never sees the difference — it always gets a QAAnswer.
 
 import { ask as askBackend, ApiError } from "./api-backend";
+import { matchPortalIntent } from "./portal-router";
 import type { Answer as BackendAnswer } from "./types-backend";
 import { DEMO_QUERIES, SUGGESTED_QUERIES, matchDemoQuery } from "./mock-data";
 import type { QAAnswer, AnswerType, ReferencedEntity, Citation } from "./types";
@@ -149,6 +150,14 @@ export async function askBrain(question: string, opts?: { user_email?: string })
   answer: QAAnswer;
   source: "live" | "mock";
 }> {
+  // Portal router — onboarding-shaped "where do I file X?" questions get
+  // answered instantly from the static catalogue (lib/portals-data.ts) so a
+  // new hire never has to guess between 25 Jira Service Desk portals.
+  const portalAnswer = matchPortalIntent(question);
+  if (portalAnswer) {
+    return { answer: portalAnswer, source: "mock" };
+  }
+
   // FAQ shortcut — applies in every mode so we never waste tokens on it
   const faq = matchFaq(question);
   if (faq) {

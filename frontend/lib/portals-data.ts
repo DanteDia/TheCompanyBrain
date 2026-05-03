@@ -1,0 +1,385 @@
+// BIND Jira Service Desk portal catalogue — extracted from
+// https://bindtm.atlassian.net/servicedesk/customer/portals
+//
+// Used by portal-router.ts to instantly answer "¿dónde subo este ticket?"
+// type questions for new hires, before falling through to the LLM.
+
+export type Portal = {
+  id: string;
+  name: string;
+  url: string;
+  owner: string;
+  // Free-form keywords the matcher looks for. Lower-case, accent-stripped at
+  // match time. Order matters only for tie-breaking — first portal wins.
+  keywords: string[];
+  // Display-friendly list of request types — surfaced in the answer.
+  requestTypes: string[];
+};
+
+export const BIND_PORTALS: Portal[] = [
+  {
+    id: "6",
+    name: "Servicios IT (Mesa de Ayuda)",
+    url: "https://bindtm.atlassian.net/servicedesk/customer/portal/6",
+    owner: "Mesa de Ayuda — Tecnología",
+    keywords: [
+      "blanqueo", "blanquear", "blanqueo de contraseña", "blanqueo de password",
+      "reset password", "resetear password", "password", "contraseña", "clave", "olvide",
+      "mouse", "teclado", "monitor", "hardware", "impresora",
+      "instalar software", "instalacion software", "instalacion de software",
+      "vpn", "configurar vpn",
+      "mudanza", "migracion equipo", "microinformatica",
+      "mesa de ayuda", "soporte it", "soporte tecnico",
+      "problema con sistema", "problema con el sistema", "problema con un sistema",
+      "no funciona", "se rompio", "se traba", "no anda",
+      "cash dispenser", "bcollect", "soporte banca",
+      "ticket it", "ticket de it", "pedido it", "solicitud it",
+    ],
+    requestTypes: [
+      "Colaboradores: Solicitud de servicio IT",
+      "Colaboradores: Problema con un sistema, servicio o microinformatica",
+      "Clientes: Cash Dispenser",
+      "Clientes: Solicitudes para Bcollect",
+      "Clientes: Soporte Banca",
+      "Call Centers: Soporte a incidentes/solicitudes de clientes",
+      "Proveedores: Solicitud de Soporte IT",
+    ],
+  },
+  {
+    id: "72",
+    name: "Seguridad de la Información (SegInfo)",
+    url: "https://bindtm.atlassian.net/servicedesk/customer/portal/72",
+    owner: "Seguridad de la Información",
+    keywords: [
+      "alta de usuario", "alta de colaborador", "alta colaborador", "alta de empleado",
+      "baja de usuario", "baja de colaborador", "baja colaborador", "baja de empleado",
+      "alta usuario externo", "alta de usuario externo",
+      "alta consultora", "baja consultora",
+      "permisos", "perfil de usuario", "abm de perfiles", "abm perfiles",
+      "cambio de puesto", "cambio de rol",
+      "consultora", "externo", "tercero",
+      "acceso a sistema", "acceso a aplicacion", "permiso para",
+      "seginfo", "seguridad informacion", "seguridad de la informacion",
+      "darle acceso", "dar acceso", "doy acceso", "le doy acceso", "dar de alta", "darle de alta", "nuevo empleado", "empleado nuevo",
+    ],
+    requestTypes: [
+      "Alta Colaborador/a BIND",
+      "Alta Colaborador/a Externo/a Consultora",
+      "Alta Colaborador/a Externo/a Directo",
+      "Baja Colaborador/a BIND",
+      "Baja Colaborador/a Externo/a Consultora",
+      "Baja Colaborador/a Externo/a Directo",
+      "Cambio de Puesto Definitivo de Colaboradores/as",
+      "Requerimiento ABM de Perfiles",
+    ],
+  },
+  {
+    id: "64",
+    name: "Capital Humano",
+    url: "https://bindtm.atlassian.net/servicedesk/customer/portal/64",
+    owner: "Capital Humano (RRHH)",
+    keywords: [
+      "busqueda de colaborador", "buscar colaborador", "nuevo colaborador",
+      "incorporacion", "hiring", "contratar",
+      "nueva posicion", "abrir busqueda",
+      "rrhh", "recursos humanos", "capital humano",
+    ],
+    requestTypes: [
+      "Búsqueda de nuevo colaborador",
+      "Solicitud de incorporación de nuevos colaboradores",
+    ],
+  },
+  {
+    id: "53",
+    name: "Préstamos y Adelantos BIND (RRHH)",
+    url: "https://bindtm.atlassian.net/servicedesk/customer/portal/53",
+    owner: "Capital Humano",
+    keywords: [
+      "anticipo de sueldo", "adelanto de sueldo", "prestamo personal",
+      "aumento limite tarjeta", "aumento limite tc",
+      "cambio de domicilio", "cambio domicilio",
+      "cobertura de puesto", "rotacion",
+    ],
+    requestTypes: [
+      "Solicitud de Anticipo de Sueldo",
+      "Solicitud de Préstamo Personal",
+      "Solicitud de Aumento de Límite de TC",
+      "Formulario de cambio de domicilio",
+      "Cobertura de Puesto",
+      "Rotación",
+    ],
+  },
+  {
+    id: "37",
+    name: "Demandas Centralizadas",
+    url: "https://bindtm.atlassian.net/servicedesk/customer/portal/37",
+    owner: "Operaciones",
+    keywords: [
+      "demanda centralizada", "demandas centralizadas", "centralizada",
+      "alta bind24", "baja bind24", "alta cuenta comitente", "cuenta comitente",
+      "alta jubilo", "baja jubilo",
+      "actualizacion de cliente", "apoderados",
+      "anulacion atm", "anulacion homebanking",
+      "aumento limite extraccion", "bloqueo telefonico",
+      "certificacion de saldos", "cobranzas prestamo",
+      "comex consulta", "consulta snp",
+      "fallecidos", "asociar cuenta beneficio",
+      "beneficio discapacidad",
+    ],
+    requestTypes: [
+      "(50 tipos — operatoria diaria del banco)",
+      "Adelantos / Adelanto Sucursal",
+      "Alta Bind24 (empresas/zafiro)",
+      "Alta cuenta comitente / GALLO-FPA / Júbilo",
+      "Aumento de límite de extracción",
+      "Certificación de Saldos",
+      "Bloqueo telefónico",
+      "COMEX - Consultas",
+      "Beneficio Discapacidad",
+      "Fallecidos (regularización)",
+    ],
+  },
+  {
+    id: "33",
+    name: "OPR-TC (Operaciones de Productos)",
+    url: "https://bindtm.atlassian.net/servicedesk/customer/portal/33",
+    owner: "Operaciones",
+    keywords: [
+      "abm cuentas comitentes", "abm empleados bind",
+      "tarjetas virtuales", "tarjeta virtual", "b24",
+      "datanet", "alta cuenta relacionada", "alta cuenta vinculada",
+      "swift", "mt940",
+      "mep devolucion", "transferencia inmediata",
+      "balanceo atm", "tdv",
+      "tarjeta regalo", "anticipo de cupones",
+      "gdh alta", "gdh aumento limite", "gdh baja",
+      "garantias consultas",
+    ],
+    requestTypes: [
+      "Clientes.ABM de Cuentas Comitentes / Empleados BIND / Tarjetas Virtuales y B24",
+      "Datanet.Alta Servicio / Cuenta Vinculada / Devoluciones",
+      "MEP.Devolución / Devolución Transferencia Inmediata / Nro de MEP",
+      "Swift.ALTA MT940",
+      "TC.ABM línea anticipo de cupones / Aplicación de Pago",
+      "TD.Balanceo ATM / TDV - ABM",
+      "TR.Pedido Tarjeta Regalo",
+      "GDH - Alta / Aumento de límite / Baja por desvinculación",
+    ],
+  },
+  {
+    id: "70",
+    name: "Bind PSP (Pagos)",
+    url: "https://bindtm.atlassian.net/servicedesk/customer/portal/70",
+    owner: "Bind Pagos",
+    keywords: [
+      "bind psp", "bind pagos", "alta de cliente psp", "baja de cliente psp",
+      "pos", "dispositivo pos", "alta pos", "baja pos",
+      "qri", "solicitud qri",
+      "integracion pagos",
+    ],
+    requestTypes: [
+      "Alta de Cliente / Baja de Cliente",
+      "Alta de Dispositivo POS / Baja de Dispositivo POS",
+      "Solicitud de QRI",
+      "Integraciones",
+      "Consultas y Reclamos",
+    ],
+  },
+  {
+    id: "86",
+    name: "Portal Seguros BIND",
+    url: "https://bindtm.atlassian.net/servicedesk/customer/portal/86",
+    owner: "Bind Seguros",
+    keywords: [
+      "seguros", "poliza", "polizas", "asegurados",
+      "modificacion de cobertura", "modificacion asegurado",
+      "cobro cuotas seguros", "devolucion seguro",
+      "reclamo seguros", "siniestro",
+    ],
+    requestTypes: [
+      "Cobro Cuotas Manual",
+      "Copias de Pólizas/Certificados",
+      "Devoluciones",
+      "Modificación de Asegurados",
+      "Modificación de Cobertura",
+      "Reclamo",
+      "Legales",
+    ],
+  },
+  {
+    id: "124",
+    name: "Portal Compliance (Gestor de Tareas PLD)",
+    url: "https://bindtm.atlassian.net/servicedesk/customer/portal/124",
+    owner: "Compliance / PLD",
+    keywords: [
+      "compliance", "cumplimiento", "consulta normativa",
+      "consulta cumplimiento", "pld",
+      "lavado de activos",
+    ],
+    requestTypes: [
+      "Consulta a Cumplimiento",
+      "Consulta Normativa",
+    ],
+  },
+  {
+    id: "39",
+    name: "KYC-USD",
+    url: "https://bindtm.atlassian.net/servicedesk/customer/portal/39",
+    owner: "Compliance",
+    keywords: [
+      "kyc usd", "kyc dolares", "desbloqueo cuenta usd",
+      "desbloqueo cuenta dolares", "cuenta en dolares bloqueada",
+      "documentacion patrimonial",
+    ],
+    requestTypes: ["KYC-USD"],
+  },
+  {
+    id: "87",
+    name: "Control Aperturas de Cuenta",
+    url: "https://bindtm.atlassian.net/servicedesk/customer/portal/87",
+    owner: "Compliance",
+    keywords: [
+      "apertura de cuenta", "aperturas de cuenta", "control apertura",
+      "abrir cuenta", "abrir una cuenta", "abrir cuenta empresa",
+      "onboarding cliente", "alta de cliente cuenta",
+    ],
+    requestTypes: ["FORM Control Apertura de Cuenta"],
+  },
+  {
+    id: "51",
+    name: "Gestión de Fraudes",
+    url: "https://bindtm.atlassian.net/servicedesk/customer/portal/51",
+    owner: "Riesgos / Fraude",
+    keywords: [
+      "fraude", "fraudes", "reportar fraude", "potencial fraude",
+      "estafa", "phishing", "investigacion fraude",
+    ],
+    requestTypes: ["Formulario de Gestión de Fraude"],
+  },
+  {
+    id: "31",
+    name: "BI - Datos: Gestión de la demanda",
+    url: "https://bindtm.atlassian.net/servicedesk/customer/portal/31",
+    owner: "BI / Datos",
+    keywords: [
+      "tablero", "dashboard", "powerbi", "qlik",
+      "pedido de informacion", "data", "datos",
+      "problema de datos", "soporte tablero",
+      "pedido bi",
+    ],
+    requestTypes: [
+      "Nuevo pedido de Información",
+      "Pedido de capacitación o soporte de uso",
+      "Problema de datos o de tablero",
+      "Solicitud por pruebas de usuario",
+    ],
+  },
+  {
+    id: "20",
+    name: "Gestión Documental (GD/GeDe)",
+    url: "https://bindtm.atlassian.net/servicedesk/customer/portal/20",
+    owner: "Procesos / GeDe",
+    keywords: [
+      "gestion documental", "gede", "gd",
+      "cambio de parametria", "parametria",
+      "actualizacion aplicativo", "regulatorio",
+      "normativo", "comunicacion regulatoria",
+    ],
+    requestTypes: [
+      "BAU - Cambio de Parametría",
+      "GD - Actualización aplicativo",
+      "GD - Normativo / Observación / Requerimiento General",
+      "GeDe Regulatorio - Comunicación",
+      "Nuevo pedido GeDe",
+    ],
+  },
+  {
+    id: "23",
+    name: "Administración",
+    url: "https://bindtm.atlassian.net/servicedesk/customer/portal/23",
+    owner: "Administración",
+    keywords: [
+      "modificacion transaccion", "modificar transaccion",
+      "transaccion emergencia", "solicitud transaccion",
+      "impacto cuenta cliente",
+    ],
+    requestTypes: [
+      "Modificación de Transacciones",
+      "Solicitud de Transacción",
+      "Solicitud de transacción SIN impacto en Cuenta Cliente",
+      "Transacción de Emergencia",
+    ],
+  },
+  {
+    id: "32",
+    name: "Portal Marketing",
+    url: "https://bindtm.atlassian.net/servicedesk/customer/portal/32",
+    owner: "Marketing / Sucursales",
+    keywords: [
+      "marketing", "auditoria mensual sucursal",
+      "imagen sucursal", "cajero nuevo", "nuevo cajero",
+      "mudanza sucursal", "refaccion sucursal",
+      "pedido marketing",
+    ],
+    requestTypes: [
+      "AUDITORÍA MENSUAL - SUCURSAL CON/SIN REQUERIMIENTOS",
+      "IMAGEN SUCURSAL: NUEVOS CAJEROS / NUEVOS CASH",
+      "IMAGEN SUCURSAL: MUDANZA / REFACCIÓN / URGENTES",
+      "Solicitud MKT - Sucursal",
+    ],
+  },
+  {
+    id: "29",
+    name: "IDCheques",
+    url: "https://bindtm.atlassian.net/servicedesk/customer/portal/29",
+    owner: "Operaciones",
+    keywords: ["id cheque", "id de cheque", "idcheques", "id cheques"],
+    requestTypes: ["Solicitud ID Cheque"],
+  },
+  {
+    id: "25",
+    name: "Solicitud de Viajes y Alojamiento",
+    url: "https://bindtm.atlassian.net/servicedesk/customer/portal/25",
+    owner: "Administración",
+    keywords: [
+      "viaje", "viajes", "alojamiento", "hotel",
+      "viatico", "solicitud de viaje", "pasaje",
+    ],
+    requestTypes: ["Solicitud de Viajes y Alojamiento"],
+  },
+  {
+    id: "81",
+    name: "Gestión de Contratos BIND",
+    url: "https://bindtm.atlassian.net/servicedesk/customer/portal/81",
+    owner: "Legales / Contratos",
+    keywords: [
+      "contrato", "nuevo contrato", "alta contrato",
+      "gestion de contratos",
+    ],
+    requestTypes: ["FORM de Nuevo Contrato"],
+  },
+  {
+    id: "34",
+    name: "Remuneración de Cuentas",
+    url: "https://bindtm.atlassian.net/servicedesk/customer/portal/34",
+    owner: "Operaciones",
+    keywords: [
+      "remuneracion cuenta", "remuneracion de cuentas",
+      "tasa cuenta",
+    ],
+    requestTypes: ["Solicitud de Remuneración de Cuentas"],
+  },
+  {
+    id: "11",
+    name: "Soporte y Gestión Previsional",
+    url: "https://bindtm.atlassian.net/servicedesk/customer/portal/11",
+    owner: "Operaciones / Previsional",
+    keywords: [
+      "previsional", "previsionales", "jubilacion",
+      "modulo previsional", "soporte previsional",
+    ],
+    requestTypes: ["Consulta", "Problema Operativo"],
+  },
+];
+
+export const PORTALS_LANDING = "https://bindtm.atlassian.net/servicedesk/customer/portals";

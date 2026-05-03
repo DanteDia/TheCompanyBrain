@@ -839,10 +839,10 @@ export function matchDemoQuery(input: string): string | null {
 
 export const SUGGESTED_QUERIES = [
   "¿Cómo funciona The Company Brain?",
+  "¿Dónde subo el ticket para blanquear mi contraseña?",
+  "¿Qué portal uso para dar de alta a un colaborador externo?",
   "Necesito acceso a Salesforce, ¿a quién le pido?",
-  "¿Quién maneja reclamos de clientes?",
   "¿Cuánto tarda en la práctica el alta de un usuario?",
-  "¿Cuál es la política de licencia por paternidad?",
 ];
 
 // ─── Métricas del Skills File para /admin overview ──────────────────

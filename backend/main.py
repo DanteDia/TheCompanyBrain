@@ -243,6 +243,48 @@ async def seed_from_sample(only: Optional[str] = None) -> dict[str, Any]:
     }
 
 
+@app.post("/api/seed-portals")
+async def seed_portals() -> dict[str, Any]:
+    """Load sample_data/jsd_portals.json into the Skills File as
+    Tool + AccessPath + TicketType. Idempotent.
+
+    This is what makes "donde subo este ticket?" answerable for new hires:
+    25 BIND Jira Service Desk portals + ~190 request types become first-class
+    entities the QA agent can cite.
+    """
+    from backend.utils.portals_loader import (
+        load_portals,
+        merge_portals_into_skills_file,
+    )
+
+    repo_root = Path(__file__).resolve().parents[1]
+    json_path = repo_root / "sample_data" / "jsd_portals.json"
+    if not json_path.exists():
+        raise HTTPException(404, f"missing {json_path}")
+
+    sb = _supabase()
+    sf = sb.load_skills_file(settings.default_org_id) or SkillsFile(
+        organization_id=settings.default_org_id,
+        organization_name="Banco Demo",
+        generated_at=datetime.now(timezone.utc),
+    )
+
+    data = load_portals(json_path)
+    counts = merge_portals_into_skills_file(sf, data)
+    sb.save_skills_file(sf)
+
+    return {
+        "ok": True,
+        "source": data.get("_meta", {}).get("source"),
+        **counts,
+        "totals_after": {
+            "tools": len(sf.tools),
+            "access_paths": len(sf.access_paths),
+            "ticket_types": len(sf.ticket_types),
+        },
+    }
+
+
 @app.post("/api/build-brain")
 async def build_brain(req: BuildBrainRequest) -> dict[str, Any]:
     """Process every interview row that hasn't been merged yet for this org."""
