@@ -1,0 +1,9 @@
+id,name,email,role,area,manager_id,phone
+ceo_acme,Lucia Fernandez,lucia@acme.test,CEO,Direccion,,+5491109876541
+cto_acme,Pablo Rodriguez,pablo@acme.test,CTO,Producto,ceo_acme,+5491109876542
+cpo_acme,Sofia Martinez,sofia@acme.test,CPO,Producto,ceo_acme,+5491109876543
+gte_eng,Javier Torres,javier@acme.test,Engineering Manager,Producto,cto_acme,+5491109876544
+sr_eng,Camila Diaz,camila@acme.test,Senior Engineer,Producto,gte_eng,+5491109876545
+ops_lead,Mateo Gimenez,mateo@acme.test,Head of Operations,Operaciones,ceo_acme,+5491109876546
+sales_lead,Florencia Ruiz,florencia@acme.test,Head of Sales,Comercial,ceo_acme,+5491109876547
+hr_acme,Tomas Castro,tomas@acme.test,HR Lead,Personas,ceo_acme,+5491109876548

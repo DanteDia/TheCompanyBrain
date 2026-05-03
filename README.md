@@ -4,6 +4,17 @@ Infrastructure that learns how a company works internally by **interviewing its 
 
 V1 focus: a 7-minute voice interview with each employee builds a knowledge graph of the organization. New hires query the Brain in natural language to get the exact person, contact, and procedure for any operational question (e.g. *"who do I ask for Salesforce access?"*).
 
+## Live URLs
+
+| | |
+|---|---|
+| **Production** | https://thecompanybrain.xyz |
+| Vercel default | https://the-company-brain.vercel.app |
+| Backend API | https://company-brain-backend.onrender.com |
+| Health check | https://company-brain-backend.onrender.com/health |
+
+See [DEMO_PLAYBOOK.md](./DEMO_PLAYBOOK.md) for step-by-step demo flows (YC pitch, live interview, full company onboarding).
+
 ## Architecture (V1)
 
 ```

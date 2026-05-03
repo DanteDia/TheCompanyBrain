@@ -62,4 +62,16 @@ export async function startWebCall(
   });
 }
 
+
+
+export async function schedule(
+  organization_id?: string,
+  employee_ids?: string[]
+): Promise<{ ok: boolean; scheduled: Array<{ employee_id: string; event_id: string; meet_link?: string; slot: string }> }> {
+  return request("/api/schedule", {
+    method: "POST",
+    body: JSON.stringify({ organization_id, employee_ids }),
+  });
+}
+
 export { ApiError, API_URL };
