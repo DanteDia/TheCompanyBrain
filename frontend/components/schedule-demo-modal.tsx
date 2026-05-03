@@ -12,7 +12,7 @@ import { X } from "lucide-react";
 //   3. Create a "30min Demo" event type
 //   4. Paste the event URL here:
 const CAL_URL =
-  process.env.NEXT_PUBLIC_BOOKING_URL || "https://cal.com/tomas-cb/30min-demo";
+  process.env.NEXT_PUBLIC_BOOKING_URL || "https://cal.com/tomas-.-thecompanybrain";
 
 interface Props {
   open: boolean;
