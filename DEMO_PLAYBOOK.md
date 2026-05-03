@@ -53,7 +53,11 @@ Este es el **Caso 5 del spec V2** — el sistema construyéndose en vivo durante
 
 1. Abrir https://thecompanybrain.xyz/admin/upload
 2. Cambiar el `Organization id` a algo único, ej: `acme_test`
-3. Subir un CSV con la siguiente estructura:
+3. Subir un CSV. Tenés dos pre-armados en el repo:
+   - **`sample_data/bind_org_chart.csv`** — 57 empleados con la estructura REAL de Grupo BIND (CEO Grupo → Chairman → 12 sub-leaders → 4 sub-CEOs y un Gerente General con sus equipos). Los nombres son ficticios para el demo, los emails son `@bind.com.ar`. Estructura mirroreada de Workvivo.
+   - **`sample_data/acme_org_chart.csv`** — 8 empleados de una empresa ficticia "Acme" para demos rápidas multi-tenant.
+
+   O subí tu propio CSV con la siguiente estructura:
    ```
    id,name,email,role,area,manager_id,phone
    ceo_01,Ana CEO,ana@acme.com,CEO,Direccion,,+5491100000001

@@ -1,0 +1,58 @@
+id,name,email,role,area,manager_id,phone
+ceo_grupo,Andres Meta,andres.meta@bind.com.ar,CEO Grupo,Direccion Grupo,,+5491100100001
+chairman,Ariel Sigal,ariel.sigal@bind.com.ar,Chairman Grupo BIND,Presidencia Grupo,ceo_grupo,+5491100100002
+ceo_inv,Juan Martin Aguiar,juan.aguiar@bind.com.ar,CEO Bind Inversiones,Bind Inversiones,chairman,+5491100100003
+dir_altmann,Juan Carlos Altmann,juan.altmann@bind.com.ar,Director,Direccion Grupo,chairman,+5491100100004
+dir_coscia,Alejandro Coscia,alejandro.coscia@bind.com.ar,Director,Direccion Grupo,chairman,+5491100100005
+gte_general,Gaston Eckelhart,gaston.eckelhart@bind.com.ar,Gerente General,Direccion General,chairman,+5491100100006
+ceo_seg,Sebastian Habif,sebastian.habif@bind.com.ar,CEO Bind Seguros,Bind Seguros,chairman,+5491100100007
+dir_lede,Hernan Lede,hernan.lede@bind.com.ar,Director,Direccion Grupo,chairman,+5491100100008
+dir_menalled,Ramon Menalled,ramon.menalled@bind.com.ar,Director,Direccion Grupo,chairman,+5491100100009
+dir_mizraji,Jaime Mizraji,jaime.mizraji@bind.com.ar,Director,Direccion Grupo,chairman,+5491100100010
+ceo_pagos,Alberto Murad,alberto.murad@bind.com.ar,CEO Bind Pagos,Bind Pagos,chairman,+5491100100011
+pres_garantias,Sabina Ozomek,sabina.ozomek@bind.com.ar,Presidente Bind Garantias,Bind Garantias,chairman,+5491100100012
+pres_prida,Andres Prida,andres.prida@bind.com.ar,Presidente,Direccion Grupo,chairman,+5491100100013
+adsc_vazquez,Facundo Vazquez,facundo.vazquez@bind.com.ar,Adscripto a la Presidencia,Presidencia Grupo,chairman,+5491100100014
+inv_koltan,Damian Koltan,damian.koltan@bind.com.ar,Director de Productos,Bind Inversiones,ceo_inv,+5491100100020
+inv_riskhead,Mariana Lopez,mariana.lopez@bind.com.ar,Head of Investment Risk,Bind Inversiones,ceo_inv,+5491100100021
+inv_traders,Federico Bauer,federico.bauer@bind.com.ar,Head of Trading,Bind Inversiones,ceo_inv,+5491100100022
+inv_research,Camila Ferraro,camila.ferraro@bind.com.ar,Head of Research,Bind Inversiones,ceo_inv,+5491100100023
+inv_ops,Pablo Sosa,pablo.sosa@bind.com.ar,COO Bind Inversiones,Bind Inversiones,ceo_inv,+5491100100024
+inv_compliance,Lucia Hidalgo,lucia.hidalgo@bind.com.ar,Compliance Inversiones,Bind Inversiones,ceo_inv,+5491100100025
+inv_clients,Tomas Iturralde,tomas.iturralde@bind.com.ar,Head of Wealth Clients,Bind Inversiones,ceo_inv,+5491100100026
+inv_jefeprod_jorge,Jorge Manuel Fernandez,jorge.fernandez@bind.com.ar,Jefe de Productos y Gestion,Bind Inversiones,inv_koltan,+5491100100030
+inv_lucas,Lucas Martin Karpelovich,lucas.karpelovich@bind.com.ar,Asistente de Inversiones,Bind Inversiones,inv_jefeprod_jorge,+5491100100031
+inv_dante,Dante Arola,dante.arola@bind.com.ar,Analista de Business Intelligence,Bind Inversiones,inv_jefeprod_jorge,+5491100100032
+inv_thiago,Thiago Larivey,thiago.larivey@bind.com.ar,Analista de Datos,Bind Inversiones,inv_jefeprod_jorge,+5491100100033
+gg_riesgo,Carlos Mendez,carlos.mendez@bind.com.ar,VP de Riesgo,Riesgos,gte_general,+5491100100040
+gg_finanzas,Laura Gomez,laura.gomez@bind.com.ar,CFO,Finanzas,gte_general,+5491100100041
+gg_ops,Diego Ramirez,diego.ramirez@bind.com.ar,Gerente de Operaciones,Operaciones,gte_general,+5491100100042
+gg_tec,Juan Perez,juan.perez@bind.com.ar,CTO,Tecnologia,gte_general,+5491100100043
+gg_rrhh,Valeria Rios,valeria.rios@bind.com.ar,Lider de RRHH,RRHH,gte_general,+5491100100044
+gg_legal,Carolina Vidal,carolina.vidal@bind.com.ar,Gerente Legal,Legales,gte_general,+5491100100045
+gg_compliance,Maximo Solari,maximo.solari@bind.com.ar,Compliance Officer,Compliance,gte_general,+5491100100046
+gg_marketing,Florencia Belgrano,florencia.belgrano@bind.com.ar,Gerente de Marketing,Marketing,gte_general,+5491100100047
+gg_data,Ezequiel Vidal,ezequiel.vidal@bind.com.ar,Head of Data,Datos,gte_general,+5491100100048
+gg_innovacion,Agustina Castellanos,agustina.castellanos@bind.com.ar,Lider de Innovacion,Innovacion,gte_general,+5491100100049
+gg_audi,Federico Saavedra,federico.saavedra@bind.com.ar,Auditor Interno,Auditoria,gte_general,+5491100100050
+gg_admin,Romina Pelaez,romina.pelaez@bind.com.ar,Gerente Administracion,Administracion,gte_general,+5491100100051
+gg_proy,Nicolas Adamo,nicolas.adamo@bind.com.ar,PMO Lead,Proyectos,gte_general,+5491100100052
+seg_ops,Martin Galvan,martin.galvan@bind.com.ar,COO Bind Seguros,Bind Seguros,ceo_seg,+5491100100060
+seg_ventas,Vanesa Quiroga,vanesa.quiroga@bind.com.ar,Head of Sales Bind Seguros,Bind Seguros,ceo_seg,+5491100100061
+lede_a,Sergio Larroza,sergio.larroza@bind.com.ar,Subdirector,Direccion Grupo,dir_lede,+5491100100070
+lede_b,Patricia Vegna,patricia.vegna@bind.com.ar,Subdirector,Direccion Grupo,dir_lede,+5491100100071
+lede_c,Esteban Boschi,esteban.boschi@bind.com.ar,Subdirector,Direccion Grupo,dir_lede,+5491100100072
+lede_d,Mariela Pardo,mariela.pardo@bind.com.ar,Subdirector,Direccion Grupo,dir_lede,+5491100100073
+pagos_cto,Bruno Gimenez,bruno.gimenez@bind.com.ar,CTO Bind Pagos,Bind Pagos,ceo_pagos,+5491100100080
+pagos_ops,Daniela Robles,daniela.robles@bind.com.ar,COO Bind Pagos,Bind Pagos,ceo_pagos,+5491100100081
+pagos_comm,Ignacio Beltran,ignacio.beltran@bind.com.ar,Head of Commercial Pagos,Bind Pagos,ceo_pagos,+5491100100082
+gar_ops,Luciana Aravena,luciana.aravena@bind.com.ar,COO Bind Garantias,Bind Garantias,pres_garantias,+5491100100090
+gar_credit,Matias Vergara,matias.vergara@bind.com.ar,Head of Credit Garantias,Bind Garantias,pres_garantias,+5491100100091
+gar_legal,Daiana Kotan,daiana.kotan@bind.com.ar,Legal Garantias,Bind Garantias,pres_garantias,+5491100100092
+gar_sales,Jeremias Lopez,jeremias.lopez@bind.com.ar,Head of Sales Garantias,Bind Garantias,pres_garantias,+5491100100093
+gar_risk,Andrea Sanjurjo,andrea.sanjurjo@bind.com.ar,Risk Manager Garantias,Bind Garantias,pres_garantias,+5491100100094
+gar_admin,Tomas Avalos,tomas.avalos@bind.com.ar,Admin Garantias,Bind Garantias,pres_garantias,+5491100100095
+mizraji_assist,Soledad Bermudez,soledad.bermudez@bind.com.ar,Asistente de Direccion,Direccion Grupo,dir_mizraji,+5491100100100
+altmann_a,Sergio Albornoz,sergio.albornoz@bind.com.ar,Adscripto Direccion,Direccion Grupo,dir_altmann,+5491100100101
+altmann_b,Magdalena Cruz,magdalena.cruz@bind.com.ar,Adscripto Direccion,Direccion Grupo,dir_altmann,+5491100100102
+altmann_c,Hernan Vega,hernan.vega@bind.com.ar,Adscripto Direccion,Direccion Grupo,dir_altmann,+5491100100103
