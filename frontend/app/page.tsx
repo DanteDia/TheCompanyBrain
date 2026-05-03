@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import {
   Users,
@@ -21,6 +22,7 @@ import { HeroChatMock } from "@/components/hero-chat-mock";
 import { BeforeAfterAnimation } from "@/components/before-after-animation";
 import { IntegrationCard } from "@/components/integration-card";
 import { BrainNetwork } from "@/components/brain-network";
+import { ScheduleDemoModal } from "@/components/schedule-demo-modal";
 import { RotatingWord } from "@/components/rotating-word";
 import { INTEGRATIONS } from "@/lib/mock-data";
 import { useLocale } from "@/components/locale-toggle";
@@ -28,6 +30,7 @@ import { t } from "@/lib/i18n";
 
 export default function LandingPage() {
   const [locale] = useLocale();
+  const [bookingOpen, setBookingOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-stone-50">
@@ -59,7 +62,11 @@ export default function LandingPage() {
                     <ArrowRight className="h-4 w-4" />
                   </Button>
                 </Link>
-                <Button variant="outline" size="lg">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => setBookingOpen(true)}
+                >
                   {t("hero.cta_secondary", locale)}
                 </Button>
               </div>
@@ -278,6 +285,12 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+
+      {/* Schedule demo modal */}
+      <ScheduleDemoModal
+        open={bookingOpen}
+        onClose={() => setBookingOpen(false)}
+      />
     </div>
   );
 }
