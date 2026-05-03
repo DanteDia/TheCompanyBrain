@@ -74,4 +74,21 @@ export async function schedule(
   });
 }
 
+
+
+export async function uploadOrgChart(
+  file: File,
+  organization_id: string,
+  organization_name?: string
+): Promise<{ ok: boolean; people_loaded: number; total_in_brain: number }> {
+  const fd = new FormData();
+  fd.append("file", file);
+  fd.append("organization_id", organization_id);
+  fd.append("organization_name", organization_name || organization_id);
+  // Don't set Content-Type — browser injects multipart boundary.
+  const res = await fetch(`${API_URL}/api/upload-org-chart`, { method: "POST", body: fd });
+  if (!res.ok) throw new ApiError(res.status, await res.text());
+  return res.json();
+}
+
 export { ApiError, API_URL };
