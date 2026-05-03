@@ -196,6 +196,25 @@ class SlackChannel(ChannelAdapter):
 
     # ── Outbound (delivery) ──────────────────────────────────────────────────
 
+    @staticmethod
+    def thinking_payload() -> dict[str, Any]:
+        """Block Kit for the placeholder posted while the agent is working.
+
+        Posted in <1s so the user sees activity instantly. We then `chat.update`
+        this same message with the real answer once the agent finishes.
+        """
+        return {
+            "blocks": [
+                {
+                    "type": "context",
+                    "elements": [
+                        {"type": "mrkdwn", "text": ":brain: *Pensando…*"}
+                    ],
+                }
+            ],
+            "text": "Pensando…",
+        }
+
     async def post_message(
         self,
         *,
@@ -203,7 +222,11 @@ class SlackChannel(ChannelAdapter):
         payload: dict[str, Any],
         thread_ts: Optional[str] = None,
     ) -> dict[str, Any]:
-        """Post a Block Kit payload to Slack via chat.postMessage."""
+        """Post a Block Kit payload to Slack via chat.postMessage.
+
+        Returns the full Slack API response (includes `ts`, used by
+        update_message to edit the same message later).
+        """
         token = settings.slack_bot_token
         if not token:
             raise RuntimeError("SLACK_BOT_TOKEN not configured")
@@ -217,6 +240,43 @@ class SlackChannel(ChannelAdapter):
         async with httpx.AsyncClient(timeout=10) as client:
             r = await client.post(
                 f"{SLACK_API}/chat.postMessage",
+                headers={
+                    "Authorization": f"Bearer {token}",
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+                json=body,
+            )
+        r.raise_for_status()
+        data = r.json()
+        if not data.get("ok"):
+            raise RuntimeError(f"Slack API error: {data.get('error')!r}")
+        return data
+
+    async def update_message(
+        self,
+        *,
+        channel: str,
+        ts: str,
+        payload: dict[str, Any],
+    ) -> dict[str, Any]:
+        """Edit an existing message via chat.update.
+
+        Used to swap a "Pensando…" placeholder with the final answer once the
+        agent finishes. `ts` comes from the `post_message` response.
+        `chat:write` scope is sufficient (same as posting).
+        """
+        token = settings.slack_bot_token
+        if not token:
+            raise RuntimeError("SLACK_BOT_TOKEN not configured")
+        body: dict[str, Any] = {
+            "channel": channel,
+            "ts": ts,
+            "blocks": payload.get("blocks", []),
+            "text": payload.get("text") or "Respuesta del Brain",
+        }
+        async with httpx.AsyncClient(timeout=10) as client:
+            r = await client.post(
+                f"{SLACK_API}/chat.update",
                 headers={
                     "Authorization": f"Bearer {token}",
                     "Content-Type": "application/json; charset=utf-8",

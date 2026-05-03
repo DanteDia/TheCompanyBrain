@@ -545,31 +545,69 @@ async def _slack_qa_background(
     slack_channel: str,
     thread_ts: Optional[str],
 ) -> None:
-    """Run Q&A and post the answer back to Slack via chat.postMessage."""
-    sf = _supabase().load_skills_file(organization_id)
-    if not sf:
-        await SLACK.post_message(
+    """Run Q&A and post the answer back to Slack.
+
+    UX flow:
+      1. Post a "Pensando…" placeholder immediately so the user sees activity
+         in <1s, even though the agent takes 2-5s.
+      2. Run answer_query in fast mode (Haiku, no extended thinking).
+      3. Edit the placeholder in-place via chat.update with the real answer.
+      4. If chat.update fails for any reason (rare), fall back to a fresh
+         postMessage so the user still gets the answer.
+    """
+    import structlog
+    log = structlog.get_logger("slack_qa")
+
+    # 1. Placeholder — best-effort, don't block on failure
+    placeholder_ts: Optional[str] = None
+    try:
+        placeholder = await SLACK.post_message(
             channel=slack_channel,
-            payload={
-                "blocks": [
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": ":warning: El Brain de tu organización aún no fue construido. "
-                            "Subí el organigrama y entrevistá empleados para empezar.",
-                        },
-                    }
-                ],
-                "text": "Brain not built yet",
-            },
+            payload=SLACK.thinking_payload(),
             thread_ts=thread_ts,
         )
-        return
-    answer = await answer_query(query=text, skills_file=sf)
+        placeholder_ts = placeholder.get("ts")
+    except Exception as e:  # noqa: BLE001
+        log.warning("slack.placeholder_failed", error=str(e))
+
+    # 2. Build the real answer payload
+    sf = _supabase().load_skills_file(organization_id)
+    if not sf:
+        msg_payload: dict[str, Any] = {
+            "blocks": [
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": ":warning: El Brain de tu organización aún no fue construido. "
+                        "Subí el organigrama y entrevistá empleados para empezar.",
+                    },
+                }
+            ],
+            "text": "Brain not built yet",
+        }
+    else:
+        # fast=True → Haiku 4.5, no extended thinking, lower max_tokens.
+        # Trades a small quality dip for ~3x lower latency on Slack DMs.
+        answer = await answer_query(query=text, skills_file=sf, fast=True)
+        msg_payload = SLACK.format_response(answer)
+
+    # 3. Edit the placeholder in place when possible — keeps the channel clean
+    if placeholder_ts:
+        try:
+            await SLACK.update_message(
+                channel=slack_channel,
+                ts=placeholder_ts,
+                payload=msg_payload,
+            )
+            return
+        except Exception as e:  # noqa: BLE001
+            log.warning("slack.update_failed_falling_back", error=str(e))
+
+    # 4. Fallback: post fresh
     await SLACK.post_message(
         channel=slack_channel,
-        payload=SLACK.format_response(answer),
+        payload=msg_payload,
         thread_ts=thread_ts,
     )
 
