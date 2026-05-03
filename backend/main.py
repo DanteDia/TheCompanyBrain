@@ -529,12 +529,23 @@ async def _process_interview_bg(*, call_id: str, org_id: str, employee_id: Optio
 
 @app.post("/channels/gchat/webhook")
 async def gchat_webhook(request: Request) -> JSONResponse:
+    """Google Chat HTTP webhook.
+
+    Synchronous: the response of this endpoint IS the message that gets
+    posted back to the user. Google Chat allows up to ~30s but the user
+    perceives anything over 5s as broken, so we run the agent in fast mode
+    (Haiku 4.5, no extended thinking) → ~2-3s end-to-end.
+
+    Async pattern (post placeholder + chat.update like Slack) is possible via
+    the Chat REST API with a `chat.bot` service account, but adds setup
+    overhead and isn't needed yet at this latency.
+    """
     payload = await request.json()
     msg = GCHAT.parse_inbound(payload)
     if not msg:
-        return JSONResponse({"text": ""})  # silent ack
+        return JSONResponse({"text": ""})  # silent ack for ADDED_TO_SPACE etc.
     sf = _get_skills_file_or_404(msg.organization_id)
-    answer = await answer_query(query=msg.text, skills_file=sf)
+    answer = await answer_query(query=msg.text, skills_file=sf, fast=True)
     return JSONResponse(GCHAT.format_response(answer))
 
 
