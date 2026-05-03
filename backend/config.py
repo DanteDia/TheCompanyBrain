@@ -64,6 +64,10 @@ class Settings(BaseSettings):
     twilio_auth_token: str = ""
     twilio_from_number: str = ""
 
+    # ── Slack ────────────────────────────────────────────────────────────────
+    slack_bot_token: Optional[str] = None  # xoxb-... (Bot User OAuth Token)
+    slack_signing_secret: Optional[str] = None  # for verifying request signatures
+
     # ── Google Calendar ──────────────────────────────────────────────────────
     gcp_service_account_json_path: Optional[str] = None
     gcp_service_account_json: Optional[str] = Field(

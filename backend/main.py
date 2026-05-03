@@ -44,6 +44,7 @@ from backend.agents.post_interview import process_interview
 from backend.agents.qa_agent import answer_query
 from backend.channels.gchat import GoogleChatChannel
 from backend.channels.web import WebChannel
+from backend.channels.slack import SlackChannel
 from backend.channels.whatsapp import WhatsAppChannel
 from backend.config import settings
 from backend.models.schemas import SkillsFile
@@ -65,6 +66,7 @@ app.add_middleware(
 
 WEB = WebChannel()
 GCHAT = GoogleChatChannel()
+SLACK = SlackChannel()
 WHATSAPP = WhatsAppChannel()
 
 
@@ -491,6 +493,84 @@ async def gchat_webhook(request: Request) -> JSONResponse:
     sf = _get_skills_file_or_404(msg.organization_id)
     answer = await answer_query(query=msg.text, skills_file=sf)
     return JSONResponse(GCHAT.format_response(answer))
+
+
+@app.post("/channels/slack/events")
+async def slack_events(request: Request, background: BackgroundTasks) -> JSONResponse:
+    """Slack Events API webhook.
+
+    Handles three things:
+      1. URL verification challenge (initial setup with Slack).
+      2. Signature verification (rejects requests not from Slack).
+      3. Event dispatch — app_mention or message.im → background Q&A,
+         answer is posted back via chat.postMessage so we ack within 3s.
+    """
+    body = await request.body()
+    try:
+        payload = json.loads(body) if body else {}
+    except json.JSONDecodeError:
+        return JSONResponse({"error": "invalid json"}, status_code=400)
+
+    # 1. URL verification (no signature check on this — happens during setup)
+    if payload.get("type") == "url_verification":
+        return JSONResponse({"challenge": payload.get("challenge", "")})
+
+    # 2. Verify signature
+    timestamp = request.headers.get("X-Slack-Request-Timestamp", "")
+    signature = request.headers.get("X-Slack-Signature", "")
+    if not SLACK.verify_signature(body, timestamp, signature):
+        return JSONResponse({"error": "invalid signature"}, status_code=401)
+
+    # 3. Parse + dispatch
+    msg = SLACK.parse_inbound(payload)
+    if not msg:
+        return JSONResponse({"ok": True, "ignored": True})
+
+    event = payload.get("event") or {}
+    background.add_task(
+        _slack_qa_background,
+        text=msg.text,
+        organization_id=msg.organization_id,
+        slack_channel=event.get("channel", ""),
+        thread_ts=event.get("thread_ts") or event.get("ts"),
+    )
+    return JSONResponse({"ok": True})
+
+
+async def _slack_qa_background(
+    *,
+    text: str,
+    organization_id: str,
+    slack_channel: str,
+    thread_ts: Optional[str],
+) -> None:
+    """Run Q&A and post the answer back to Slack via chat.postMessage."""
+    sf = _supabase().load_skills_file(organization_id)
+    if not sf:
+        await SLACK.post_message(
+            channel=slack_channel,
+            payload={
+                "blocks": [
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": ":warning: El Brain de tu organización aún no fue construido. "
+                            "Subí el organigrama y entrevistá empleados para empezar.",
+                        },
+                    }
+                ],
+                "text": "Brain not built yet",
+            },
+            thread_ts=thread_ts,
+        )
+        return
+    answer = await answer_query(query=text, skills_file=sf)
+    await SLACK.post_message(
+        channel=slack_channel,
+        payload=SLACK.format_response(answer),
+        thread_ts=thread_ts,
+    )
 
 
 @app.post("/channels/whatsapp/webhook")
