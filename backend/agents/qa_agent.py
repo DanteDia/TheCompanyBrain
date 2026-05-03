@@ -93,6 +93,17 @@ async def answer_query(
     Use the default (Opus + thinking) for the web UI where users wait
     happily for a deeper answer.
     """
+    # 0. Portal-intent shortcut. If the question is shaped like "¿dónde subo
+    # este ticket?" we can answer deterministically from the JSM portal
+    # catalogue without burning LLM tokens. Returns immediately for any
+    # channel (Slack, WhatsApp, web /ask, /api/ask).
+    from backend.utils.portal_router import match_portal_intent
+
+    portal_hit = match_portal_intent(query)
+    if portal_hit is not None:
+        log.info("qa.portal_router_hit", portal=portal_hit.get("router_selection"))
+        return portal_hit
+
     selection = await route_entities(skills_file, query)
     sub_brain = build_sub_skills_file(skills_file, selection)
 
