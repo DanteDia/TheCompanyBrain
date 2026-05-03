@@ -9,7 +9,7 @@ interface Props {
   employee_id: string;
   organization_id?: string;
   variant?: "outline" | "default" | "ghost";
-  size?: "sm" | "md" | "lg";
+  size?: "default" | "sm" | "lg" | "icon";
   className?: string;
 }
 

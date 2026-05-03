@@ -11,7 +11,7 @@ import { AnswerCard } from "@/components/answer-card";
 import { ThinkingTrace } from "@/components/thinking-trace";
 import { Composer } from "@/components/composer";
 import { SUGGESTED_QUERIES, ORGANIZATION } from "@/lib/mock-data";
-import { askBrain, getAskMode } from "@/lib/ask-router";
+import { askBrain } from "@/lib/ask-router";
 import { t } from "@/lib/i18n";
 import type { ChatTurn, QAAnswer } from "@/lib/types";
 
