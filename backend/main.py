@@ -314,6 +314,30 @@ async def seed_portals() -> dict[str, Any]:
     }
 
 
+@app.post("/api/admin/refresh-agent")
+async def api_refresh_retell_agent() -> dict[str, Any]:
+    """Force-PATCH the existing Retell agent with the current
+    interview_agent.INTERVIEW_SYSTEM_PROMPT + voice + language config.
+
+    Why this exists: web-initiate only calls create_or_update_agent when
+    RETELL_AGENT_ID is unset. Once the env var is set in production, the
+    agent's prompt on the Retell side never updates even if we change it
+    in code. This endpoint closes that gap — POST it once after deploys
+    that change the prompt or language.
+    """
+    from backend.agents.interview_agent import create_or_update_agent
+
+    if not settings.retell_agent_id:
+        raise HTTPException(400, "RETELL_AGENT_ID is not set")
+    agent = create_or_update_agent("Demo")
+    return {
+        "ok": True,
+        "agent_id": agent.get("agent_id"),
+        "language": agent.get("language") or agent.get("language_code"),
+        "begin_message": agent.get("response_engine", {}).get("begin_message"),
+    }
+
+
 @app.post("/api/build-brain")
 async def build_brain(req: BuildBrainRequest) -> dict[str, Any]:
     """Process every interview row that hasn't been merged yet for this org."""
