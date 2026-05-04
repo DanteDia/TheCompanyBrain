@@ -3,12 +3,14 @@
 import { useState } from "react";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { PEOPLE } from "@/lib/mock-data";
+import { useBrain } from "@/lib/use-brain";
 import { cn } from "@/lib/utils";
 import { PersonCard } from "@/components/person-card";
 
 export default function PeoplePage() {
   const [selected, setSelected] = useState<string | null>(null);
+  const brain = useBrain();
+  const PEOPLE = brain.data.people;
 
   return (
     <div className="flex h-dvh">
@@ -22,8 +24,13 @@ export default function PeoplePage() {
               Personas
             </h1>
             <p className="mt-2 text-stone-600">
-              {PEOPLE.length} empleados en BIND Bank ·{" "}
-              {PEOPLE.filter((p) => p.interviewed).length} entrevistados
+              {brain.loading
+                ? "Cargando…"
+                : `${PEOPLE.length} empleados${
+                    brain.data.source === "live" ? "" : " (mock)"
+                  } · ${
+                    PEOPLE.filter((p) => p.interviewed).length
+                  } entrevistados`}
             </p>
           </header>
 
