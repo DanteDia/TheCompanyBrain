@@ -50,8 +50,20 @@ def load_skills_file(org_id: str) -> Optional[SkillsFile]:
     return SkillsFile.model_validate(res.data[0]["payload"])
 
 
+def ensure_organization(org_id: str, org_name: str = "") -> None:
+    """Idempotent insert into organizations — required before any FK-bearing
+    table accepts the org_id. Called automatically by save_skills_file so
+    new tenants don't crash on first write.
+    """
+    client = get_client()
+    payload = {"id": org_id, "name": org_name or org_id}
+    client.table("organizations").upsert(payload, on_conflict="id").execute()
+
+
 def save_skills_file(skills: SkillsFile) -> None:
-    """Upsert the full Skills File for an org."""
+    """Upsert the full Skills File for an org. Auto-creates the organizations
+    row if missing — fixes FK violation on first upload of a new tenant."""
+    ensure_organization(skills.organization_id, skills.organization_name or "")
     get_client().table("skills_file").upsert(
         {
             "organization_id": skills.organization_id,
