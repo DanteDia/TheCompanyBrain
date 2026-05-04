@@ -147,6 +147,34 @@ class BuildBrainRequest(BaseModel):
 
 @app.post("/api/seed-from-sample")
 async def seed_from_sample(only: Optional[str] = None) -> dict[str, Any]:
+    """Public wrapper: catches any exception and returns it in the body so we
+    can debug without depending on log streaming. Calls the inner impl below.
+    """
+    import traceback
+    try:
+        return await _seed_from_sample_inner(only=only)
+    except Exception as e:  # noqa: BLE001
+        tb = traceback.format_exc()
+        # Log too, in case logs do work
+        try:
+            import structlog
+            structlog.get_logger("seed").error(
+                "seed_from_sample.failed", error=str(e), traceback=tb
+            )
+        except Exception:  # noqa: BLE001
+            pass
+        # Return 500 with the actual detail so the caller can see it
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "error_class": type(e).__name__,
+                "error_message": str(e),
+                "traceback": tb.splitlines()[-15:],  # last 15 lines = the meat
+            },
+        )
+
+
+async def _seed_from_sample_inner(only: Optional[str] = None) -> dict[str, Any]:
     """Process bundled sample_data/ → Skills File in Supabase.
 
     SYNCHRONOUS — returns after the work is done. Caller can pass
