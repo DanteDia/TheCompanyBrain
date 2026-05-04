@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import type { Locale } from "@/lib/i18n";
 
 export function useLocale(): [Locale, (l: Locale) => void] {
-  const [locale, setLocale] = useState<Locale>("es");
+  const [locale, setLocale] = useState<Locale>("en");
 
   useEffect(() => {
     const stored = localStorage.getItem("cb-locale") as Locale | null;
@@ -30,7 +30,7 @@ export function LocaleToggle({
 }) {
   return (
     <div className="inline-flex items-center rounded-md border border-stone-200 p-0.5 bg-white">
-      {(["es", "en"] as const).map((l) => (
+      {(["en", "es"] as const).map((l) => (
         <button
           key={l}
           onClick={() => onChange(l)}

@@ -3,7 +3,7 @@
 
 export type Locale = "es" | "en";
 
-export const DEFAULT_LOCALE: Locale = "es";
+export const DEFAULT_LOCALE: Locale = "en";
 
 type Dict = Record<string, { es: string; en: string }>;
 

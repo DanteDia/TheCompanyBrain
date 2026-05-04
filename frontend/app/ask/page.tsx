@@ -53,7 +53,7 @@ export default function AskPage() {
         answer:
           err instanceof Error
             ? err.message
-            : "Error contactando al Brain. Probá ?demo=1 para usar datos mock.",
+            : "Error reaching the Brain. Try ?demo=1 to use mock data.",
         answer_type: "unknown",
         entities_referenced: [],
         citations: [],
@@ -165,11 +165,11 @@ function EmptyState({
       className="text-center pt-4 md:pt-12"
     >
       <h1 className="text-3xl md:text-4xl tracking-tight font-medium text-stone-900">
-        Hola {userName}.
+        Hi {userName}.
       </h1>
       <p className="mt-3 text-stone-600 max-w-md mx-auto text-base md:text-lg">
         {locale === "es"
-          ? `Preguntame cualquier cosa sobre cómo funciona ${orgName}.`
+          ? `Ask me anything about how ${orgName} works.`
           : `Ask me anything about how ${orgName} works.`}
       </p>
 

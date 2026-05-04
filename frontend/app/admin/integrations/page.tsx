@@ -17,7 +17,7 @@ export default function IntegrationsPage() {
         </h1>
         <p className="mt-2 text-stone-600 max-w-2xl">
           El Brain plays nice con tu ecosistema. Conectá donde la gente ya pregunta
-          (channels), de dónde viene el conocimiento (sources) y cómo se autentica
+          (channels), where knowledge comes from (sources) and how authentication is handled
           (identity).
         </p>
       </header>
@@ -29,7 +29,7 @@ export default function IntegrationsPage() {
       />
       <Section
         title="Fuentes de conocimiento"
-        subtitle="De dónde viene lo que sabe el Brain"
+        subtitle="Where the Brain's knowledge comes from"
         items={sources}
       />
       <Section

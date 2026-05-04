@@ -32,22 +32,22 @@ export default function AdminOverviewPage() {
       {/* KPI Tiles */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
         <KpiTile
-          label="Personas entrevistadas"
+          label="People interviewed"
           value={`${COVERAGE.interviewed} / ${COVERAGE.total_employees}`}
           unit={`${COVERAGE.pct_interviewed}% del banco`}
           progress={COVERAGE.pct_interviewed}
           accent
         />
         <KpiTile
-          label="Personas"
+          label="People"
           value={String(COVERAGE.entities_by_type.people)}
-          unit="en el Brain"
+          unit="in the Brain"
           icon={Users}
         />
         <KpiTile
           label="Queries / Prompts"
           value={String(COVERAGE.queries_this_week)}
-          unit="esta semana"
+          unit="this week"
           icon={MessageCircle}
         />
       </div>
@@ -69,9 +69,9 @@ export default function AdminOverviewPage() {
         </div>
         <div className="grid grid-cols-3 gap-3">
           {[
-            { Icon: Users, label: "Personas", value: COVERAGE.entities_by_type.people },
-            { Icon: Wrench, label: "Sistemas", value: COVERAGE.entities_by_type.tools },
-            { Icon: Workflow, label: "Procesos", value: COVERAGE.entities_by_type.processes },
+            { Icon: Users, label: "People", value: COVERAGE.entities_by_type.people },
+            { Icon: Wrench, label: "Systems", value: COVERAGE.entities_by_type.tools },
+            { Icon: Workflow, label: "Processes", value: COVERAGE.entities_by_type.processes },
           ].map(({ Icon, label, value }) => (
             <div key={label} className="rounded-md border border-stone-200 px-3 py-2.5">
               <Icon className="h-3.5 w-3.5 text-stone-400 mb-1.5" strokeWidth={1.5} />

@@ -25,35 +25,35 @@ log = structlog.get_logger("interview_agent")
 RETELL_BASE = "https://api.retellai.com/v2"
 
 
-INTERVIEW_SYSTEM_PROMPT = """Sos un entrevistador del proyecto Company Brain. Tu trabajo es entrevistar a un empleado durante 5-10 minutos para entender como trabaja en su empresa.
+INTERVIEW_SYSTEM_PROMPT = """You are an interviewer for the Company Brain project. Your job is to interview an employee for 5-10 minutes to understand how they work at their company.
 
 <your_persona>
-Sos calido, breve, profesional. No usas jerga corporativa. Hablas en español rioplatense neutro. Te llamas "Brain" — un asistente que esta aprendiendo de la empresa.
+You are warm, brief, professional. You don't use corporate jargon. You speak in clear, neutral English. Your name is "Brain" — an assistant that is learning from the company.
 </your_persona>
 
 <conversation_flow>
-1. Saludas brevemente. "Hola {nombre}, soy Brain. Gracias por darme estos minutos. Te voy a hacer trece preguntas cortas para entender como trabajas. La idea es que en siete minutos pueda armar un mapa de como funciona el equipo. Arrancamos?"
+1. Greet briefly: "Hi {nombre}, I'm Brain. Thanks for taking these few minutes. I'll ask you thirteen short questions to understand how you work. The idea is that in seven minutes I can build a map of how the team operates. Ready?"
 
-2. Despues de cada respuesta, haces ACK breve y pasas a la proxima ("Buenisimo. Siguiente:")
+2. After each answer, give a brief ACK and move on ("Got it. Next:")
 
-3. Si el empleado se va por las ramas, lo traes con cuidado: "Eso es interesante — para no pasarme del tiempo, te llevo a la proxima."
+3. If the employee goes off topic, gently bring them back: "That's interesting — to keep us on time, let me move to the next one."
 
-4. Si no entendes algo, una repregunta maxima. No mas.
+4. If you don't understand something, ask ONE follow-up max. No more.
 
-5. Al final agradeces y cerras: "Listo, ya esta. Gracias {nombre}, esto suma muchisimo."
+5. At the end, thank them and close: "Done, that's it. Thanks {nombre}, this adds a ton."
 </conversation_flow>
 
 <rules>
-- NO inventas respuestas si el empleado dijo algo confuso. Mejor repreguntá UNA vez, y si sigue confuso, pasás a la próxima y el equipo de Brain lo procesa después.
-- NO presionas. Si no quiere responder algo, esta bien. Pasas.
-- NO te extiendas. La meta es 7 minutos totales. Si vas atrasado, recortas los ACKs.
+- DO NOT invent answers if the employee said something confusing. Better to re-ask ONCE, and if still confused, move on and the Brain team processes it after.
+- DO NOT pressure. If they don't want to answer something, that's fine. Move on.
+- DO NOT ramble. Goal is 7 minutes total. If you're behind, trim the ACKs.
 </rules>
 
 <questions>
 {questions_block}
 </questions>
 
-Hace las preguntas EN ORDEN. No saltees. Despues de la ultima (q13_open), cerras la entrevista."""
+Ask the questions IN ORDER. Don't skip. After the last one (q13_open), close the interview."""
 
 
 def _system_prompt_for_employee(name: str) -> str:
@@ -86,14 +86,14 @@ def create_or_update_agent(employee_name: str) -> dict[str, Any]:
     payload = {
         "agent_name": "brain-interviewer",
         "voice_id": "11labs-Adrian",
-        "language": "es-ES",
+        "language": "en-US",
         "response_engine": {
             "type": "retell-llm",
             "llm_id": settings.model_interview,
             "system_prompt": _system_prompt_for_employee(employee_name),
             "begin_message": (
-                f"Hola {employee_name.split()[0] if employee_name else ''}, soy Brain. "
-                f"Tenes un par de minutos?"
+                f"Hi {employee_name.split()[0] if employee_name else ''}, I'm Brain. "
+                f"Do you have a couple of minutes?"
             ),
         },
     }
@@ -129,8 +129,8 @@ def initiate_phone_call(
         },
         "retell_llm_dynamic_variables": {
             "nombre": employee_name.split()[0] if employee_name else "",
-            "rol": employee_role or "empleado",
-            "area": employee_area or "su area",
+            "rol": employee_role or "employee",
+            "area": employee_area or "their area",
         },
     }
     with _client() as c:
@@ -164,8 +164,8 @@ def initiate_web_call(
         },
         "retell_llm_dynamic_variables": {
             "nombre": employee_name.split()[0] if employee_name else "",
-            "rol": employee_role or "empleado",
-            "area": employee_area or "su area",
+            "rol": employee_role or "employee",
+            "area": employee_area or "their area",
         },
     }
     with _client() as c:

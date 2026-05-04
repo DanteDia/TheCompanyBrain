@@ -22,23 +22,23 @@ class Question(TypedDict, total=False):
 INTERVIEW_QUESTIONS: list[Question] = [
     {
         "id": "q1_role",
-        "text": "Para arrancar, contame en una frase tu rol y en qué área estás.",
+        "text": "To start, tell me in one sentence your role and what area you're in.",
         "extracts": ["Person.role", "Person.area"],
         "follow_up_if_unclear": True,
     },
     {
         "id": "q2_current_work",
-        "text": "¿Cuáles son las 2 o 3 cosas más importantes en las que estás trabajando esta semana?",
+        "text": "What are the 2 or 3 most important things you're working on this week?",
         "extracts": ["Person.current_projects", "Process (mencionados)"],
     },
     {
         "id": "q3_recurring_meetings",
-        "text": "¿En qué reuniones recurrentes participás? Pensá en daily, semanales, mensuales — qué son, con quiénes.",
+        "text": "What recurring meetings do you join? Think dailies, weeklies, monthlies — what they are and with whom.",
         "extracts": ["Person.recurring_meetings", "Relationship.collaborates_with"],
     },
     {
         "id": "q4_top_collaborators",
-        "text": "¿Quiénes son las 5 personas con las que más colaborás día a día? Decime nombres y para qué temas.",
+        "text": "Who are the 5 people you collaborate with most day-to-day? Tell me names and topics.",
         "extracts": [
             "Person.top_collaborators",
             "Relationship.collaborates_with",
@@ -47,19 +47,19 @@ INTERVIEW_QUESTIONS: list[Question] = [
     },
     {
         "id": "q5_manager_reports",
-        "text": "¿A quién le reportás? ¿Y tenés gente a cargo? Si sí, ¿quiénes son?",
+        "text": "Who do you report to? And do you have direct reports? If so, who are they?",
         "extracts": ["Person.manager_id", "Person.direct_reports"],
     },
     {
         "id": "q6_tools_used",
-        "text": "¿Qué sistemas o herramientas usás todos los días? Pensá en software, plataformas, lo que tengas abierto siempre.",
+        "text": "What systems or tools do you use every day? Think software, platforms, whatever you always have open.",
         "extracts": ["Tool", "Person uses Tool"],
     },
     {
         "id": "q7_access_paths",
         "text": (
-            "Cuando entraste a la empresa, ¿a quién le pediste acceso a esos sistemas? "
-            "Y si entrara alguien nuevo a tu equipo hoy, ¿a quién mandarías que le pida cada cosa?"
+            "When you joined the company, who did you ask for access to those systems? "
+            "And if someone new joined your team today, who would you send them to for each one?"
         ),
         "extracts": ["AccessPath", "Tool.access_path_id"],
         "why_this_matters": (
@@ -69,27 +69,27 @@ INTERVIEW_QUESTIONS: list[Question] = [
     },
     {
         "id": "q8_tickets_received",
-        "text": "¿Qué tipo de pedidos o consultas te llegan a vos? ¿De qué áreas o personas suelen venir?",
+        "text": "What kinds of requests or questions come to you? From what areas or people do they usually come?",
         "extracts": ["TicketType", "Person.expertise_areas"],
     },
     {
         "id": "q9_escalation",
-        "text": "Cuando hay algo que no podés resolver vos, ¿a quién se lo escalás? ¿Y si tu manager no está, qué hacés?",
+        "text": "When there's something you can't solve yourself, who do you escalate to? And if your manager is out, what do you do?",
         "extracts": ["Relationship.escalates_to"],
     },
     {
         "id": "q10_process_ownership",
         "text": (
-            "¿Hay algún proceso o flujo del que vos seas el dueño o el referente? "
-            "Es decir, si alguien tiene una pregunta sobre eso, te la haría a vos."
+            "Is there a process or workflow that you own or are the go-to person for? "
+            "Meaning, if someone has a question about it, they'd ask you."
         ),
         "extracts": ["Process.owner_id", "Person.owns_processes"],
     },
     {
         "id": "q11_informal_knowledge",
         "text": (
-            "Esta es importante: ¿qué cosas aprendiste de cómo funciona la empresa "
-            "que NO están escritas en ningún manual ni se lo dicen al que recién entra?"
+            "This one's important: what things have you learned about how the company works "
+            "that are NOT written in any manual and that nobody tells the new hire?"
         ),
         "extracts": ["InformalRule"],
         "why_this_matters": (
@@ -99,14 +99,14 @@ INTERVIEW_QUESTIONS: list[Question] = [
     },
     {
         "id": "q12_glossary",
-        "text": "¿Hay términos, nombres de productos o siglas que se usan acá adentro y que alguien de afuera no entendería?",
+        "text": "Are there terms, product names, or acronyms used here that someone from outside wouldn't understand?",
         "extracts": ["GlossaryTerm"],
     },
     {
         "id": "q13_open",
         "text": (
-            "Última: ¿hay algo importante de cómo trabajás o de cómo funciona la "
-            "empresa que no te pregunté y debería saber?"
+            "Last one: is there anything important about how you work or how the company "
+            "operates that I didn't ask and should know?"
         ),
         "extracts": ["*"],
     },

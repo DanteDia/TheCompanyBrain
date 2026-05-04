@@ -28,7 +28,7 @@ export default function UploadPage() {
 
   async function handleFile(file: File) {
     if (!file.name.toLowerCase().endsWith(".csv")) {
-      setError("El archivo debe ser .csv");
+      setError("File must be .csv");
       return;
     }
     setError(null);

@@ -38,8 +38,8 @@ const NAV_GROUPS = [
   {
     label: "Operación",
     items: [
-      { href: "/admin/interviews", label: "Entrevistas", icon: Phone },
-      { href: "/admin/integrations", label: "Integraciones", icon: Plug },
+      { href: "/admin/interviews", label: "Interviews", icon: Phone },
+      { href: "/admin/integrations", label: "Integrations", icon: Plug },
       { href: "/admin/upload", label: "Subir datos", icon: Upload },
     ],
   },

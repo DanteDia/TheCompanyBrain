@@ -99,14 +99,14 @@ export default function InterviewPage() {
       startTimer();
       // Add fake transcript entries on a timer
       const lines: Array<{ role: string; content: string; delayMs: number }> = [
-        { role: "agent", content: "Hola, soy el agente de Company Brain. Te voy a hacer unas preguntas cortas — ¿estás listo?", delayMs: 1500 },
-        { role: "user", content: "Sí, dale.", delayMs: 5500 },
-        { role: "agent", content: "Perfecto. Para empezar, contame en una frase qué hacés en tu rol.", delayMs: 7000 },
-        { role: "user", content: "Soy cofundador y manejo marketing y growth — sitio web, contenido, contacto con prospects.", delayMs: 12000 },
-        { role: "agent", content: "Buenísimo. ¿Qué herramientas usás día a día?", delayMs: 14500 },
-        { role: "user", content: "Notion para docs, Vercel para deployar la landing, Cal.com para booking, y Slack con el equipo.", delayMs: 19000 },
-        { role: "agent", content: "Excelente. Si alguien necesita acceso a Vercel, ¿a quién le pide?", delayMs: 21500 },
-        { role: "user", content: "Me lo pide a mí — soy el dueño del workspace.", delayMs: 25000 },
+        { role: "agent", content: "Hi, I'm the Company Brain agent. I'll ask you a few short questions — ready?", delayMs: 1500 },
+        { role: "user", content: "Yes, go ahead.", delayMs: 5500 },
+        { role: "agent", content: "Perfect. To start — tell me in one sentence what you do in your role.", delayMs: 7000 },
+        { role: "user", content: "I'm co-founder and I run marketing & growth — website, content, prospect outreach.", delayMs: 12000 },
+        { role: "agent", content: "Great. What tools do you use day-to-day?", delayMs: 14500 },
+        { role: "user", content: "Notion for docs, Vercel to deploy the landing, Cal.com for booking, and Slack with the team.", delayMs: 19000 },
+        { role: "agent", content: "Excellent. If someone needs access to Vercel, who do they ask?", delayMs: 21500 },
+        { role: "user", content: "They ask me — I'm the workspace owner.", delayMs: 25000 },
       ];
       lines.forEach((l) => {
         setTimeout(() => {
@@ -207,16 +207,16 @@ export default function InterviewPage() {
   const showError = phase === "error";
 
   const statusText: Record<Phase, string> = {
-    ready: "Listo para empezar",
-    starting: "Conectando…",
+    ready: "Ready when you are",
+    starting: "Connecting…",
     live:
       orbPhase === "speaking"
-        ? "El agente está hablando"
+        ? "The agent is talking"
         : orbPhase === "listening"
-        ? "Te escucho — hablá libremente"
-        : "En vivo",
-    ended: "Entrevista terminada",
-    error: "Algo falló",
+        ? "I'm listening — go ahead"
+        : "Live",
+    ended: "Interview finished",
+    error: "Something went wrong",
   };
 
   return (
@@ -253,7 +253,7 @@ export default function InterviewPage() {
         )}
         {isMock && phase !== "live" && (
           <div className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-[10px] font-medium uppercase tracking-wider text-amber-700">
-            Mock mode — visualización sin call real
+            Mock mode — UI only, no live call
           </div>
         )}
       </header>
@@ -273,14 +273,14 @@ export default function InterviewPage() {
               <GradientSphere phase="idle" size={360} theme="light" />
               <div className="mt-12 max-w-md">
                 <div className="text-[11px] uppercase tracking-wider text-stone-500 font-medium">
-                  Entrevista · Company Brain
+                  Interview · Company Brain
                 </div>
                 <h1 className="mt-3 text-3xl md:text-4xl tracking-tight font-medium text-stone-900">
-                  Te voy a hacer unas preguntas cortas.
+                  I'll ask you a few short questions.
                 </h1>
                 <p className="mt-4 text-base md:text-lg leading-relaxed text-stone-600">
-                  ~7 minutos. Hablá natural, como con un colega. Tu
-                  input es lo que va a armar el sistema interno de tu empresa.
+                  ~7 minutes. Speak naturally, like with a colleague.
+                  Your input is what builds your company's internal system.
                 </p>
                 <div className="mt-8 flex flex-col items-center gap-3">
                   <button
@@ -288,10 +288,10 @@ export default function InterviewPage() {
                     className="group inline-flex items-center gap-2 rounded-full bg-stone-900 px-7 py-3.5 text-sm font-medium text-stone-50 shadow-lg shadow-stone-900/20 transition-all hover:bg-accent-600 hover:shadow-accent-500/30"
                   >
                     <Mic className="h-4 w-4" />
-                    Empezar entrevista
+                    Start interview
                   </button>
                   <p className="text-xs text-stone-500">
-                    Vas a darle permiso al microfono cuando lo pida tu navegador.
+                    You'll grant mic permission when your browser asks.
                   </p>
                 </div>
               </div>
@@ -312,7 +312,7 @@ export default function InterviewPage() {
                 {phase === "starting" ? (
                   <span className="inline-flex items-center gap-2">
                     <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                    Conectando…
+                    Connecting…
                   </span>
                 ) : (
                   statusText[phase]
@@ -338,7 +338,7 @@ export default function InterviewPage() {
                       animate={{ opacity: 1, y: 0 }}
                       className={t.role === "agent" ? "text-stone-900" : "text-stone-500 italic"}
                     >
-                      {t.role === "agent" ? "" : "tú: "}
+                      {t.role === "agent" ? "" : "you: "}
                       {t.content}
                     </motion.div>
                   ))}
@@ -350,7 +350,7 @@ export default function InterviewPage() {
                 className="fixed bottom-6 left-1/2 -translate-x-1/2 z-20 inline-flex items-center gap-2 rounded-full border border-stone-300 bg-white/90 backdrop-blur-sm px-5 py-2.5 text-sm font-medium text-stone-700 shadow-md transition-all hover:border-stone-500 hover:bg-white"
               >
                 <MicOff className="h-3.5 w-3.5" />
-                Terminar entrevista
+                End interview
               </button>
             </motion.div>
           )}
@@ -366,18 +366,17 @@ export default function InterviewPage() {
               <GradientSphere phase="ended" size={260} theme="light" />
               <div className="mt-10 max-w-md">
                 <h2 className="text-2xl tracking-tight font-medium text-stone-900">
-                  Listo — gracias!
+                  Done — thanks!
                 </h2>
                 <p className="mt-3 text-base leading-relaxed text-stone-600">
-                  El Brain está procesando lo que charlamos. En segundos vas a
-                  ver tu información integrada en{" "}
+                  The Brain is processing what we talked about. In seconds you'll see your information integrated into{" "}
                   <a href="/brain/people" className="text-accent-700 underline-offset-4 hover:underline">
-                    el grafo de la empresa
+                    the company graph
                   </a>
                   .
                 </p>
                 <div className="mt-2 text-xs text-stone-500 font-mono">
-                  duración: {fmtTime(elapsed)}
+                  duration: {fmtTime(elapsed)}
                 </div>
               </div>
             </motion.div>
@@ -394,10 +393,10 @@ export default function InterviewPage() {
                 <AlertTriangle className="h-5 w-5 text-red-600" strokeWidth={1.5} />
               </div>
               <h2 className="text-2xl tracking-tight font-medium text-stone-900">
-                No pudimos iniciar la entrevista
+                We couldn't start the interview
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-stone-600">
-                {error || "Error desconocido"}
+                {error || "Unknown error"}
               </p>
               <button
                 onClick={() => {
@@ -407,10 +406,10 @@ export default function InterviewPage() {
                 }}
                 className="mt-6 rounded-full border border-stone-300 bg-white px-5 py-2 text-sm font-medium text-stone-700 transition-all hover:border-stone-500"
               >
-                Reintentar
+                Retry
               </button>
               <p className="mt-4 text-xs text-stone-500">
-                Si el problema persiste, escribinos a tomas@thecompanybrain.xyz
+                If the problem persists, write to tomas@thecompanybrain.xyz
               </p>
             </motion.div>
           )}
