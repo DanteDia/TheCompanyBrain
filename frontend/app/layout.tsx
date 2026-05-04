@@ -4,9 +4,9 @@ import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Company Brain — el cerebro operativo de tu empresa",
+  title: "Company Brain — your company's operating brain",
   description:
-    "Entrevistamos a tus empleados con un agente de voz, extraemos cómo funciona internamente la empresa, y dejamos cualquier pregunta operativa respondible en segundos.",
+    "We interview your employees with a voice agent, extract how the company actually works inside, and make any operational question answerable in seconds.",
 };
 
 export default function RootLayout({
@@ -15,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" className={`${GeistSans.variable} ${GeistMono.variable}`}>
+    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <body className="font-sans">{children}</body>
     </html>
   );
