@@ -137,7 +137,7 @@ class SlackChannel(ChannelAdapter):
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": f"*Cómo:* {answer['procedure']}",
+                        "text": f"*How:* {answer['procedure']}",
                     },
                 }
             )
@@ -180,11 +180,11 @@ class SlackChannel(ChannelAdapter):
                 {
                     "type": "context",
                     "elements": [
-                        {"type": "mrkdwn", "text": ":brain: *Pensando…*"}
+                        {"type": "mrkdwn", "text": ":brain: *Thinking…*"}
                     ],
                 }
             ],
-            "text": "Pensando…",
+            "text": "Thinking…",
         }
 
     async def post_message(
@@ -233,7 +233,7 @@ class SlackChannel(ChannelAdapter):
     ) -> dict[str, Any]:
         """Edit an existing message via chat.update.
 
-        Used to swap a "Pensando…" placeholder with the final answer once the
+        Used to swap a "Thinking…" placeholder with the final answer once the
         agent finishes. `ts` comes from the `post_message` response.
         `chat:write` scope is sufficient (same as posting).
         """

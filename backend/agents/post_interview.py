@@ -49,51 +49,51 @@ from backend.utils.transcript_loader import format_transcript_for_llm
 log = structlog.get_logger("post_interview")
 
 
-POST_INTERVIEW_SYSTEM = """Sos un analista que recibe el transcript de una entrevista a un empleado y extrae el conocimiento estructurado.
+POST_INTERVIEW_SYSTEM = """You are an analyst who receives the transcript of an interview with an employee and extracts structured knowledge.
 
 <input>
-Vas a recibir:
-1. Un transcript con turns (speaker, text, timestamp_seconds en segundos)
-2. La info que ya teniamos del empleado (id, nombre, rol, area del org chart)
-3. Las 13 preguntas que se hicieron, en orden
+You will receive:
+1. A transcript with turns (speaker, text, timestamp_seconds in seconds)
+2. Info we already had about the employee (id, name, role, area from the org chart)
+3. The 13 questions that were asked, in order
 
-Cada turn del entrevistador (speaker=agent) hace UNA pregunta. Cada turn del empleado (speaker=employee) responde a la pregunta mas reciente del entrevistador.
+Each interviewer turn (speaker=agent) asks ONE question. Each employee turn (speaker=employee) answers the most recent interviewer question.
 </input>
 
 <extraction_targets>
-Extrae y registrá usando el tool `extract_from_interview`:
+Extract and record using the `extract_from_interview` tool:
 
-1. **people**: personas mencionadas (companeros, manager, reportes, terceros). Si tienen rol/area inferible, incluilo. Si solo dijo nombre, registralo igual con campos vacios — el merge despues lo matchea contra el org chart.
-2. **tools**: sistemas, software, plataformas, repos. Cada uno con purpose breve.
-3. **access_paths**: "para X, le pido a Y" → AccessPath. CRITICAL para el Trojan Horse — esta es la pregunta 7. Captura SLA si lo menciono.
-4. **processes**: procesos o flujos mencionados, con owner si se infiere.
-5. **ticket_types**: "me llegan pedidos de X de gente de Y".
-6. **glossary**: terminos internos con su definicion (pregunta 12).
-7. **informal_rules**: TODO lo que el empleado dijo en la pregunta 11 (conocimiento no escrito), MAS cualquier cosa similar que aparezca en otras respuestas. Se generoso aca — false positives son aceptables.
-8. **relationships**: edges entre entidades. "X y yo trabajamos juntos en Y" → Relationship.
-9. **knowledge_gaps**: temas que el empleado mencionó pero no profundizó.
+1. **people**: people mentioned (colleagues, manager, reports, third parties). If you can infer role/area, include it. If only a name was given, record it anyway with empty fields — the merge will match it against the org chart later.
+2. **tools**: systems, software, platforms, repos. Each with a brief purpose.
+3. **access_paths**: "for X, I ask Y" → AccessPath. CRITICAL for the Trojan Horse — this is question 7. Capture SLA if mentioned.
+4. **processes**: processes or workflows mentioned, with owner if inferable.
+5. **ticket_types**: "I get requests for X from people in Y".
+6. **glossary**: internal terms with their definition (question 12).
+7. **informal_rules**: EVERYTHING the employee said in question 11 (unwritten knowledge), PLUS anything similar that comes up in other answers. Be generous here — false positives are acceptable.
+8. **relationships**: edges between entities. "X and I work together on Y" → Relationship.
+9. **knowledge_gaps**: topics the employee mentioned but didn't expand on.
 
-Cada extracción incluye un `evidence` array con:
+Each extraction includes an `evidence` array with:
 - source_type: "interview"
-- source_id: el call_id que te paso
-- speaker: quién lo dijo (típicamente "employee", a veces "agent" si fue interpretacion)
-- timestamp_seconds: cuando
-- quote: la frase literal (≤30 palabras)
+- source_id: the call_id passed in
+- speaker: who said it (typically "employee", sometimes "agent" if it was an interpretation)
+- timestamp_seconds: when
+- quote: the literal phrase (≤30 words)
 </extraction_targets>
 
 <id_conventions>
-- Usá snake_case para todos los ids: "ana_lopez", "salesforce_creditos", "alta_usuario_sistemas".
-- Si la persona ya viene en el employee skeleton (te lo paso en el input), USA ESE id, no inventes uno nuevo.
-- Para Tools, usá un id descriptivo del producto, no de la marca (ej: "salesforce_creditos" no "sf").
-- Para AccessPath, el id es target_tool_id + "_access" (ej: "salesforce_creditos_access").
+- Use snake_case for all ids: "ana_lopez", "salesforce_credits", "user_provisioning_systems".
+- If the person already comes in the employee skeleton (passed in input), USE THAT id, don't invent a new one.
+- For Tools, use a descriptive product id, not the brand (e.g. "salesforce_credits" not "sf").
+- For AccessPath, the id is target_tool_id + "_access" (e.g. "salesforce_credits_access").
 </id_conventions>
 
 <rules>
-- Si el empleado mencionó un nombre sin apellido o rol, registralo como Person con `name` lo que dijo y dejá los otros campos vacíos. El merge despues hace el matching.
-- NO inventes información. Si no se dijo, no se incluye.
-- En reglas informales sé generoso — incluso menciones de pasada. Mejor false positive que perder señal.
-- Las relationships se INFIEREN del transcript, pero solo cuando hay evidencia clara. No inventes vinculos.
-- knowledge_gaps NO son cosas que el agente preguntó y el empleado no respondió — son temas que el empleado tocó pero dejó incompletos.
+- If the employee mentioned a name without surname or role, record it as Person with `name` set to what they said and leave other fields empty. The merge handles matching later.
+- NEVER invent information. If it wasn't said, don't include it.
+- For informal rules, be generous — even passing mentions. Better a false positive than losing signal.
+- Relationships are INFERRED from the transcript, but only when there's clear evidence. Don't invent connections.
+- knowledge_gaps are NOT things the agent asked that the employee didn't answer — they're topics the employee touched on but left incomplete.
 </rules>"""
 
 
@@ -114,8 +114,8 @@ async def process_interview(
         f"<employee>\n{json.dumps(employee_skeleton, ensure_ascii=False, indent=2)}\n</employee>\n\n"
         f"<questions>\n{questions_block_for_prompt()}\n</questions>\n\n"
         f'<transcript call_id="{call_id}">\n{transcript_text}\n</transcript>\n\n'
-        "Extraé todo el conocimiento usando el tool `extract_from_interview`. "
-        "Cada item con su evidence."
+        "Extract all knowledge using the `extract_from_interview` tool. "
+        "Each item with its evidence."
     )
 
     log.info(

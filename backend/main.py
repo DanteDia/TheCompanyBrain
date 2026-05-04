@@ -712,8 +712,8 @@ async def _slack_qa_background(
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": ":warning: El Brain de tu organización aún no fue construido. "
-                        "Subí el organigrama y entrevistá empleados para empezar.",
+                        "text": ":warning: Your organization's Brain is not built yet. "
+                        "Upload the org chart and run interviews to get started.",
                     },
                 }
             ],
@@ -764,7 +764,7 @@ async def _slack_qa_background(
                             "type": "button",
                             "text": {
                                 "type": "plain_text",
-                                "text": ":white_check_mark: Crear ticket en Jira",
+                                "text": ":white_check_mark: Create Jira ticket",
                                 "emoji": True,
                             },
                             "style": "primary",
@@ -775,7 +775,7 @@ async def _slack_qa_background(
                             "type": "button",
                             "text": {
                                 "type": "plain_text",
-                                "text": "Cancelar",
+                                "text": "Cancel",
                                 "emoji": True,
                             },
                             "action_id": "cancel_ticket",
@@ -916,7 +916,7 @@ async def slack_interactivity(request: Request) -> JSONResponse:
          sent).
       3. Call jira_client.create_request to actually create the ticket.
       4. Update the original message in-place so the buttons disappear and
-         the user sees "✅ Ticket BLUR-N creado · [link]".
+         the user sees "✅ Ticket BLUR-N created · [link]".
 
     Slack delivers form-encoded body with a single `payload` field that is
     JSON-encoded.
@@ -964,11 +964,11 @@ async def slack_interactivity(request: Request) -> JSONResponse:
                             {
                                 "type": "context",
                                 "elements": [
-                                    {"type": "mrkdwn", "text": "_Cancelado por el usuario_"}
+                                    {"type": "mrkdwn", "text": "_Cancelled by the user_"}
                                 ],
                             }
                         ],
-                        "text": "Cancelado",
+                        "text": "Cancelled",
                     },
                 )
             except Exception:  # noqa: BLE001
@@ -1061,7 +1061,7 @@ async def _slack_create_ticket_and_update(
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": f"_{e}_\n\nProbá creándolo manual en el portal.",
+                        "text": f"_{e}_\n\nTry creating it manually in the portal.",
                     },
                 },
             ],

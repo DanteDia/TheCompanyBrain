@@ -23,15 +23,15 @@ from backend.utils.claude_client import call_with_retry, extract_tool_use
 log = structlog.get_logger("router")
 
 
-ROUTER_SYSTEM = """Sos el router del Company Brain. Recibis (1) una pregunta de un empleado, y (2) un resumen compacto del Skills File de su empresa.
+ROUTER_SYSTEM = """You are the Company Brain router. You receive (1) an employee question, and (2) a compact summary of their company's Skills File.
 
 Tu UNICO trabajo es seleccionar los ids de entidades relevantes para la pregunta y devolverlos via el tool `route_entities`.
 
 <principles>
-- Sé inclusivo. El Q&A agent prefiere ver mas contexto, no menos.
-- Si la pregunta menciona un sistema (Salesforce, JIRA, etc), incluí ese Tool y su access_path.
-- Si la pregunta es operativa ("a quien le pido X", "como hago Y", "que tarda Z"), poné `include_all_informal_rules: true`.
-- Si la pregunta es sobre una persona específica, incluí esa Person y sus colaboradores top.
+- Be inclusive. The Q&A agent prefers more context, not less.
+- If the question mentions a system (Salesforce, JIRA, etc), include that Tool and its access_path.
+- If the question is operational ("who do I ask for X", "how do I do Y", "how long does Z take"), set `include_all_informal_rules: true`.
+- If the question is about a specific person, include that Person and their top collaborators.
 - Cap total: 30 entidades.
 </principles>"""
 
@@ -66,7 +66,7 @@ async def route_entities(
     user_msg = (
         f"<query>\n{query}\n</query>\n\n"
         f"<skills_file_summary>\n{json.dumps(summary, ensure_ascii=False, indent=2)}\n</skills_file_summary>\n\n"
-        f"Seleccioná hasta {max_entities} ids relevantes para la pregunta."
+        f"Select up to {max_entities} relevant ids for the question."
     )
 
     import asyncio

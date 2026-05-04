@@ -652,12 +652,12 @@ def match_portal_intent(question: str) -> Optional[dict[str, Any]]:
     if rt_match is not None:
         rt, _rt_score = rt_match
         summary_lines.append(
-            f"Para eso usá **{top_portal.name} → {rt.name}**."
+            f"For that, use **{top_portal.name} → {rt.name}**."
         )
         summary_lines.append("")
         summary_lines.append(f"→ {top_portal.deep_link(rt.rt_id)}")
         summary_lines.append("")
-        summary_lines.append(f"**Quién lo gestiona:** {top_portal.owner}")
+        summary_lines.append(f"**Owned by:** {top_portal.owner}")
 
         # If there are other plausible request types in the same portal, list a
         # couple so the user can self-correct without going back.
@@ -669,37 +669,37 @@ def match_portal_intent(question: str) -> Optional[dict[str, Any]]:
         if siblings:
             summary_lines.append("")
             summary_lines.append(
-                f"_Otros formularios del mismo portal por si era otra cosa:_"
+                f"_Other forms in the same portal in case it was something else:_"
             )
             for sib in siblings:
                 summary_lines.append(f"• {sib.name} — {top_portal.deep_link(sib.rt_id)}")
     else:
         # Couldn't disambiguate the sub-type. Land them on the portal and list
         # the request types we know about.
-        summary_lines.append(f"Para eso usá el portal **{top_portal.name}**.")
+        summary_lines.append(f"For that, use the **{top_portal.name}** portal.")
         summary_lines.append("")
         summary_lines.append(f"→ {top_portal.url}")
         summary_lines.append("")
-        summary_lines.append(f"**Quién lo gestiona:** {top_portal.owner}")
+        summary_lines.append(f"**Owned by:** {top_portal.owner}")
         if top_portal.request_types:
             summary_lines.append("")
-            summary_lines.append("**Tipos de solicitud disponibles:**")
+            summary_lines.append("**Available request types:**")
             for rt in top_portal.request_types[:8]:
                 if rt.rt_id != "0":
                     summary_lines.append(f"• {rt.name} — {top_portal.deep_link(rt.rt_id)}")
                 else:
                     summary_lines.append(f"• {rt.name}")
             if len(top_portal.request_types) > 8:
-                summary_lines.append(f"• … (+{len(top_portal.request_types) - 8} en el portal)")
+                summary_lines.append(f"• … (+{len(top_portal.request_types) - 8} more in the portal)")
 
     if others:
         summary_lines.append("")
-        summary_lines.append("**Si era de otra área, también podría ser:**")
+        summary_lines.append("**If it was a different area, it could also be:**")
         for p in others:
             summary_lines.append(f"• {p.name} — {p.url}")
 
     summary_lines.append("")
-    summary_lines.append(f"_Catálogo completo: {PORTALS_LANDING}_")
+    summary_lines.append(f"_Full catalog: {PORTALS_LANDING}_")
 
     referenced = [f"tool-jsd-{top_portal.id}"]
     if rt_match is not None:
@@ -732,16 +732,16 @@ def match_portal_intent(question: str) -> Optional[dict[str, Any]]:
                     "source_type": "document",
                     "source_id": f"jsd-portal-{top_portal.id}",
                     "quote": (
-                        f"Portal '{top_portal.name}' en {PORTALS_LANDING} — "
-                        f"gestionado por {top_portal.owner}."
+                        f"Portal '{top_portal.name}' at {PORTALS_LANDING} — "
+                        f"managed by {top_portal.owner}."
                     ),
                 },
             }
         ],
         "follow_ups": [
-            {"text": "¿Quién es el dueño de este portal?"},
-            {"text": "¿Cuánto suele tardar la respuesta?"},
-            {"text": "Mostrame todos los portales disponibles"},
+            {"text": "Who owns this portal?"},
+            {"text": "How long does it usually take?"},
+            {"text": "Show me all available portals"},
         ],
         "thinking_trace": None,
         "router_selection": selection,
@@ -751,12 +751,12 @@ def match_portal_intent(question: str) -> Optional[dict[str, Any]]:
 def _fallback_to_landing() -> dict[str, Any]:
     return {
         "summary": (
-            "No te puedo precisar el portal exacto sin más contexto, pero "
-            "todos los portales del banco viven en el Portal de Autogestión "
+            "I can't pinpoint the exact portal without more context, but "
+            "all the bank's portals live on the Self-Service Portal "
             f"de Blur: {PORTALS_LANDING}\n\n"
-            "Decime qué necesitás (ej: \"alta de un externo de consultora\", "
-            "\"anticipo de sueldo\", \"problema con un sistema\") y te apunto "
-            "al formulario correcto."
+            "Tell me what you need (e.g. \"onboard an external consultant\", "
+            "\"salary advance\", \"problem with a system\") and I'll point "
+            "you to the right form."
         ),
         "person_to_contact": None,
         "procedure": None,
@@ -765,9 +765,9 @@ def _fallback_to_landing() -> dict[str, Any]:
         "referenced_entity_ids": ["tool-jsd-landing"],
         "citations": [],
         "follow_ups": [
-            {"text": "¿Cómo pido alta de un colaborador externo?"},
-            {"text": "¿Dónde subo un blanqueo de contraseña?"},
-            {"text": "¿Qué portal uso para devolver una transferencia inmediata?"},
+            {"text": "How do I onboard an external collaborator?"},
+            {"text": "Where do I file a password reset?"},
+            {"text": "Which portal do I use to refund an immediate transfer?"},
         ],
         "thinking_trace": None,
         "router_selection": {"source": "portal_router_fallback"},
