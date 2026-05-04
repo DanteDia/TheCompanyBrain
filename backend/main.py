@@ -697,11 +697,44 @@ async def _slack_qa_background(
         answer = await answer_query(query=text, skills_file=sf, fast=True)
         msg_payload = SLACK.format_response(answer)
 
-        # If the query looks like a ticketable request, append a "Crear ticket"
-        # button. Click goes to /channels/slack/interactivity which calls Jira.
-        ticket_intent = _detect_ticket_intent(text)
-        if ticket_intent:
-            msg_payload.setdefault("blocks", []).append(
+        # The agent decides if a ticket should be proposed by emitting a
+        # `proposed_ticket` object in submit_answer. If present, render the
+        # action buttons. This replaces the earlier keyword-based detector —
+        # the model can reason about intent + pick the right request_type_id.
+        proposed = answer.get("proposed_ticket") if isinstance(answer, dict) else None
+        if not proposed:
+            # Fallback: legacy keyword detector. Kept so the demo still works
+            # if the model forgets to emit proposed_ticket.
+            proposed = _detect_ticket_intent(text)
+
+        if proposed:
+            # Show why we picked this in the description for the demo
+            reasoning = proposed.get("reasoning")
+            ticket_payload = {
+                "service_desk_id": str(proposed.get("service_desk_id", "2")),
+                "request_type_id": str(proposed.get("request_type_id", "10")),
+                "summary": (proposed.get("summary") or text)[:200],
+                "description": proposed.get("description") or text,
+            }
+            blocks = msg_payload.setdefault("blocks", [])
+            # Optional: small context block above the buttons explaining what
+            # ticket the agent inferred — helps the user trust the action.
+            blocks.append(
+                {
+                    "type": "context",
+                    "elements": [
+                        {
+                            "type": "mrkdwn",
+                            "text": (
+                                f":robot_face: _Detecté que esto se resuelve con un ticket._\n"
+                                f"*Tipo:* {proposed.get('request_type_name', 'Get IT help')}\n"
+                                f"*Resumen propuesto:* {ticket_payload['summary']}"
+                            ),
+                        }
+                    ],
+                }
+            )
+            blocks.append(
                 {
                     "type": "actions",
                     "elements": [
@@ -714,7 +747,7 @@ async def _slack_qa_background(
                             },
                             "style": "primary",
                             "action_id": "create_ticket",
-                            "value": json.dumps(ticket_intent)[:1900],
+                            "value": json.dumps(ticket_payload)[:1900],
                         },
                         {
                             "type": "button",

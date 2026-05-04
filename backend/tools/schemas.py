@@ -346,6 +346,61 @@ SUBMIT_ANSWER_TOOL: dict[str, Any] = {
                 "items": _FOLLOW_UP,
                 "description": "2-3 useful next questions the employee might ask.",
             },
+            "proposed_ticket": {
+                "type": "object",
+                "description": (
+                    "If the question requires action (not just info), propose a "
+                    "ticket to be created in the company's Jira Service Desk. "
+                    "User will see a 'Crear ticket' button to confirm. Skip for "
+                    "purely informational queries."
+                ),
+                "properties": {
+                    "service_desk_id": {
+                        "type": "string",
+                        "description": "Currently always '2' for the BLUR project.",
+                    },
+                    "request_type_id": {
+                        "type": "string",
+                        "description": (
+                            "Numeric id from the catalog provided in the system "
+                            "prompt. Default to '10' (Get IT help) for generic "
+                            "issues. Use '17' for bugs, '24' for onboarding, '11' "
+                            "for VPN, '14' for software requests."
+                        ),
+                    },
+                    "summary": {
+                        "type": "string",
+                        "description": (
+                            "Short, action-oriented, specific (≤120 chars). "
+                            "Bad: 'Need help'. Good: 'Excel download from "
+                            "Bloomberg Terminal failing on credit ops'."
+                        ),
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": (
+                            "Detailed context: what the user said + any "
+                            "relevant brain knowledge that gives context (who "
+                            "owns it, related rules, etc.). Include a line "
+                            "'Reportado vía Company Brain' at the end."
+                        ),
+                    },
+                    "reasoning": {
+                        "type": "string",
+                        "description": (
+                            "1 sentence on why this request type was chosen. "
+                            "Used for telemetry, not shown to user."
+                        ),
+                    },
+                },
+                "required": [
+                    "service_desk_id",
+                    "request_type_id",
+                    "summary",
+                    "description",
+                    "reasoning",
+                ],
+            },
         },
         "required": [
             "summary",
