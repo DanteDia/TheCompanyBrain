@@ -22,6 +22,9 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
     default_timezone: str = "America/Argentina/Buenos_Aires"
     default_org_id: str = "banco_demo"
+    # Public-facing frontend (Vercel) — used in Calendar invites so the
+    # employee gets a clickable link to the in-browser web call.
+    frontend_url: str = "https://www.thecompanybrain.xyz"
 
     # ── LLM provider switch ──────────────────────────────────────────────────
     # "anthropic" → uses native Anthropic SDK (extended thinking + caching available)

@@ -64,20 +64,36 @@ def schedule_interview(
     employee_email: str,
     employee_first_name: str,
     slot_start: datetime,
+    employee_id: str = "",
     duration_minutes: int = 10,
 ) -> dict[str, Any]:
-    """Create a calendar event with auto-generated Google Meet link."""
+    """Create a calendar event with auto-generated Google Meet link.
+
+    The description includes a link to our in-browser Web Call page
+    (`/interview/{employee_id}`) — that's the path that connects to the
+    Retell agent. The Meet link is kept as a backup if the bot ever joins
+    Meet directly (not implemented yet)."""
     service = _calendar_service()
     end = slot_start + timedelta(minutes=duration_minutes)
+    web_call_url = (
+        f"{settings.frontend_url}/interview/{employee_id}"
+        if employee_id
+        else settings.frontend_url
+    )
     event = {
         "summary": f"Brain · 7 min de entrevista con {employee_first_name}",
         "description": (
-            "Hola — te agendamos 7 minutos para que un agente del proyecto "
-            "Company Brain te haga unas preguntas cortas sobre como trabajas. "
-            "Tu input es lo que va a armar el sistema interno de la empresa. "
-            "Si no te queda comodo el horario, movelo libremente.\n\n"
-            "Al unirte a la llamada confirmas tu consentimiento para que la "
-            "conversacion sea transcripta y procesada por el sistema."
+            f"Hola {employee_first_name}, te agendamos 7 minutos para que un "
+            "agente AI del proyecto Company Brain te haga unas preguntas "
+            "cortas sobre como trabajas. Tu input es lo que va a armar el "
+            "sistema interno de la empresa.\n\n"
+            f"PARA UNIRTE A LA ENTREVISTA: abrí este link desde tu navegador "
+            f"(Chrome/Safari) y dale permiso al microfono:\n"
+            f"{web_call_url}\n\n"
+            "Si no te queda comodo el horario, movelo libremente — el link de "
+            "arriba sigue siendo valido. Al unirte a la llamada confirmas tu "
+            "consentimiento para que la conversacion sea transcripta y "
+            "procesada por el sistema."
         ),
         "start": {
             "dateTime": slot_start.isoformat(),
@@ -135,6 +151,7 @@ def schedule_all(
             employee_email=emp["email"],
             employee_first_name=(emp.get("name") or "").split()[0] or "",
             slot_start=slot,
+            employee_id=emp.get("id", ""),
         )
         out.append(
             {
