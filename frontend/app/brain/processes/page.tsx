@@ -5,11 +5,14 @@ import { Workflow, Mail } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { PROCESSES, findPerson } from "@/lib/mock-data";
+import { useBrain } from "@/lib/use-brain";
 import { cn } from "@/lib/utils";
 
 export default function ProcessesPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const brain = useBrain();
+  const PROCESSES = brain.data.processes;
+  const findPerson = (id?: string) => (id ? brain.data.people.find((p) => p.id === id) : undefined);
   const selected = PROCESSES.find((p) => p.id === selectedId) || null;
   const owner = selected ? findPerson(selected.owner_id) : null;
 
@@ -25,7 +28,11 @@ export default function ProcessesPage() {
               Procesos
             </h1>
             <p className="mt-2 text-stone-600">
-              {PROCESSES.length} procesos operativos extraídos de las entrevistas y documentos.
+              {brain.loading
+                ? "Cargando…"
+                : `${PROCESSES.length} procesos operativos extraídos de las entrevistas y documentos${
+                    brain.data.source === "live" ? "" : " (mock)"
+                  }.`}
             </p>
           </header>
 

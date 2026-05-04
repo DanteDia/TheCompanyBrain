@@ -7,6 +7,8 @@ import {
   Users,
   Wrench,
   Workflow,
+  Lightbulb,
+  BookOpen,
   Phone,
   Plug,
   Upload,
@@ -29,6 +31,8 @@ const NAV_GROUPS = [
       { href: "/brain/people", label: "Personas", icon: Users },
       { href: "/brain/tools", label: "Sistemas", icon: Wrench },
       { href: "/brain/processes", label: "Procesos", icon: Workflow },
+      { href: "/brain/rules", label: "Reglas no escritas", icon: Lightbulb },
+      { href: "/brain/glossary", label: "Glosario", icon: BookOpen },
     ],
   },
   {

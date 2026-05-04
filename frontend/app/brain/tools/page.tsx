@@ -5,13 +5,16 @@ import { Wrench, Mail } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { TOOLS, findPerson } from "@/lib/mock-data";
+import { useBrain } from "@/lib/use-brain";
 import { cn } from "@/lib/utils";
 
 export default function ToolsPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const brain = useBrain();
+  const TOOLS = brain.data.tools;
+  const findPerson = (id?: string) => (id ? brain.data.people.find((p) => p.id === id) : undefined);
   const selected = TOOLS.find((t) => t.id === selectedId) || null;
-  const owner = selected ? findPerson(selected.owner_id) : null;
+  const owner = selected ? findPerson((selected as any).owner_id || (selected.owners?.[0])) : null;
 
   return (
     <div className="flex h-dvh">
@@ -25,7 +28,11 @@ export default function ToolsPage() {
               Sistemas y herramientas
             </h1>
             <p className="mt-2 text-stone-600">
-              {TOOLS.length} sistemas detectados a partir de las entrevistas + documentos.
+              {brain.loading
+                ? "Cargando…"
+                : `${TOOLS.length} sistemas detectados a partir de las entrevistas + documentos${
+                    brain.data.source === "live" ? "" : " (mock)"
+                  }.`}
             </p>
           </header>
 
@@ -42,7 +49,7 @@ export default function ToolsPage() {
               </thead>
               <tbody>
                 {TOOLS.map((t) => {
-                  const ownerPerson = findPerson(t.owner_id);
+                  const ownerPerson = findPerson((t as any).owner_id || t.owners?.[0]);
                   return (
                     <tr
                       key={t.id}
