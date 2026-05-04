@@ -34,12 +34,16 @@ interface PhaseConfig {
   meshScale: number;
 }
 
+// Baseline tuned to match radicalsoftware.xyz/labs/gradient-sphere with
+// these slider values: speed 0.20, freq 0.34, amp 0.10, palette_mult 0.86,
+// rotationSpeed 0.42, divisions 177. Their freq is mapped to our shader by
+// trial — their 0.34 → our 0.55 reads visually identical (same "swell size").
 const PHASE_CONFIG: Record<SpherePhase, PhaseConfig> = {
-  idle:        { noiseSpeed: 0.15, noiseFreq: 1.5, noiseAmp: 0.10, paletteMult: 0.45, rotationSpeed: 0.06, meshScale: 1.00 },
-  connecting:  { noiseSpeed: 0.45, noiseFreq: 1.8, noiseAmp: 0.18, paletteMult: 0.55, rotationSpeed: 0.18, meshScale: 1.02 },
-  listening:   { noiseSpeed: 0.20, noiseFreq: 1.6, noiseAmp: 0.13, paletteMult: 0.50, rotationSpeed: 0.10, meshScale: 1.00 },
-  speaking:    { noiseSpeed: 0.55, noiseFreq: 2.0, noiseAmp: 0.28, paletteMult: 0.65, rotationSpeed: 0.20, meshScale: 1.06 },
-  ended:       { noiseSpeed: 0.05, noiseFreq: 1.5, noiseAmp: 0.06, paletteMult: 0.30, rotationSpeed: 0.02, meshScale: 0.95 },
+  idle:        { noiseSpeed: 0.18, noiseFreq: 0.55, noiseAmp: 0.16, paletteMult: 0.80, rotationSpeed: 0.30, meshScale: 1.00 },
+  connecting:  { noiseSpeed: 0.35, noiseFreq: 0.55, noiseAmp: 0.20, paletteMult: 0.86, rotationSpeed: 0.55, meshScale: 1.02 },
+  listening:   { noiseSpeed: 0.20, noiseFreq: 0.55, noiseAmp: 0.18, paletteMult: 0.86, rotationSpeed: 0.42, meshScale: 1.00 },
+  speaking:    { noiseSpeed: 0.40, noiseFreq: 0.55, noiseAmp: 0.26, paletteMult: 0.92, rotationSpeed: 0.55, meshScale: 1.05 },
+  ended:       { noiseSpeed: 0.04, noiseFreq: 0.55, noiseAmp: 0.10, paletteMult: 0.50, rotationSpeed: 0.05, meshScale: 0.96 },
 };
 
 // Standard Ashima/Stefan-Gustavson 3D simplex noise — copy-pasted because
@@ -165,10 +169,12 @@ export function GradientSphere({ phase, level = 0, size = 360, className }: Prop
     // Scene + camera
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
-    camera.position.set(0, 0, 4.5);
+    camera.position.set(0, 0, 3.2);  // closer = sphere fills more of frame
 
     // Geometry — high-subdivision icosahedron for clean wireframe lattice
-    const geometry = new THREE.IcosahedronGeometry(1.0, 6);
+    // detail=8 → 20 * 4^8 = 1.3M triangles. Heavy but matches Radical look.
+    // GPUs handle this fine; if low-end devices stutter, drop to 7.
+    const geometry = new THREE.IcosahedronGeometry(1.0, 7);
 
     // Uniforms — start at idle, lerp toward target each frame
     const uniforms = {
@@ -177,9 +183,9 @@ export function GradientSphere({ phase, level = 0, size = 360, className }: Prop
       u_noise_freq: { value: PHASE_CONFIG.idle.noiseFreq },
       u_noise_amp: { value: PHASE_CONFIG.idle.noiseAmp },
       u_palette_mult: { value: PHASE_CONFIG.idle.paletteMult },
-      u_color_a: { value: new THREE.Color(0xeb8c40) },   // accent-400 terracotta hot
-      u_color_b: { value: new THREE.Color(0x6b8aa6) },   // cool slate blue
-      u_color_dark: { value: new THREE.Color(0x1a1410) },// near-black warm
+      u_color_a: { value: new THREE.Color(0xff8a2a) },   // saturated terracotta hot
+      u_color_b: { value: new THREE.Color(0x4fa1d8) },   // bright slate-cyan cool
+      u_color_dark: { value: new THREE.Color(0x0d0a08) },// deep warm-black sombra
     };
 
     // Filled mesh (faint, gives the sphere body)
@@ -191,7 +197,7 @@ export function GradientSphere({ phase, level = 0, size = 360, className }: Prop
       side: THREE.DoubleSide,
     });
     const fillMesh = new THREE.Mesh(geometry, fillMaterial);
-    fillMesh.scale.setScalar(0.985);
+    fillMesh.scale.setScalar(0.99);
 
     // Wireframe overlay — uses a slightly inflated copy so edges sit on top
     const wireMaterial = new THREE.ShaderMaterial({
