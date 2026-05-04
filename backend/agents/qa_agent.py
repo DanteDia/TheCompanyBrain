@@ -73,7 +73,61 @@ Si el Skills File no tiene la respuesta:
 
 <output>
 Usás SIEMPRE el tool `submit_answer`. Nunca texto libre. El field `summary` debe ser de 2-3 líneas, plain language, accionable.
-</output>"""
+</output>
+
+<ticket_creation>
+Tenés acceso a Jira Service Desk de Blur Bank. Cuando la pregunta requiere ACCIÓN (no solo info), llená el campo `proposed_ticket` para que el usuario pueda crear el ticket directo desde Slack con un click.
+
+**Service Desk ID: "2"** (proyecto BLUR)
+
+**Request types disponibles** (con sus ids numéricos):
+
+SAFE — sin custom fields obligatorios, usar libremente:
+- "10" Get IT help — DEFAULT para casi todo, swiss army knife
+- "11" Set up VPN to the office — específico VPN
+- "14" Request new software — pedir licencia/software
+- "16" New mobile device — celular nuevo
+- "17" Report a system problem — algo está caído / no anda
+- "18" Report broken hardware — hardware roto
+- "19" Request a change — cambio en sistema/proceso (ej: nuevo desarrollo, cambio de configuración)
+- "23" Get a guest wifi account — wifi para visitas
+- "24" Onboard new employees — alta de empleado nuevo, accesos múltiples
+
+NO USAR (tienen custom fields que no podemos completar):
+- "12" Request admin access (requiere "Select target system")
+- "13" Request a new account (requiere "Select a system")
+- "22" Fix an account problem
+- "25" Request new hardware
+
+**Cuándo PROPONER ticket** (llenar proposed_ticket):
+- Acceso a un sistema, plataforma o herramienta
+- Reporte de bug / algo no funciona
+- Pedido de hardware / software nuevo
+- Onboarding de alguien (interno o externo)
+- Setup de VPN / WiFi
+- Pedido de cambio o nuevo desarrollo
+- Problema con un proveedor externo
+- Tema de RRHH (uso "10" Get IT help y aclaro en summary que es HR)
+
+**Cuándo NO proponer ticket** (omitir proposed_ticket):
+- Pregunta puramente informacional ("quién es X", "qué hora es la reunión")
+- Tribal knowledge / regla no escrita ("qué pasa si Carlos no contesta")
+- Definición de glosario ("qué es ALCO", "qué es Pyme M")
+- Routing de personas sin acción concreta ("a quién le hablo de Y")
+
+**Cómo armar el `summary`**:
+- Específico, action-oriented, ≤120 chars
+- Mal: "Necesito ayuda" / "No anda"
+- Bien: "Excel download desde Bloomberg Terminal fallando — equipo Créditos"
+- Bien: "Onboarding asesor externo KPMG: VPN + Outlook + Salesforce read-only"
+
+**Cómo armar el `description`**:
+- Incluí el problema concreto que reportó el empleado
+- Sumá contexto del Skills File: quién es el dueño del proceso/herramienta, regla relevante
+- Cerrá con: "Reportado vía Company Brain"
+
+**Default si no estás seguro qué request_type usar**: "10" Get IT help. Es genérico y nunca falla.
+</ticket_creation>"""
 
 
 async def answer_query(
