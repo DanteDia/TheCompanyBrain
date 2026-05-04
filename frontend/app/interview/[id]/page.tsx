@@ -125,7 +125,14 @@ export default function InterviewPage() {
     setError(null);
     try {
       const RetellWebClient = await loadRetell();
-      const r = await startWebCall(employeeId, orgId);
+      // Read the per-org language preference (set in /admin/settings).
+      // Defaults to 'en'; agent speaks Spanish if the admin toggled to 'es'.
+      const lang =
+        typeof window !== "undefined" &&
+        localStorage.getItem(`cb-org-language-${orgId}`) === "es"
+          ? "es"
+          : "en";
+      const r = await startWebCall(employeeId, orgId, lang);
       const client = new RetellWebClient();
       clientRef.current = client;
 

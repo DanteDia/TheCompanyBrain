@@ -13,6 +13,7 @@ import {
   Plug,
   Upload,
   Settings,
+  MessageCircle,
 } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 import { Avatar } from "@/components/ui/avatar";
@@ -23,7 +24,10 @@ import { AdminPasswordGate } from "@/components/admin-password-gate";
 const NAV_GROUPS = [
   {
     label: null,
-    items: [{ href: "/admin", label: "Overview", icon: LayoutDashboard }],
+    items: [
+      { href: "/admin", label: "Overview", icon: LayoutDashboard },
+      { href: "/admin/chat", label: "Company Brain", icon: MessageCircle },
+    ],
   },
   {
     label: "Brain Explorer",

@@ -116,6 +116,7 @@ def initiate_phone_call(
     employee_name: str,
     employee_role: str = "",
     employee_area: str = "",
+    language: str = "en",
 ) -> dict[str, Any]:
     """Trigger an outbound call. Retell + Twilio handle the rest."""
     payload = {
@@ -131,6 +132,7 @@ def initiate_phone_call(
             "nombre": employee_name.split()[0] if employee_name else "",
             "rol": employee_role or "employee",
             "area": employee_area or "their area",
+            "language": "Spanish" if language == "es" else "English",
         },
     }
     with _client() as c:
@@ -153,6 +155,7 @@ def initiate_web_call(
     employee_name: str,
     employee_role: str = "",
     employee_area: str = "",
+    language: str = "en",
 ) -> dict[str, Any]:
     """Create a web-call (browser-based) — for testing without Twilio."""
     payload = {
@@ -166,6 +169,7 @@ def initiate_web_call(
             "nombre": employee_name.split()[0] if employee_name else "",
             "rol": employee_role or "employee",
             "area": employee_area or "their area",
+            "language": "Spanish" if language == "es" else "English",
         },
     }
     with _client() as c:

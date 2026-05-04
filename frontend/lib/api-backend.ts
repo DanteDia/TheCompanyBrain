@@ -54,11 +54,12 @@ export async function getInterviews(organization_id?: string): Promise<Interview
 
 export async function startWebCall(
   employee_id: string,
-  organization_id?: string
+  organization_id?: string,
+  language: "en" | "es" = "en"
 ): Promise<WebCallResponse> {
   return request<WebCallResponse>("/api/call/web-initiate", {
     method: "POST",
-    body: JSON.stringify({ employee_id, organization_id }),
+    body: JSON.stringify({ employee_id, organization_id, language }),
   });
 }
 

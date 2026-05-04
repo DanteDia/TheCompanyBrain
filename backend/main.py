@@ -440,6 +440,7 @@ async def api_schedule(req: ScheduleRequest) -> dict[str, Any]:
 class InitiateCallRequest(BaseModel):
     employee_id: str
     organization_id: str = Field(default_factory=lambda: settings.default_org_id)
+    language: str = "en"  # "en" or "es" — drives the agent's spoken language
 
 
 @app.post("/api/call/initiate")
@@ -465,6 +466,7 @@ async def api_initiate_call(req: InitiateCallRequest) -> dict[str, Any]:
         employee_name=person.name,
         employee_role=person.role or "",
         employee_area=person.area or "",
+        language=req.language,
     )
     return {"ok": True, "call_id": result.get("call_id"), "agent_id": agent_id}
 
@@ -499,6 +501,7 @@ async def api_initiate_web_call(req: InitiateCallRequest) -> dict[str, Any]:
         employee_name=person.name,
         employee_role=person.role or "",
         employee_area=person.area or "",
+        language=req.language,
     )
     call_id = result.get("call_id", "")
     access_token = result.get("access_token", "")
