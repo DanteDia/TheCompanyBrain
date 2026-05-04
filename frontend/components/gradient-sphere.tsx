@@ -145,10 +145,12 @@ void main() {
   float t = v_color_noise * u_palette_mult + 0.5;
   vec3 col = mix(u_color_b, u_color_a, smoothstep(0.35, 0.65, t));
 
-  // Fresnel for edge glow + soft inner shadow
+  // Fresnel rim only — slight darkening at face center, brightest at edges
   vec3 viewDir = vec3(0.0, 0.0, 1.0);
-  float fresnel = pow(1.0 - abs(dot(normalize(v_normal), viewDir)), 1.6);
-  col = mix(u_color_dark, col, 0.78 + 0.22 * fresnel);
+  float fresnel = pow(1.0 - abs(dot(normalize(v_normal), viewDir)), 1.4);
+  // Mild darken in the middle (NDotV high), bright at the rim. Keeps body
+  // saturation rather than muddying it.
+  col *= 0.85 + 0.30 * fresnel;
   gl_FragColor = vec4(col, 1.0);
 }
 `;
@@ -204,8 +206,8 @@ export function GradientSphere({ phase, level = 0, size = 360, className }: Prop
       u_noise_freq: { value: PHASE_CONFIG.idle.noiseFreq },
       u_noise_amp: { value: PHASE_CONFIG.idle.noiseAmp },
       u_palette_mult: { value: PHASE_CONFIG.idle.paletteMult },
-      u_color_a: { value: new THREE.Color(0xff7a25) },   // vibrant terracotta hot
-      u_color_b: { value: new THREE.Color(0x3690cc) },   // vibrant cyan-blue cool
+      u_color_a: { value: new THREE.Color(0xff8c2e) },   // bright terracotta
+      u_color_b: { value: new THREE.Color(0x3fa0e5) },   // bright cyan-blue
       u_color_dark: { value: new THREE.Color(0x141826) },// cool dark-slate (NOT warm) — keeps blue zones blue
     };
 
