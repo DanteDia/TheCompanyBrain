@@ -91,7 +91,7 @@ export default function AdminOverviewPage() {
             <div>
               <h2 className="font-medium text-stone-900">Pending interviews</h2>
               <p className="text-sm text-stone-500 mt-0.5">
-                {pendingPeople.length} personas todavía sin entrevistar
+                {pendingPeople.length} people still to be interviewed
               </p>
             </div>
             <Link href="/admin/interviews">
