@@ -31,6 +31,10 @@ const config: Config = {
         "fade-in": "fadeIn 0.2s ease-out",
         "slide-up": "slideUp 0.2s ease-out",
         "pulse-soft": "pulseSoft 2s ease-in-out infinite",
+        "orb-pulse": "orbPulse var(--duration,4s) ease-in-out infinite",
+        "orb-breathe": "orbBreathe var(--duration,4s) ease-in-out infinite",
+        "orb-ripple": "orbRipple 3s cubic-bezier(0.16,1,0.3,1) infinite",
+        "orb-spin": "orbSpin 60s linear infinite",
       },
       keyframes: {
         fadeIn: {
@@ -44,6 +48,23 @@ const config: Config = {
         pulseSoft: {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0.5" },
+        },
+        orbPulse: {
+          "0%, 100%": { transform: "scale(1)", filter: "brightness(1)" },
+          "50%": { transform: "scale(1.05)", filter: "brightness(1.1)" },
+        },
+        orbBreathe: {
+          "0%, 100%": { transform: "scale(1) rotate(0deg)" },
+          "33%": { transform: "scale(1.02) rotate(2deg)" },
+          "66%": { transform: "scale(1.04) rotate(-1deg)" },
+        },
+        orbRipple: {
+          "0%": { transform: "scale(1)", opacity: "0.6" },
+          "100%": { transform: "scale(1.8)", opacity: "0" },
+        },
+        orbSpin: {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
         },
       },
     },
