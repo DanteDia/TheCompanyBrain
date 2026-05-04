@@ -42,7 +42,7 @@ export default function ToolsPage() {
                 <tr className="border-b border-stone-200 bg-stone-50/60 text-[11px] uppercase tracking-wider text-stone-500">
                   <th className="text-left font-medium px-4 py-2.5 w-10"></th>
                   <th className="text-left font-medium px-4 py-2.5">Sistema</th>
-                  <th className="text-left font-medium px-4 py-2.5">Categoría</th>
+                  <th className="text-left font-medium px-4 py-2.5">Category</th>
                   <th className="text-left font-medium px-4 py-2.5">Owner</th>
                   <th className="text-left font-medium px-4 py-2.5">SLA acceso</th>
                 </tr>

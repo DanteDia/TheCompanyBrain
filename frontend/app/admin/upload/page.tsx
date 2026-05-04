@@ -83,8 +83,8 @@ export default function UploadPage() {
             Upload org chart
           </h1>
           <p className="mt-2 text-stone-600 max-w-2xl">
-            Upload a CSV con la lista de empleados. Después agendamos
-            entrevistas con Google Calendar y un agente de voz extrae cómo trabajan.
+            Upload a CSV con la lista de empleados. Then we schedule
+            interviews with Google Calendar and a voice agent extracts how they work.
           </p>
         </div>
         <div className="text-right">
@@ -154,7 +154,7 @@ export default function UploadPage() {
             </div>
             <Button variant="outline" className="mt-6" disabled={loading}>
               <FileText className="h-4 w-4" />
-              Seleccionar archivo
+              Select file
             </Button>
             <div className="mt-8 text-xs text-stone-400 font-mono">
               Real upload to backend · org_id = {orgId}

@@ -11,10 +11,10 @@ type Turn = { who: string; side: "left" | "right"; text: { es: string; en: strin
 
 const BEFORE_TURNS: Turn[] = [
   {
-    who: "Sofía",
+    who: "Sofia",
     side: "left",
     text: {
-      es: "¿Quién revisa los contratos con proveedores?",
+      es: "Who reviews vendor contracts?",
       en: "Who reviews vendor contracts?",
     },
   },
@@ -22,15 +22,15 @@ const BEFORE_TURNS: Turn[] = [
     who: "Diego",
     side: "right",
     text: {
-      es: "Uf, no soy yo. Probá con Ana.",
+      es: "Ugh, not me. Try Ana.",
       en: "Not me. Try Ana.",
     },
   },
   {
-    who: "Sofía",
+    who: "Sofia",
     side: "left",
     text: {
-      es: "Ana, ¿revisás contratos de proveedores?",
+      es: "Ana, do you review vendor contracts?",
       en: "Ana, do you review vendor contracts?",
     },
   },
@@ -38,15 +38,15 @@ const BEFORE_TURNS: Turn[] = [
     who: "Ana",
     side: "right",
     text: {
-      es: "No, eso lo lleva Legales. Andá con Carlos.",
+      es: "No, Legal handles that. Try Carlos.",
       en: "No, that's Legal. Go with Carlos.",
     },
   },
   {
-    who: "Sofía",
+    who: "Sofia",
     side: "left",
     text: {
-      es: "Carlos, ¿podés revisar este contrato?",
+      es: "Carlos, can you review this contract?",
       en: "Carlos, can you review this contract?",
     },
   },
@@ -61,7 +61,7 @@ const BEFORE_TURNS: Turn[] = [
 ];
 
 const AFTER_QUESTION = {
-  es: "¿Quién revisa los contratos con proveedores?",
+  es: "Who reviews vendor contracts?",
   en: "Who reviews vendor contracts?",
 };
 

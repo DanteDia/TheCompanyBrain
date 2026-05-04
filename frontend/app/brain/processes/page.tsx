@@ -42,7 +42,7 @@ export default function ProcessesPage() {
                 <tr className="border-b border-stone-200 bg-stone-50/60 text-[11px] uppercase tracking-wider text-stone-500">
                   <th className="text-left font-medium px-4 py-2.5 w-10"></th>
                   <th className="text-left font-medium px-4 py-2.5">Proceso</th>
-                  <th className="text-left font-medium px-4 py-2.5">Área</th>
+                  <th className="text-left font-medium px-4 py-2.5">Area</th>
                   <th className="text-left font-medium px-4 py-2.5">Owner</th>
                   <th className="text-center font-medium px-4 py-2.5">Steps</th>
                   <th className="text-left font-medium px-4 py-2.5">SLA</th>

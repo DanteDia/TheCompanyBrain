@@ -11,11 +11,11 @@ interface ThinkingTraceProps {
 }
 
 const DEFAULT_STEPS = [
-  "Analizando la pregunta",
-  "Buscando entidades relevantes en el Brain",
-  "Consultando entrevistas pertinentes",
-  "Conectando con el organigrama",
-  "Verificando citations",
+  "Analyzing the question",
+  "Searching relevant entities in the Brain",
+  "Consulting pertinent interviews",
+  "Connecting with the org chart",
+  "Verifying citations",
 ];
 
 export function ThinkingTrace({ steps = DEFAULT_STEPS, active = false }: ThinkingTraceProps) {

@@ -22,13 +22,13 @@ export default function InterviewsPage() {
             Interviews
           </h1>
           <p className="mt-2 text-stone-600">
-            {completed.length} completadas · {scheduled.length} agendadas ·{" "}
-            {pending.length} pendientes
+            {completed.length} completed · {scheduled.length} scheduled ·{" "}
+            {pending.length} pending
           </p>
         </div>
         <Button>
           <Calendar className="h-4 w-4" />
-          Agendar nueva
+          Schedule new
         </Button>
       </header>
 
@@ -36,7 +36,7 @@ export default function InterviewsPage() {
       <section className="mb-8">
         <h2 className="text-sm font-medium text-stone-700 mb-3 flex items-center gap-2">
           <Check className="h-4 w-4 text-green-700" strokeWidth={2} />
-          Completadas
+          Completed
         </h2>
         <div className="grid md:grid-cols-2 gap-3">
           {completed.map((i) => {
@@ -52,7 +52,7 @@ export default function InterviewsPage() {
         <section className="mb-8">
           <h2 className="text-sm font-medium text-stone-700 mb-3 flex items-center gap-2">
             <Calendar className="h-4 w-4 text-blue-700" strokeWidth={2} />
-            Agendadas
+            Scheduled
           </h2>
           <div className="grid md:grid-cols-2 gap-3">
             {scheduled.map((i) => {
@@ -69,7 +69,7 @@ export default function InterviewsPage() {
         <section>
           <h2 className="text-sm font-medium text-stone-700 mb-3 flex items-center gap-2">
             <Clock className="h-4 w-4 text-stone-500" strokeWidth={2} />
-            Pendientes de agendar
+            Pending de agendar
           </h2>
           <div className="grid md:grid-cols-2 gap-3">
             {pending.map((i) => {
@@ -92,9 +92,9 @@ function InterviewCard({
   person: (typeof PEOPLE)[number];
 }) {
   const statusInfo = {
-    completed: { label: "Completada", variant: "success" as const, icon: Check },
-    scheduled: { label: "Agendada", variant: "info" as const, icon: Calendar },
-    pending: { label: "Pendiente", variant: "outline" as const, icon: Clock },
+    completed: { label: "Completed", variant: "success" as const, icon: Check },
+    scheduled: { label: "Scheduled", variant: "info" as const, icon: Calendar },
+    pending: { label: "Pending", variant: "outline" as const, icon: Clock },
   }[interview.status];
   const Icon = statusInfo.icon;
 
@@ -119,18 +119,18 @@ function InterviewCard({
               <div className="flex items-center gap-3 mt-3 text-xs text-stone-600 font-mono">
                 <span>⏱ {interview.duration}</span>
                 <span>·</span>
-                <span>{interview.entities_extracted} entidades</span>
+                <span>{interview.entities_extracted} entities</span>
                 <span>·</span>
                 <span className="text-accent-700">
-                  {interview.informal_rules} reglas informales
+                  {interview.informal_rules} unwritten rules
                 </span>
               </div>
               <div className="flex items-center gap-2 mt-3">
                 <Button variant="outline" size="sm" className="h-7 text-xs">
-                  Ver transcript
+                  View transcript
                 </Button>
                 <Button variant="ghost" size="sm" className="h-7 text-xs">
-                  Ver extracción
+                  View extraction
                 </Button>
               </div>
             </>
@@ -140,7 +140,7 @@ function InterviewCard({
             <div className="flex items-center gap-2 mt-3">
               <Button variant="outline" size="sm" className="h-7 text-xs">
                 <Phone className="h-3 w-3" />
-                {interview.status === "scheduled" ? "Reagendar" : "Agendar"}
+                {interview.status === "scheduled" ? "Reschedule" : "Schedule"}
               </Button>
               <WebCallButton employee_id={person.id} />
             </div>

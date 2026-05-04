@@ -50,7 +50,7 @@ export default function RulesPage() {
                     <p className="text-stone-900 leading-relaxed">{r.description}</p>
                     {r.context && (
                       <p className="text-sm text-stone-500 mt-1.5 italic">
-                        Contexto: {r.context}
+                        Context: {r.context}
                       </p>
                     )}
                     {sources.length > 0 && (

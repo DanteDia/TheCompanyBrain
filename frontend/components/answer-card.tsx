@@ -125,7 +125,7 @@ export function AnswerCard({ answer, isAdmin, onSuggestionClick }: AnswerCardPro
       <div className="px-5 py-3 border-t border-stone-100 bg-stone-50/30 rounded-b-lg">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3 text-xs text-stone-500">
-            <span>¿Te ayudó?</span>
+            <span>Did this help?</span>
             <button className="hover:text-green-700 transition-colors">
               <ThumbsUp className="h-3.5 w-3.5" />
             </button>
@@ -138,7 +138,7 @@ export function AnswerCard({ answer, isAdmin, onSuggestionClick }: AnswerCardPro
         {answer.follow_up_suggestions && answer.follow_up_suggestions.length > 0 && (
           <div className="mt-3">
             <div className="text-[11px] uppercase tracking-wider text-stone-400 mb-1.5">
-              También podés preguntar
+              You can also ask
             </div>
             <div className="flex flex-wrap gap-1.5">
               {answer.follow_up_suggestions.map((s) => (
