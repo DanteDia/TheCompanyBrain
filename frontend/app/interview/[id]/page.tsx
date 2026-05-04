@@ -424,13 +424,7 @@ export default function InterviewPage() {
         </AnimatePresence>
       </main>
 
-      {/* Footer */}
-      <footer className="absolute bottom-0 inset-x-0 z-10 flex items-center justify-center px-6 py-5">
-        <div className="text-[10px] text-stone-600 font-mono">
-          {employeeId ? `id · ${employeeId}` : "—"}
-          {orgId && ` · org · ${orgId}`}
-        </div>
-      </footer>
+
     </div>
   );
 }
