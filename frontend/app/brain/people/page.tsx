@@ -30,7 +30,7 @@ export default function PeoplePage() {
                     brain.data.source === "live" ? "" : " (mock)"
                   } · ${
                     PEOPLE.filter((p) => p.interviewed).length
-                  } entrevistados`}
+                  } interviewed`}
             </p>
           </header>
 
