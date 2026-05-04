@@ -1,4 +1,4 @@
-// BIND Jira Service Desk portal catalogue — extracted from
+// Blur Jira Service Desk portal catalogue — extracted from
 // https://bindtm.atlassian.net/servicedesk/customer/portals
 //
 // Used by portal-router.ts to instantly answer "¿dónde subo este ticket?"
@@ -16,7 +16,7 @@ export type Portal = {
   requestTypes: string[];
 };
 
-export const BIND_PORTALS: Portal[] = [
+export const BLUR_PORTALS: Portal[] = [
   {
     id: "6",
     name: "Servicios IT (Mesa de Ayuda)",
@@ -63,10 +63,10 @@ export const BIND_PORTALS: Portal[] = [
       "darle acceso", "dar acceso", "doy acceso", "le doy acceso", "dar de alta", "darle de alta", "nuevo empleado", "empleado nuevo",
     ],
     requestTypes: [
-      "Alta Colaborador/a BIND",
+      "Alta Colaborador/a Blur",
       "Alta Colaborador/a Externo/a Consultora",
       "Alta Colaborador/a Externo/a Directo",
-      "Baja Colaborador/a BIND",
+      "Baja Colaborador/a Blur",
       "Baja Colaborador/a Externo/a Consultora",
       "Baja Colaborador/a Externo/a Directo",
       "Cambio de Puesto Definitivo de Colaboradores/as",
@@ -91,7 +91,7 @@ export const BIND_PORTALS: Portal[] = [
   },
   {
     id: "53",
-    name: "Préstamos y Adelantos BIND (RRHH)",
+    name: "Préstamos y Adelantos Blur (RRHH)",
     url: "https://bindtm.atlassian.net/servicedesk/customer/portal/53",
     owner: "Capital Humano",
     keywords: [
@@ -129,7 +129,7 @@ export const BIND_PORTALS: Portal[] = [
     requestTypes: [
       "(50 tipos — operatoria diaria del banco)",
       "Adelantos / Adelanto Sucursal",
-      "Alta Bind24 (empresas/zafiro)",
+      "Alta Blur24 (empresas/zafiro)",
       "Alta cuenta comitente / GALLO-FPA / Júbilo",
       "Aumento de límite de extracción",
       "Certificación de Saldos",
@@ -156,7 +156,7 @@ export const BIND_PORTALS: Portal[] = [
       "garantias consultas",
     ],
     requestTypes: [
-      "Clientes.ABM de Cuentas Comitentes / Empleados BIND / Tarjetas Virtuales y B24",
+      "Clientes.ABM de Cuentas Comitentes / Empleados Blur / Tarjetas Virtuales y B24",
       "Datanet.Alta Servicio / Cuenta Vinculada / Devoluciones",
       "MEP.Devolución / Devolución Transferencia Inmediata / Nro de MEP",
       "Swift.ALTA MT940",
@@ -168,9 +168,9 @@ export const BIND_PORTALS: Portal[] = [
   },
   {
     id: "70",
-    name: "Bind PSP (Pagos)",
+    name: "Blur PSP (Pagos)",
     url: "https://bindtm.atlassian.net/servicedesk/customer/portal/70",
-    owner: "Bind Pagos",
+    owner: "Blur Pagos",
     keywords: [
       "bind psp", "bind pagos", "alta de cliente psp", "baja de cliente psp",
       "pos", "dispositivo pos", "alta pos", "baja pos",
@@ -187,9 +187,9 @@ export const BIND_PORTALS: Portal[] = [
   },
   {
     id: "86",
-    name: "Portal Seguros BIND",
+    name: "Portal Seguros Blur",
     url: "https://bindtm.atlassian.net/servicedesk/customer/portal/86",
-    owner: "Bind Seguros",
+    owner: "Blur Seguros",
     keywords: [
       "seguros", "poliza", "polizas", "asegurados",
       "modificacion de cobertura", "modificacion asegurado",
@@ -349,7 +349,7 @@ export const BIND_PORTALS: Portal[] = [
   },
   {
     id: "81",
-    name: "Gestión de Contratos BIND",
+    name: "Gestión de Contratos Blur",
     url: "https://bindtm.atlassian.net/servicedesk/customer/portal/81",
     owner: "Legales / Contratos",
     keywords: [

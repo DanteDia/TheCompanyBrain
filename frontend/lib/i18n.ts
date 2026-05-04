@@ -171,8 +171,8 @@ export const STRINGS: Dict = {
 
   // Web app /ask
   "ask.greeting": {
-    es: "Preguntame cualquier cosa sobre cómo funciona BIND Bank.",
-    en: "Ask me anything about how BIND Bank works.",
+    es: "Preguntame cualquier cosa sobre cómo funciona Blur Bank.",
+    en: "Ask me anything about how Blur Bank works.",
   },
   "ask.try": { es: "Probá:", en: "Try:" },
   "ask.composer_placeholder": {

@@ -8,7 +8,7 @@ import { useBrain } from "@/lib/use-brain";
 // supersede these.
 const FALLBACK_TERMS: Array<{ term: string; definition: string }> = [
   {
-    term: "Score BIND",
+    term: "Score Blur",
     definition:
       "Score crediticio interno. Fórmula: (Veraz × 0.6) + (Antigüedad meses × 0.3) + (Saldo promedio × 0.1).",
   },

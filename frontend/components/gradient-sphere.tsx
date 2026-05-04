@@ -40,19 +40,16 @@ interface PhaseConfig {
 }
 
 const PHASE_CONFIG: Record<SpherePhase, PhaseConfig> = {
-  // The contrast between listening (calm, agent waiting for user) and
-  // speaking (active, agent talking) is intentionally dramatic — the
-  // sphere should feel ALIVE when the agent talks and almost still when
-  // it listens. That's the heartbeat of a conversational AI.
-  idle:        { noiseSpeed: 0.18, noiseFreq: 1.10, noiseAmp: 0.30, paletteMult: 0.85, rotationSpeed: 0.20, meshScale: 1.00 },
-  connecting:  { noiseSpeed: 0.50, noiseFreq: 1.10, noiseAmp: 0.40, paletteMult: 0.92, rotationSpeed: 0.65, meshScale: 1.03 },
-  // LISTENING — almost still. Slow rotation, small amp, muted palette.
-  // Reads as "I'm here, waiting for you."
-  listening:   { noiseSpeed: 0.10, noiseFreq: 1.10, noiseAmp: 0.22, paletteMult: 0.75, rotationSpeed: 0.12, meshScale: 0.98 },
-  // SPEAKING — alive. Fast rotation, big bulges, vibrant palette,
-  // scaled up so it commands attention. Reads as "I'm talking now."
-  speaking:    { noiseSpeed: 0.65, noiseFreq: 1.10, noiseAmp: 0.55, paletteMult: 1.00, rotationSpeed: 0.85, meshScale: 1.08 },
-  ended:       { noiseSpeed: 0.04, noiseFreq: 1.10, noiseAmp: 0.18, paletteMult: 0.55, rotationSpeed: 0.06, meshScale: 0.96 },
+  // Speaking is now ~4x slower than the previous draft (per Dante feedback:
+  // the sphere felt frantic). Amp also dropped a touch so big bulges don't
+  // clip against the canvas edges. Listening proportionally calmer too.
+  idle:        { noiseSpeed: 0.06, noiseFreq: 1.10, noiseAmp: 0.24, paletteMult: 0.85, rotationSpeed: 0.06, meshScale: 1.00 },
+  connecting:  { noiseSpeed: 0.13, noiseFreq: 1.10, noiseAmp: 0.30, paletteMult: 0.92, rotationSpeed: 0.18, meshScale: 1.02 },
+  // LISTENING — almost still
+  listening:   { noiseSpeed: 0.04, noiseFreq: 1.10, noiseAmp: 0.18, paletteMult: 0.75, rotationSpeed: 0.04, meshScale: 0.98 },
+  // SPEAKING — alive but not frantic. ~4x slower than before.
+  speaking:    { noiseSpeed: 0.16, noiseFreq: 1.10, noiseAmp: 0.36, paletteMult: 1.00, rotationSpeed: 0.21, meshScale: 1.04 },
+  ended:       { noiseSpeed: 0.02, noiseFreq: 1.10, noiseAmp: 0.16, paletteMult: 0.55, rotationSpeed: 0.02, meshScale: 0.96 },
 };
 
 // Standard Ashima 3D simplex noise.
@@ -278,7 +275,7 @@ export function GradientSphere({ phase, level = 0, size = 360, className, theme 
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
-    camera.position.set(0, 0, 3.4);
+    camera.position.set(0, 0, 4.0);  // extra room so deformed bulges never clip frame
 
     // Dense icosahedron for crisp lattice. detail=6 → 80k tris.
     const geometry = new THREE.IcosahedronGeometry(1.0, 6);
@@ -340,9 +337,9 @@ export function GradientSphere({ phase, level = 0, size = 360, className, theme 
 
       const cfg = PHASE_CONFIG[phaseRef.current];
       const lvl = levelRef.current;
-      const targetAmp = cfg.noiseAmp + lvl * 0.18;
-      const targetSpeed = cfg.noiseSpeed + lvl * 0.30;
-      const targetRot = cfg.rotationSpeed + lvl * 0.25;
+      const targetAmp = cfg.noiseAmp + lvl * 0.10;  // tame audio-amp boost too
+      const targetSpeed = cfg.noiseSpeed + lvl * 0.10;
+      const targetRot = cfg.rotationSpeed + lvl * 0.10;
       const targetScale = cfg.meshScale + lvl * 0.04;
 
       const k = 1 - Math.exp(-dt * 4.5);  // snappier phase transitions

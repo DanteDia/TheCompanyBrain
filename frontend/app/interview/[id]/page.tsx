@@ -15,7 +15,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Mic, MicOff, Loader2, AlertTriangle, Sparkles } from "lucide-react";
+import { Mic, MicOff, Loader2, AlertTriangle } from "lucide-react";
 import { GradientSphere, type SpherePhase } from "@/components/gradient-sphere";
 import { Logo } from "@/components/ui/logo";
 import { startWebCall, ApiError } from "@/lib/api-backend";
@@ -307,7 +307,7 @@ export default function InterviewPage() {
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="flex flex-col items-center text-center"
             >
-              <GradientSphere phase={orbPhase} level={audioLevel} size={460} theme="light" />
+              <GradientSphere phase={orbPhase} level={audioLevel} size={400} theme="light" />
               <div className="mt-10 h-6 text-sm font-medium text-stone-700">
                 {phase === "starting" ? (
                   <span className="inline-flex items-center gap-2">
@@ -347,7 +347,7 @@ export default function InterviewPage() {
 
               <button
                 onClick={handleEnd}
-                className="mt-10 inline-flex items-center gap-2 rounded-full border border-stone-300 bg-white/70 backdrop-blur-sm px-5 py-2.5 text-sm font-medium text-stone-700 shadow-sm transition-all hover:border-stone-500 hover:bg-white"
+                className="fixed bottom-6 left-1/2 -translate-x-1/2 z-20 inline-flex items-center gap-2 rounded-full border border-stone-300 bg-white/90 backdrop-blur-sm px-5 py-2.5 text-sm font-medium text-stone-700 shadow-md transition-all hover:border-stone-500 hover:bg-white"
               >
                 <MicOff className="h-3.5 w-3.5" />
                 Terminar entrevista
@@ -363,11 +363,8 @@ export default function InterviewPage() {
               transition={{ duration: 0.4 }}
               className="flex flex-col items-center text-center"
             >
-              <GradientSphere phase="ended" size={300} theme="light" />
+              <GradientSphere phase="ended" size={260} theme="light" />
               <div className="mt-10 max-w-md">
-                <div className="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-50 mb-4">
-                  <Sparkles className="h-5 w-5 text-accent-600" strokeWidth={1.5} />
-                </div>
                 <h2 className="text-2xl tracking-tight font-medium text-stone-900">
                   Listo — gracias!
                 </h2>

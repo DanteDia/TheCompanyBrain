@@ -50,7 +50,7 @@ class Portal:
 # Each request_type's keyword list is intentionally narrow — these only
 # disambiguate WITHIN a portal, after the portal-level match already fired.
 
-BIND_PORTALS: list[Portal] = [
+BLUR_PORTALS: list[Portal] = [
     Portal(
         id="6",
         name="Servicios IT (Mesa de Ayuda)",
@@ -123,7 +123,7 @@ BIND_PORTALS: list[Portal] = [
             "dar de alta", "darle de alta", "nuevo empleado", "empleado nuevo",
         ],
         request_types=[
-            RequestType("1125", "Alta Colaborador/a BIND", [
+            RequestType("1125", "Alta Colaborador/a Blur", [
                 "alta interno", "alta empleado bind", "empleado interno", "alta bind",
                 "alta de empleado interno", "alta colaborador interno",
             ]),
@@ -136,7 +136,7 @@ BIND_PORTALS: list[Portal] = [
                 "alta externo directo", "alta directo externo",
                 "tercero directo", "alta de tercero",
             ]),
-            RequestType("1124", "Baja Colaborador/a BIND", [
+            RequestType("1124", "Baja Colaborador/a Blur", [
                 "baja interno", "baja empleado bind", "baja bind",
                 "baja de empleado interno", "baja colaborador interno",
             ]),
@@ -182,7 +182,7 @@ BIND_PORTALS: list[Portal] = [
     ),
     Portal(
         id="53",
-        name="Préstamos y Adelantos BIND (RRHH)",
+        name="Préstamos y Adelantos Blur (RRHH)",
         url="https://bindtm.atlassian.net/servicedesk/customer/portal/53",
         owner="Capital Humano",
         keywords=[
@@ -255,9 +255,9 @@ BIND_PORTALS: list[Portal] = [
     ),
     Portal(
         id="86",
-        name="Portal Seguros BIND",
+        name="Portal Seguros Blur",
         url="https://bindtm.atlassian.net/servicedesk/customer/portal/86",
-        owner="Bind Seguros",
+        owner="Blur Seguros",
         keywords=[
             "seguros", "poliza", "polizas", "asegurados",
             "modificacion de cobertura", "modificacion asegurado",
@@ -276,9 +276,9 @@ BIND_PORTALS: list[Portal] = [
     ),
     Portal(
         id="70",
-        name="Bind PSP (Pagos)",
+        name="Blur PSP (Pagos)",
         url="https://bindtm.atlassian.net/servicedesk/customer/portal/70",
-        owner="Bind Pagos",
+        owner="Blur Pagos",
         keywords=[
             "bind psp", "bind pagos", "alta de cliente psp", "baja de cliente psp",
             "pos", "dispositivo pos", "alta pos", "baja pos",
@@ -342,7 +342,7 @@ BIND_PORTALS: list[Portal] = [
     ),
     Portal(
         id="81",
-        name="Gestión de Contratos BIND",
+        name="Gestión de Contratos Blur",
         url="https://bindtm.atlassian.net/servicedesk/customer/portal/81",
         owner="Legales / Contratos",
         keywords=["contrato", "nuevo contrato", "alta contrato", "gestion de contratos"],
@@ -414,7 +414,7 @@ BIND_PORTALS: list[Portal] = [
                 "datanet vinculada",
             ]),
             RequestType("607", "Datanet.Devoluciones", ["datanet devolucion"]),
-            RequestType("560", "Clientes.ABM de Empleados BIND", ["abm empleados bind"]),
+            RequestType("560", "Clientes.ABM de Empleados Blur", ["abm empleados bind"]),
             RequestType("561", "Clientes.ABM de Tarjetas Virtuales y B24", ["tarjeta virtual", "abm b24"]),
             RequestType("558", "Clientes.ABM de Cuentas Comitentes", ["abm cuenta comitente"]),
         ],
@@ -445,8 +445,8 @@ BIND_PORTALS: list[Portal] = [
             RequestType("915", "Adelanto", ["adelanto"]),
             RequestType("1006", "Apoderados", ["apoderados", "apoderado"]),
             RequestType("1908", "Atención de Derecho de titulares de Datos", ["derecho titulares", "datos personales", "derecho de titular"]),
-            RequestType("1128", "Alta Bind24 –empresas/ zafiro", ["alta bind24"]),
-            RequestType("937", "Baja BIND24", ["baja bind24"]),
+            RequestType("1128", "Alta Blur24 –empresas/ zafiro", ["alta bind24"]),
+            RequestType("937", "Baja Blur24", ["baja bind24"]),
             RequestType("1126", "Actualización de Clientes", ["actualizacion cliente"]),
             RequestType("931", "Alta cuenta comitente", ["alta cuenta comitente"]),
             RequestType("1129", "Alta cuenta GALLO - FPA", ["gallo fpa"]),
@@ -567,7 +567,7 @@ def _score_portal(q_norm: str, p: Portal) -> int:
 
 
 def _rank_portals(q_norm: str) -> list[tuple[Portal, int]]:
-    ranked = [(p, _score_portal(q_norm, p)) for p in BIND_PORTALS]
+    ranked = [(p, _score_portal(q_norm, p)) for p in BLUR_PORTALS]
     ranked = [x for x in ranked if x[1] > 0]
     ranked.sort(key=lambda x: -x[1])
     return ranked
@@ -725,7 +725,7 @@ def match_portal_intent(question: str) -> Optional[dict[str, Any]]:
         "referenced_entity_ids": referenced,
         "citations": [
             {
-                "text": f"Portal {top_portal.name} — Jira Service Desk de BIND",
+                "text": f"Portal {top_portal.name} — Jira Service Desk de Blur",
                 "entity_type": "Tool",
                 "entity_id": f"tool-jsd-{top_portal.id}",
                 "evidence": {
@@ -753,7 +753,7 @@ def _fallback_to_landing() -> dict[str, Any]:
         "summary": (
             "No te puedo precisar el portal exacto sin más contexto, pero "
             "todos los portales del banco viven en el Portal de Autogestión "
-            f"de BIND: {PORTALS_LANDING}\n\n"
+            f"de Blur: {PORTALS_LANDING}\n\n"
             "Decime qué necesitás (ej: \"alta de un externo de consultora\", "
             "\"anticipo de sueldo\", \"problema con un sistema\") y te apunto "
             "al formulario correcto."

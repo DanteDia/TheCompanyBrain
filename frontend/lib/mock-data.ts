@@ -1,10 +1,10 @@
 import type { Person, Integration, QAAnswer } from "./types";
 
-// ─── BIND — 12 empleados sintéticos del banco cliente ──────────────────
+// ─── Blur — 12 empleados sintéticos del banco cliente ──────────────────
 
 export const ORGANIZATION = {
   id: "bind",
-  name: "BIND Bank",
+  name: "Blur Bank",
   full_name: "Banco Industrial",
   domain: "bind.com.ar",
   industry: "Banca",
@@ -93,7 +93,7 @@ export const PEOPLE: Person[] = [
     area: "Riesgos",
     email: "martin@bind.com.ar",
     manager_id: "gte_credit",
-    expertise_areas: ["Evaluación crediticia", "Garantías", "Score BIND"],
+    expertise_areas: ["Evaluación crediticia", "Garantías", "Score Blur"],
     interviewed: true,
   },
   {
@@ -168,7 +168,7 @@ export function activeUser(): Person {
   return PEOPLE.find((p) => p.id === "analyst_jr")!;
 }
 
-// ─── SISTEMAS / TOOLS de BIND Bank ──────────────────────────────────
+// ─── SISTEMAS / TOOLS de Blur Bank ──────────────────────────────────
 
 export interface ToolEntity {
   id: string;
@@ -214,7 +214,7 @@ export const TOOLS: ToolEntity[] = [
   },
   {
     id: "score_bind",
-    name: "Score BIND",
+    name: "Score Blur",
     category: "Internal scoring",
     purpose: "Score crediticio interno (Veraz × 0.6 + Antigüedad × 0.3 + Saldo × 0.1)",
     owner_id: "vp_risk",
@@ -304,7 +304,7 @@ export const TOOLS: ToolEntity[] = [
   },
 ];
 
-// ─── PROCESOS de BIND Bank ──────────────────────────────────────────
+// ─── PROCESOS de Blur Bank ──────────────────────────────────────────
 
 export interface ProcessEntity {
   id: string;
@@ -868,7 +868,7 @@ export const COVERAGE = {
 export const RECENT_QUERIES = [
   { query: "Necesito acceso a Salesforce", count: 8, type: "access_path", resolved: true },
   { query: "¿Quién aprueba excepciones de crédito?", count: 5, type: "person_lookup", resolved: true },
-  { query: "¿Qué es el Score BIND?", count: 4, type: "definition", resolved: true },
+  { query: "¿Qué es el Score Blur?", count: 4, type: "definition", resolved: true },
   { query: "¿Cómo derivo un reclamo a Legales?", count: 3, type: "routing", resolved: true },
   { query: "¿Cuál es la política de paternidad?", count: 3, type: "unknown", resolved: false },
 ];

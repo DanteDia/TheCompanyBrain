@@ -4,7 +4,7 @@
 // never burn LLM tokens.
 
 import type { QAAnswer } from "./types";
-import { BIND_PORTALS, PORTALS_LANDING, type Portal } from "./portals-data";
+import { BLUR_PORTALS, PORTALS_LANDING, type Portal } from "./portals-data";
 
 const STRIP_DIACRITICS = (s: string) =>
   s.normalize("NFD").replace(/[̀-ͯ]/g, "");
@@ -57,7 +57,7 @@ function scorePortal(question: string, p: Portal): number {
 }
 
 function rankPortals(question: string): Array<{ portal: Portal; score: number }> {
-  return BIND_PORTALS.map((p) => ({ portal: p, score: scorePortal(question, p) }))
+  return BLUR_PORTALS.map((p) => ({ portal: p, score: scorePortal(question, p) }))
     .filter((x) => x.score > 0)
     .sort((a, b) => b.score - a.score);
 }
@@ -71,14 +71,14 @@ function buildAnswer(
     return {
       answer:
         `No te puedo precisar el portal exacto sin más contexto, pero todos los portales del banco viven acá:\n\n` +
-        `→ [Portal de Autogestión BIND](${PORTALS_LANDING})\n\n` +
+        `→ [Portal de Autogestión Blur](${PORTALS_LANDING})\n\n` +
         `Si me decís qué necesitás (ej: *"alta de usuario externo"*, *"anticipo de sueldo"*, *"problema con un sistema"*) te apunto al portal correcto.`,
       answer_type: "routing",
       entities_referenced: [
         {
           type: "Tool",
           id: "tool-jsd-landing",
-          name: "Portal de Autogestión BIND (Jira Service Desk)",
+          name: "Portal de Autogestión Blur (Jira Service Desk)",
         },
       ],
       citations: [],
@@ -122,7 +122,7 @@ function buildAnswer(
 
   lines.push("");
   lines.push(
-    `_Catálogo completo de los 25 portales: [Portal de Autogestión BIND](${PORTALS_LANDING})_`,
+    `_Catálogo completo de los 25 portales: [Portal de Autogestión Blur](${PORTALS_LANDING})_`,
   );
 
   const entities = [
@@ -149,7 +149,7 @@ function buildAnswer(
     entities_referenced: entities,
     citations: [
       {
-        text: `Portal ${top.name} — Jira Service Desk de BIND`,
+        text: `Portal ${top.name} — Jira Service Desk de Blur`,
         entity_type: "Tool",
         entity_id: `tool-jsd-${top.id}`,
         evidence: {

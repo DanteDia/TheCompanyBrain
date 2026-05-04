@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 import { Avatar } from "@/components/ui/avatar";
 import { LocaleToggle, useLocale } from "@/components/locale-toggle";
@@ -165,9 +164,6 @@ function EmptyState({
       transition={{ duration: 0.3 }}
       className="text-center pt-4 md:pt-12"
     >
-      <div className="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-50 mb-6">
-        <Sparkles className="h-6 w-6 text-accent-600" strokeWidth={1.5} />
-      </div>
       <h1 className="text-3xl md:text-4xl tracking-tight font-medium text-stone-900">
         Hola {userName}.
       </h1>

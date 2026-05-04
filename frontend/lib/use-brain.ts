@@ -47,7 +47,7 @@ const FALLBACK: BrainData = {
   informal_rules: [],
   glossary: [],
   relationships: [],
-  organization_name: "BIND Bank (mock)",
+  organization_name: "Blur Bank (mock)",
   source: "mock",
 };
 
