@@ -40,11 +40,19 @@ interface PhaseConfig {
 }
 
 const PHASE_CONFIG: Record<SpherePhase, PhaseConfig> = {
-  idle:        { noiseSpeed: 0.20, noiseFreq: 1.10, noiseAmp: 0.34, paletteMult: 0.85, rotationSpeed: 0.30, meshScale: 1.00 },
-  connecting:  { noiseSpeed: 0.45, noiseFreq: 1.10, noiseAmp: 0.38, paletteMult: 0.90, rotationSpeed: 0.55, meshScale: 1.02 },
-  listening:   { noiseSpeed: 0.22, noiseFreq: 1.10, noiseAmp: 0.36, paletteMult: 0.88, rotationSpeed: 0.38, meshScale: 1.00 },
-  speaking:    { noiseSpeed: 0.50, noiseFreq: 1.10, noiseAmp: 0.46, paletteMult: 0.95, rotationSpeed: 0.65, meshScale: 1.05 },
-  ended:       { noiseSpeed: 0.04, noiseFreq: 1.10, noiseAmp: 0.20, paletteMult: 0.55, rotationSpeed: 0.06, meshScale: 0.96 },
+  // The contrast between listening (calm, agent waiting for user) and
+  // speaking (active, agent talking) is intentionally dramatic — the
+  // sphere should feel ALIVE when the agent talks and almost still when
+  // it listens. That's the heartbeat of a conversational AI.
+  idle:        { noiseSpeed: 0.18, noiseFreq: 1.10, noiseAmp: 0.30, paletteMult: 0.85, rotationSpeed: 0.20, meshScale: 1.00 },
+  connecting:  { noiseSpeed: 0.50, noiseFreq: 1.10, noiseAmp: 0.40, paletteMult: 0.92, rotationSpeed: 0.65, meshScale: 1.03 },
+  // LISTENING — almost still. Slow rotation, small amp, muted palette.
+  // Reads as "I'm here, waiting for you."
+  listening:   { noiseSpeed: 0.10, noiseFreq: 1.10, noiseAmp: 0.22, paletteMult: 0.75, rotationSpeed: 0.12, meshScale: 0.98 },
+  // SPEAKING — alive. Fast rotation, big bulges, vibrant palette,
+  // scaled up so it commands attention. Reads as "I'm talking now."
+  speaking:    { noiseSpeed: 0.65, noiseFreq: 1.10, noiseAmp: 0.55, paletteMult: 1.00, rotationSpeed: 0.85, meshScale: 1.08 },
+  ended:       { noiseSpeed: 0.04, noiseFreq: 1.10, noiseAmp: 0.18, paletteMult: 0.55, rotationSpeed: 0.06, meshScale: 0.96 },
 };
 
 // Standard Ashima 3D simplex noise.
@@ -305,7 +313,7 @@ export function GradientSphere({ phase, level = 0, size = 360, className }: Prop
       const targetRot = cfg.rotationSpeed + lvl * 0.25;
       const targetScale = cfg.meshScale + lvl * 0.04;
 
-      const k = 1 - Math.exp(-dt * 3.5);
+      const k = 1 - Math.exp(-dt * 4.5);  // snappier phase transitions
       uniforms.u_noise_amp.value = lerp(uniforms.u_noise_amp.value, targetAmp, k);
       uniforms.u_noise_speed.value = lerp(uniforms.u_noise_speed.value, targetSpeed, k);
       uniforms.u_noise_freq.value = lerp(uniforms.u_noise_freq.value, cfg.noiseFreq, k);
