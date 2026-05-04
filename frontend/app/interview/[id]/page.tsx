@@ -19,6 +19,7 @@ import { Mic, MicOff, Loader2, AlertTriangle } from "lucide-react";
 import { GradientSphere, type SpherePhase } from "@/components/gradient-sphere";
 import { Logo } from "@/components/ui/logo";
 import { startWebCall, ApiError } from "@/lib/api-backend";
+import { getOrgLanguage } from "@/lib/org-settings";
 
 type Phase = "ready" | "starting" | "live" | "ended" | "error";
 
@@ -125,13 +126,8 @@ export default function InterviewPage() {
     setError(null);
     try {
       const RetellWebClient = await loadRetell();
-      // Read the per-org language preference (set in /admin/settings).
-      // Defaults to 'en'; agent speaks Spanish if the admin toggled to 'es'.
-      const lang =
-        typeof window !== "undefined" &&
-        localStorage.getItem(`cb-org-language-${orgId}`) === "es"
-          ? "es"
-          : "en";
+      // Per-org language pref set in /admin/settings (defaults to en).
+      const lang = getOrgLanguage(orgId);
       const r = await startWebCall(employeeId, orgId, lang);
       const client = new RetellWebClient();
       clientRef.current = client;

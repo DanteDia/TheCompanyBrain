@@ -12,29 +12,24 @@ import { Globe2, Check } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { ORGANIZATION } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
-
-type Lang = "en" | "es";
-
-const STORAGE_KEY = (orgId: string) => `cb-org-language-${orgId}`;
-
-export function getOrgLanguage(orgId: string): Lang {
-  if (typeof window === "undefined") return "en";
-  const v = localStorage.getItem(STORAGE_KEY(orgId));
-  return v === "es" ? "es" : "en";
-}
+import {
+  getOrgLanguage,
+  setOrgLanguage,
+  type OrgLanguage,
+} from "@/lib/org-settings";
 
 export default function AdminSettingsPage() {
   const orgId = ORGANIZATION.id ?? "tcb_demo";
-  const [lang, setLang] = useState<Lang>("en");
+  const [lang, setLang] = useState<OrgLanguage>("en");
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     setLang(getOrgLanguage(orgId));
   }, [orgId]);
 
-  function update(next: Lang) {
+  function update(next: OrgLanguage) {
     setLang(next);
-    localStorage.setItem(STORAGE_KEY(orgId), next);
+    setOrgLanguage(orgId, next);
     setSaved(true);
     setTimeout(() => setSaved(false), 1800);
   }
@@ -112,7 +107,7 @@ function LanguageOption({
   selected,
   onSelect,
 }: {
-  value: Lang;
+  value: OrgLanguage;
   label: string;
   description: string;
   selected: boolean;
