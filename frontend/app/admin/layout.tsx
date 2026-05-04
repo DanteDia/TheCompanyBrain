@@ -70,6 +70,8 @@ function AdminLayoutInner({
   children: React.ReactNode;
   pathname: string;
 }) {
+  const [locale, setLocale] = useLocale();
+
   return (
     <div className="flex h-dvh bg-stone-50">
       {/* Sidebar */}
@@ -120,7 +122,13 @@ function AdminLayoutInner({
             </div>
           ))}
         </nav>
-        <div className="border-t border-stone-100 px-3 py-3">
+        <div className="border-t border-stone-100 px-3 py-3 space-y-2">
+          <div className="flex items-center justify-between px-2">
+            <span className="text-[10px] uppercase tracking-wider text-stone-400 font-medium">
+              Language
+            </span>
+            <LocaleToggle locale={locale} onChange={setLocale} />
+          </div>
           <div className="flex items-center gap-2 rounded-md px-2 py-1.5">
             <Avatar name="Tomás Calligaris" size="sm" />
             <div className="flex-1 min-w-0">

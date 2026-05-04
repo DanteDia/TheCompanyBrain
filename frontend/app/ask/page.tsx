@@ -9,7 +9,7 @@ import { UserSelector, useActiveUser } from "@/components/user-selector";
 import { AnswerCard } from "@/components/answer-card";
 import { ThinkingTrace } from "@/components/thinking-trace";
 import { Composer } from "@/components/composer";
-import { SUGGESTED_QUERIES, ORGANIZATION } from "@/lib/mock-data";
+import { SUGGESTED_QUERIES, getSuggestedQueries, ORGANIZATION } from "@/lib/mock-data";
 import { askBrain } from "@/lib/ask-router";
 import { t } from "@/lib/i18n";
 import type { ChatTurn, QAAnswer } from "@/lib/types";
@@ -177,7 +177,7 @@ function EmptyState({
         <div className="text-[11px] uppercase tracking-wider text-stone-400 mb-1 px-1">
           {locale === "es" ? "Probá con esto" : "Try these"}
         </div>
-        {SUGGESTED_QUERIES.map((q, i) => (
+        {getSuggestedQueries(locale).map((q, i) => (
           <motion.button
             key={q}
             initial={{ opacity: 0, y: 4 }}

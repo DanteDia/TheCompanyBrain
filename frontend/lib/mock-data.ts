@@ -857,13 +857,31 @@ export function matchDemoQuery(input: string): string | null {
 
 // ─── Suggestion chips (empty state del /ask) ────────────────────────
 
-export const SUGGESTED_QUERIES = [
+// Locale-aware. The /ask and /admin/chat pages call getSuggestedQueries(locale)
+// instead of using SUGGESTED_QUERIES directly so the empty-state chips match
+// the active language.
+export const SUGGESTED_QUERIES_EN = [
+  "How does The Company Brain work?",
+  "Where do I file the ticket to reset my password?",
+  "Which portal do I use to onboard an external collaborator?",
+  "I need access to Salesforce — who do I ask?",
+  "How long does user provisioning actually take in practice?",
+];
+
+export const SUGGESTED_QUERIES_ES = [
   "¿Cómo funciona The Company Brain?",
   "¿Dónde subo el ticket para blanquear mi contraseña?",
   "¿Qué portal uso para dar de alta a un colaborador externo?",
   "Necesito acceso a Salesforce, ¿a quién le pido?",
   "¿Cuánto tarda en la práctica el alta de un usuario?",
 ];
+
+export function getSuggestedQueries(locale: "en" | "es"): string[] {
+  return locale === "es" ? SUGGESTED_QUERIES_ES : SUGGESTED_QUERIES_EN;
+}
+
+// Backwards-compat default — points to the English list.
+export const SUGGESTED_QUERIES = SUGGESTED_QUERIES_EN;
 
 // ─── Métricas del Skills File para /admin overview ──────────────────
 
