@@ -107,32 +107,45 @@ uniform float u_noise_freq;
 uniform float u_noise_amp;
 varying float v_noise;
 varying vec3 v_normal;
+varying vec3 v_world_pos;
 void main() {
   vec3 pos = position;
   float n = snoise(pos * u_noise_freq + vec3(u_time * u_noise_speed));
   pos += normal * n * u_noise_amp;
   v_noise = n;
   v_normal = normalize(normalMatrix * normal);
+  v_world_pos = pos;
   gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
 }
 `;
 
 const FRAGMENT_SHADER = `
+${SIMPLEX_GLSL}
 precision highp float;
+uniform float u_time;
 uniform vec3 u_color_a;     // hot — terracotta
 uniform vec3 u_color_b;     // cool — slate
 uniform vec3 u_color_dark;  // dark zones
 uniform float u_palette_mult;
 varying float v_noise;
 varying vec3 v_normal;
+varying vec3 v_world_pos;
 void main() {
-  // Map noise to a palette position, plus a Fresnel term so edges glow.
+  // Primary palette position from displacement noise.
   float t = clamp(v_noise * u_palette_mult + 0.5, 0.0, 1.0);
-  vec3 col = mix(u_color_b, u_color_a, smoothstep(0.30, 0.75, t));
-  // Darken interior, edges keep saturation
+  vec3 col = mix(u_color_b, u_color_a, smoothstep(0.40, 0.62, t));
+
+  // 2nd noise octave at finer scale, adds streaky orange highlights
+  // that are independent of the bulge geometry — what gives the Radical
+  // reference its "patchy" mixed-zone look.
+  float n2 = snoise(v_world_pos * 1.6 + vec3(0.0, u_time * 0.15, 0.0));
+  float boost = smoothstep(0.10, 0.45, n2);
+  col = mix(col, u_color_a, boost * 0.45);
+
+  // Fresnel for edge glow + soft inner shadow
   vec3 viewDir = vec3(0.0, 0.0, 1.0);
   float fresnel = pow(1.0 - abs(dot(normalize(v_normal), viewDir)), 1.8);
-  col = mix(u_color_dark, col, 0.55 + 0.45 * fresnel);  // keep saturation in dark zones
+  col = mix(u_color_dark, col, 0.78 + 0.22 * fresnel);
   gl_FragColor = vec4(col, 1.0);
 }
 `;
