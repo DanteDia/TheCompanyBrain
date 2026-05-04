@@ -302,7 +302,10 @@ export default function InterviewPage() {
                 )}>
                   Te voy a hacer unas preguntas cortas.
                 </h1>
-                <p className="mt-4 text-stone-300 text-base md:text-lg leading-relaxed">
+                <p className={cn(
+                  "mt-4 text-base md:text-lg leading-relaxed",
+                  isLight ? "text-stone-600" : "text-stone-300"
+                )}>
                   ~7 minutos. Hablá natural, como con un colega. Tu
                   input es lo que va a armar el sistema interno de tu empresa.
                 </p>
