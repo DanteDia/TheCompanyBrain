@@ -19,7 +19,7 @@ export default function InterviewsPage() {
             Discovery
           </div>
           <h1 className="text-3xl tracking-tight font-medium text-stone-900 mt-1">
-            Entrevistas
+            Interviews
           </h1>
           <p className="mt-2 text-stone-600">
             {completed.length} completadas · {scheduled.length} agendadas ·{" "}

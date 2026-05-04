@@ -25,7 +25,7 @@ export default function ProcessesPage() {
               Brain Explorer
             </div>
             <h1 className="text-3xl tracking-tight font-medium text-stone-900 mt-1">
-              Procesos
+              Processes
             </h1>
             <p className="mt-2 text-stone-600">
               {brain.loading
@@ -43,8 +43,8 @@ export default function ProcessesPage() {
                   <th className="text-left font-medium px-4 py-2.5 w-10"></th>
                   <th className="text-left font-medium px-4 py-2.5">Proceso</th>
                   <th className="text-left font-medium px-4 py-2.5">Área</th>
-                  <th className="text-left font-medium px-4 py-2.5">Dueño</th>
-                  <th className="text-center font-medium px-4 py-2.5">Pasos</th>
+                  <th className="text-left font-medium px-4 py-2.5">Owner</th>
+                  <th className="text-center font-medium px-4 py-2.5">Steps</th>
                   <th className="text-left font-medium px-4 py-2.5">SLA</th>
                 </tr>
               </thead>
@@ -127,7 +127,7 @@ export default function ProcessesPage() {
 
             <div className="space-y-2">
               <div className="text-[10px] uppercase tracking-wider text-stone-500 font-medium">
-                Dueño / Referente
+                Owner / Referente
               </div>
               <div className="rounded-md border border-stone-200 bg-stone-50/40 p-3 flex items-start gap-3">
                 <Avatar name={owner.name} size="md" />
@@ -152,7 +152,7 @@ export default function ProcessesPage() {
             <div className="grid grid-cols-2 gap-2">
               <div className="rounded-md border border-stone-200 px-3 py-2">
                 <div className="text-[10px] uppercase tracking-wider text-stone-500">
-                  Pasos
+                  Steps
                 </div>
                 <div className="text-sm font-medium text-stone-900 mt-0.5 font-mono">
                   {selected.steps}
@@ -171,7 +171,7 @@ export default function ProcessesPage() {
             {selected.participants.length > 0 && (
               <div className="space-y-2">
                 <div className="text-[10px] uppercase tracking-wider text-stone-500 font-medium">
-                  Participantes
+                  Participants
                 </div>
                 <div className="space-y-1.5">
                   {selected.participants.map((id) => {

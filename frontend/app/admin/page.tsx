@@ -25,7 +25,7 @@ export default function AdminOverviewPage() {
           {ORGANIZATION.name}
         </div>
         <h1 className="text-3xl tracking-tight font-medium text-stone-900 mt-1">
-          Overview del Brain
+          Brain overview
         </h1>
       </header>
 
@@ -34,7 +34,7 @@ export default function AdminOverviewPage() {
         <KpiTile
           label="People interviewed"
           value={`${COVERAGE.interviewed} / ${COVERAGE.total_employees}`}
-          unit={`${COVERAGE.pct_interviewed}% del banco`}
+          unit={`${COVERAGE.pct_interviewed}% of bank`}
           progress={COVERAGE.pct_interviewed}
           accent
         />
@@ -56,14 +56,14 @@ export default function AdminOverviewPage() {
       <Card className="p-5 mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="font-medium text-stone-900">Composición del Brain</h2>
+            <h2 className="font-medium text-stone-900">Brain composition</h2>
             <p className="text-sm text-stone-500 mt-0.5">
-              Entidades extraídas de las {COVERAGE.interviewed} entrevistas + organigrama
+              Entities extracted from {COVERAGE.interviewed} interviews + org chart
             </p>
           </div>
           <Link href="/brain/people">
             <Button variant="ghost" size="sm">
-              Explorar el Brain <ArrowRight className="h-3.5 w-3.5" />
+              Explore the Brain <ArrowRight className="h-3.5 w-3.5" />
             </Button>
           </Link>
         </div>
@@ -89,14 +89,14 @@ export default function AdminOverviewPage() {
         <Card className="p-5">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="font-medium text-stone-900">Entrevistas pendientes</h2>
+              <h2 className="font-medium text-stone-900">Pending interviews</h2>
               <p className="text-sm text-stone-500 mt-0.5">
                 {pendingPeople.length} personas todavía sin entrevistar
               </p>
             </div>
             <Link href="/admin/interviews">
               <Button variant="ghost" size="sm">
-                Ver todas
+                See all
               </Button>
             </Link>
           </div>
@@ -116,7 +116,7 @@ export default function AdminOverviewPage() {
                   </div>
                 </div>
                 <Button variant="outline" size="sm" className="h-7 text-xs">
-                  Reagendar
+                  Reschedule
                 </Button>
               </div>
             ))}
@@ -127,9 +127,9 @@ export default function AdminOverviewPage() {
         <Card className="p-5">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="font-medium text-stone-900">Top queries de la semana</h2>
+              <h2 className="font-medium text-stone-900">Top queries this week</h2>
               <p className="text-sm text-stone-500 mt-0.5">
-                {COVERAGE.queries_resolved_pct}% resueltas con respuesta
+                {COVERAGE.queries_resolved_pct}% answered
               </p>
             </div>
             <TrendingUp className="h-4 w-4 text-green-700" />
@@ -152,7 +152,7 @@ export default function AdminOverviewPage() {
                       {q.type}
                     </Badge>
                     {q.resolved ? (
-                      <span className="text-[11px] text-green-700">Resuelta</span>
+                      <span className="text-[11px] text-green-700">Resolved</span>
                     ) : (
                       <span className="text-[11px] text-yellow-700">Sin respuesta</span>
                     )}

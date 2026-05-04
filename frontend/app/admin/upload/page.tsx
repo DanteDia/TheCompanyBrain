@@ -80,10 +80,10 @@ export default function UploadPage() {
             Discovery
           </div>
           <h1 className="text-3xl tracking-tight font-medium text-stone-900 mt-1">
-            Subir organigrama
+            Upload org chart
           </h1>
           <p className="mt-2 text-stone-600 max-w-2xl">
-            Cargá un CSV con la lista de empleados. Después agendamos
+            Upload a CSV con la lista de empleados. Después agendamos
             entrevistas con Google Calendar y un agente de voz extrae cómo trabajan.
           </p>
         </div>
@@ -173,7 +173,7 @@ export default function UploadPage() {
                   CSV cargado y procesado
                 </div>
                 <div className="text-xs text-stone-500 mt-0.5">
-                  {result.people_loaded} empleados cargados ·{" "}
+                  {result.people_loaded} employees loaded ·{" "}
                   {result.total_in_brain} ya en el Brain (incluye merges)
                 </div>
               </div>

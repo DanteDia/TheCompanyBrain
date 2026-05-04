@@ -25,7 +25,7 @@ export default function ToolsPage() {
               Brain Explorer
             </div>
             <h1 className="text-3xl tracking-tight font-medium text-stone-900 mt-1">
-              Sistemas y herramientas
+              Systems y herramientas
             </h1>
             <p className="mt-2 text-stone-600">
               {brain.loading
@@ -43,7 +43,7 @@ export default function ToolsPage() {
                   <th className="text-left font-medium px-4 py-2.5 w-10"></th>
                   <th className="text-left font-medium px-4 py-2.5">Sistema</th>
                   <th className="text-left font-medium px-4 py-2.5">Categoría</th>
-                  <th className="text-left font-medium px-4 py-2.5">Dueño</th>
+                  <th className="text-left font-medium px-4 py-2.5">Owner</th>
                   <th className="text-left font-medium px-4 py-2.5">SLA acceso</th>
                 </tr>
               </thead>
@@ -125,7 +125,7 @@ export default function ToolsPage() {
 
             <div className="space-y-2">
               <div className="text-[10px] uppercase tracking-wider text-stone-500 font-medium">
-                Dueño
+                Owner
               </div>
               <div className="rounded-md border border-stone-200 bg-stone-50/40 p-3 flex items-start gap-3">
                 <Avatar name={owner.name} size="md" />

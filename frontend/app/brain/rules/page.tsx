@@ -17,7 +17,7 @@ export default function RulesPage() {
           Brain Explorer · El moat
         </div>
         <h1 className="text-3xl tracking-tight font-medium text-stone-900 mt-1">
-          Reglas no escritas
+          Unwritten rules
         </h1>
         <p className="mt-2 text-stone-600 max-w-2xl">
           {brain.loading
@@ -29,7 +29,7 @@ export default function RulesPage() {
       {!brain.loading && RULES.length === 0 ? (
         <div className="rounded-xl border border-dashed border-stone-300 p-12 text-center">
           <Lightbulb className="h-10 w-10 mx-auto text-stone-300 mb-3" strokeWidth={1.5} />
-          <div className="text-stone-700 font-medium">Sin reglas todavía</div>
+          <div className="text-stone-700 font-medium">No rules yet</div>
           <p className="text-sm text-stone-500 mt-1 max-w-md mx-auto">
             Subí entrevistas y procesalas en /admin/upload — las reglas aparecen acá.
           </p>

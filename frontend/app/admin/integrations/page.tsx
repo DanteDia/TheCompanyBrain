@@ -10,7 +10,7 @@ export default function IntegrationsPage() {
     <div className="px-8 py-8 max-w-6xl mx-auto">
       <header className="mb-8">
         <div className="text-[11px] uppercase tracking-wider text-stone-500 font-medium">
-          Integraciones
+          Integrations
         </div>
         <h1 className="text-3xl tracking-tight font-medium text-stone-900 mt-1">
           Conectores

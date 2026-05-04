@@ -28,19 +28,19 @@ const NAV_GROUPS = [
   {
     label: "Brain Explorer",
     items: [
-      { href: "/brain/people", label: "Personas", icon: Users },
-      { href: "/brain/tools", label: "Sistemas", icon: Wrench },
-      { href: "/brain/processes", label: "Procesos", icon: Workflow },
-      { href: "/brain/rules", label: "Reglas no escritas", icon: Lightbulb },
-      { href: "/brain/glossary", label: "Glosario", icon: BookOpen },
+      { href: "/brain/people", label: "People", icon: Users },
+      { href: "/brain/tools", label: "Systems", icon: Wrench },
+      { href: "/brain/processes", label: "Processes", icon: Workflow },
+      { href: "/brain/rules", label: "Unwritten rules", icon: Lightbulb },
+      { href: "/brain/glossary", label: "Glossary", icon: BookOpen },
     ],
   },
   {
-    label: "Operación",
+    label: "Operations",
     items: [
       { href: "/admin/interviews", label: "Interviews", icon: Phone },
       { href: "/admin/integrations", label: "Integrations", icon: Plug },
-      { href: "/admin/upload", label: "Subir datos", icon: Upload },
+      { href: "/admin/upload", label: "Upload data", icon: Upload },
     ],
   },
   {

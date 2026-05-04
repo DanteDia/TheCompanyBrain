@@ -52,7 +52,7 @@ export function Composer({ onSubmit, disabled, placeholder }: ComposerProps) {
           onKeyDown={handleKey}
           disabled={disabled}
           rows={1}
-          placeholder={placeholder || "Preguntá lo que necesites…"}
+          placeholder={placeholder || "Ask what you need…"}
           className="block w-full resize-none bg-transparent px-4 py-3.5 pr-12 text-base text-stone-900 placeholder:text-stone-400 focus:outline-none disabled:cursor-not-allowed"
           style={{ maxHeight: "160px" }}
         />
@@ -74,7 +74,7 @@ export function Composer({ onSubmit, disabled, placeholder }: ComposerProps) {
         </button>
       </div>
       <div className="mt-2 px-1 text-[11px] text-stone-400 font-mono">
-        Enter envía · Shift + Enter nueva línea
+        Enter sends · Shift + Enter new line
       </div>
     </div>
   );
