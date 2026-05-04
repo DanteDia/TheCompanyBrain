@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import {
   Users,
   Wrench,
@@ -22,12 +23,14 @@ import { BeforeAfterAnimation } from "@/components/before-after-animation";
 import { IntegrationCard } from "@/components/integration-card";
 import { BrainNetwork } from "@/components/brain-network";
 import { RotatingWord } from "@/components/rotating-word";
+import { ScheduleDemoModal } from "@/components/schedule-demo-modal";
 import { INTEGRATIONS } from "@/lib/mock-data";
 import { useLocale } from "@/components/locale-toggle";
 import { t } from "@/lib/i18n";
 
 export default function LandingPage() {
   const [locale] = useLocale();
+  const [bookingOpen, setBookingOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-stone-50">
@@ -59,7 +62,11 @@ export default function LandingPage() {
                     <ArrowRight className="h-4 w-4" />
                   </Button>
                 </Link>
-                <Button variant="outline" size="lg">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => setBookingOpen(true)}
+                >
                   {t("hero.cta_secondary", locale)}
                 </Button>
               </div>
@@ -111,20 +118,20 @@ export default function LandingPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-stone-200 rounded-2xl overflow-hidden border border-stone-200">
             {[
-              { Icon: Users, count: "12", unit: locale === "es" ? "personas" : "people", title: t("captures.people", locale), desc: t("captures.people_desc", locale) },
-              { Icon: Wrench, count: "23", unit: locale === "es" ? "sistemas" : "systems", title: t("captures.tools", locale), desc: t("captures.tools_desc", locale) },
-              { Icon: KeyRound, count: "47", unit: locale === "es" ? "vías" : "paths", title: t("captures.access", locale), desc: t("captures.access_desc", locale) },
-              { Icon: Lightbulb, count: "34", unit: locale === "es" ? "reglas" : "rules", title: t("captures.tribal", locale), desc: t("captures.tribal_desc", locale), highlight: true },
-              { Icon: Workflow, count: "41", unit: locale === "es" ? "procesos" : "processes", title: t("captures.processes", locale), desc: t("captures.processes_desc", locale) },
-              { Icon: BookOpen, count: "18", unit: locale === "es" ? "términos" : "terms", title: t("captures.glossary", locale), desc: t("captures.glossary_desc", locale) },
-            ].map(({ Icon, count, unit, title, desc, highlight }) => (
+              { Icon: Users, title: t("captures.people", locale), desc: t("captures.people_desc", locale) },
+              { Icon: Wrench, title: t("captures.tools", locale), desc: t("captures.tools_desc", locale) },
+              { Icon: KeyRound, title: t("captures.access", locale), desc: t("captures.access_desc", locale) },
+              { Icon: Lightbulb, title: t("captures.tribal", locale), desc: t("captures.tribal_desc", locale), highlight: true },
+              { Icon: Workflow, title: t("captures.processes", locale), desc: t("captures.processes_desc", locale) },
+              { Icon: BookOpen, title: t("captures.glossary", locale), desc: t("captures.glossary_desc", locale) },
+            ].map(({ Icon, title, desc, highlight }) => (
               <div
                 key={title}
                 className={`relative bg-white p-7 hover:bg-stone-50/40 transition-colors group ${
                   highlight ? "ring-1 ring-accent-200" : ""
                 }`}
               >
-                <div className="flex items-start justify-between mb-5">
+                <div className="mb-5">
                   <div
                     className={`h-10 w-10 rounded-lg flex items-center justify-center ${
                       highlight
@@ -133,14 +140,6 @@ export default function LandingPage() {
                     }`}
                   >
                     <Icon className="h-5 w-5" strokeWidth={1.6} />
-                  </div>
-                  <div className="text-right">
-                    <div className="text-2xl font-medium tracking-tight text-stone-900 font-mono leading-none">
-                      {count}
-                    </div>
-                    <div className="text-[10px] uppercase tracking-wider text-stone-400 mt-1">
-                      {unit}
-                    </div>
                   </div>
                 </div>
                 <h3 className="text-base font-medium text-stone-900 mb-1.5">
@@ -229,6 +228,8 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+
+      <ScheduleDemoModal open={bookingOpen} onClose={() => setBookingOpen(false)} />
     </div>
   );
 }

@@ -113,10 +113,10 @@ export const STRINGS: Dict = {
     es: "Workflows operativos con su responsable y participantes.",
     en: "Operating workflows with their owner and participants.",
   },
-  "captures.glossary": { es: "Glosario interno", en: "Internal glossary" },
+  "captures.glossary": { es: "Manual del nuevo empleado", en: "New employees playbook" },
   "captures.glossary_desc": {
-    es: "Términos, siglas, productos. Lo que un empleado nuevo no entiende.",
-    en: "Terms, acronyms, products. What a new hire doesn't get.",
+    es: "Lo que el nuevo necesita saber su primer mes — y nadie le dice.",
+    en: "What a new hire needs to know in their first month — and nobody tells them.",
   },
 
   // Integraciones

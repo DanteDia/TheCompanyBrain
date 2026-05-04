@@ -301,3 +301,27 @@ export function GmailLogo({ className = "h-5 w-5" }: { className?: string }) {
     </svg>
   );
 }
+
+export function GeminiLogo({ className = "h-5 w-5" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="Gemini"
+    >
+      <defs>
+        <linearGradient id="gemini-grad" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#1C7CFF" />
+          <stop offset="50%" stopColor="#4D8DFF" />
+          <stop offset="100%" stopColor="#9B7DFF" />
+        </linearGradient>
+      </defs>
+      <path
+        d="M12 2c.45 5.21 4.79 9.55 10 10-5.21.45-9.55 4.79-10 10-.45-5.21-4.79-9.55-10-10 5.21-.45 9.55-4.79 10-10z"
+        fill="url(#gemini-grad)"
+      />
+    </svg>
+  );
+}

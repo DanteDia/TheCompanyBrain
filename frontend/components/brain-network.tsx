@@ -108,7 +108,7 @@ export function BrainNetwork() {
             </div>
           }
           title="Company Brain"
-          subtitle="Knowledge graph"
+          subtitle=""
         />
 
         {/* Right — Tools */}
