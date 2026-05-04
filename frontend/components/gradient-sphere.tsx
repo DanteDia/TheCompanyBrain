@@ -176,10 +176,10 @@ export function GradientSphere({ phase, level = 0, size = 360, className }: Prop
     camera.position.set(0, 0, 3.0);  // tight crop — sphere fills the frame
 
     // Geometry — high-subdivision icosahedron for clean wireframe lattice
-    // detail=7 → 20 * 4^7 = 327680 triangles. Dense fabric-like lattice
-    // — only readable because the wireframe shader is bright silver,
-    // not tinted by the fill color underneath.
-    const geometry = new THREE.IcosahedronGeometry(1.0, 7);
+    // detail=6 → 20 * 4^6 = 81920 tris. Sweet spot: dense lattice that
+    // still has visible line strokes at our render sizes (300-460px).
+    // detail=7 made them sub-pixel and the wireframe collapsed to fog.
+    const geometry = new THREE.IcosahedronGeometry(1.0, 6);
 
     // Uniforms — start at idle, lerp toward target each frame
     const uniforms = {
@@ -190,7 +190,7 @@ export function GradientSphere({ phase, level = 0, size = 360, className }: Prop
       u_palette_mult: { value: PHASE_CONFIG.idle.paletteMult },
       u_color_a: { value: new THREE.Color(0xff8533) },   // bright terracotta hot
       u_color_b: { value: new THREE.Color(0x4a9ccc) },   // bright slate-cyan cool
-      u_color_dark: { value: new THREE.Color(0x241814) },// dark warm-brown — contrasts page bg
+      u_color_dark: { value: new THREE.Color(0x141826) },// cool dark-slate (NOT warm) — keeps blue zones blue
     };
 
     // Filled mesh (faint, gives the sphere body)
