@@ -39,12 +39,14 @@ interface PhaseConfig {
 // rotationSpeed 0.42, divisions 177. Their freq is mapped to our shader by
 // trial — their 0.34 → our 0.55 reads visually identical (same "swell size").
 const PHASE_CONFIG: Record<SpherePhase, PhaseConfig> = {
-  // Big amp + low freq → wavy bulges like the Radical reference.
-  idle:        { noiseSpeed: 0.22, noiseFreq: 0.40, noiseAmp: 0.32, paletteMult: 0.86, rotationSpeed: 0.35, meshScale: 1.00 },
-  connecting:  { noiseSpeed: 0.40, noiseFreq: 0.40, noiseAmp: 0.36, paletteMult: 0.90, rotationSpeed: 0.55, meshScale: 1.02 },
-  listening:   { noiseSpeed: 0.24, noiseFreq: 0.40, noiseAmp: 0.34, paletteMult: 0.88, rotationSpeed: 0.42, meshScale: 1.00 },
-  speaking:    { noiseSpeed: 0.45, noiseFreq: 0.40, noiseAmp: 0.42, paletteMult: 0.95, rotationSpeed: 0.60, meshScale: 1.04 },
-  ended:       { noiseSpeed: 0.04, noiseFreq: 0.40, noiseAmp: 0.18, paletteMult: 0.55, rotationSpeed: 0.05, meshScale: 0.96 },
+  // paletteMult ~0.5 keeps t near 0.5 so smoothstep transitions are visible
+  // and BOTH colors show across the surface (instead of snapping all-orange
+  // or all-blue depending on which side faces the camera).
+  idle:        { noiseSpeed: 0.22, noiseFreq: 0.40, noiseAmp: 0.30, paletteMult: 0.50, rotationSpeed: 0.45, meshScale: 1.00 },
+  connecting:  { noiseSpeed: 0.40, noiseFreq: 0.40, noiseAmp: 0.34, paletteMult: 0.55, rotationSpeed: 0.65, meshScale: 1.02 },
+  listening:   { noiseSpeed: 0.24, noiseFreq: 0.40, noiseAmp: 0.32, paletteMult: 0.55, rotationSpeed: 0.50, meshScale: 1.00 },
+  speaking:    { noiseSpeed: 0.45, noiseFreq: 0.40, noiseAmp: 0.40, paletteMult: 0.65, rotationSpeed: 0.70, meshScale: 1.04 },
+  ended:       { noiseSpeed: 0.04, noiseFreq: 0.40, noiseAmp: 0.18, paletteMult: 0.40, rotationSpeed: 0.08, meshScale: 0.96 },
 };
 
 // Standard Ashima/Stefan-Gustavson 3D simplex noise — copy-pasted because
@@ -130,7 +132,7 @@ void main() {
   // either definite blue or definite orange, with a thin transition. This
   // produces the patchy zones in the Radical reference.
   float t = v_noise * u_palette_mult + 0.5;
-  vec3 col = mix(u_color_b, u_color_a, smoothstep(0.45, 0.58, t));
+  vec3 col = mix(u_color_b, u_color_a, smoothstep(0.35, 0.65, t));
 
   // Fresnel for edge glow + soft inner shadow
   vec3 viewDir = vec3(0.0, 0.0, 1.0);
