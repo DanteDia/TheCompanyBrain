@@ -1,186 +1,121 @@
 import Link from "next/link";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 /**
- * Brand mark — hexagonal "brain" carved with angular wedges. The mark is a
- * single SVG path with even-odd fill rule, so it themes via `currentColor`
- * and stays crisp at any size. A small terracotta accent dot lives at the
- * core to give it personality.
+ * Brand mark — sourced from /public/logo-{mark|full}[-variant].png.
+ *
+ * The artwork comes from the canonical SVG/PNG that Tomy designed (hexagonal
+ * brain silhouette + custom wordmark). The PNG variants live in /public:
+ *
+ *   logo-mark.png             — icon only, dark on light bg (default)
+ *   logo-mark-accent.png      — icon only, terracotta tint
+ *   logo-mark-inverted.png    — icon only, white (for dark bg)
+ *
+ *   logo-full.png             — mark + wordmark, dark on light bg
+ *   logo-full-accent.png      — mark + wordmark, terracotta
+ *   logo-full-inverted.png    — mark + wordmark, white
+ *
+ * Next.js Image handles automatic WebP/AVIF serving + responsive srcsets, so
+ * even though the source is raster the browser gets the optimized format.
  */
 
-type Variant = "default" | "inverted" | "mono" | "accent";
+type Variant = "default" | "inverted" | "accent" | "mono";
 
-const VARIANT_TEXT: Record<Variant, { primary: string; secondary: string; accent: string }> = {
-  default: {
-    primary: "text-stone-900",
-    secondary: "text-stone-500",
-    accent: "text-accent-600",
-  },
-  inverted: {
-    primary: "text-stone-50",
-    secondary: "text-stone-300",
-    accent: "text-accent-300",
-  },
-  mono: {
-    primary: "text-stone-900",
-    secondary: "text-stone-900",
-    accent: "text-stone-900",
-  },
-  accent: {
-    primary: "text-accent-700",
-    secondary: "text-accent-500",
-    accent: "text-accent-700",
-  },
+const VARIANT_SUFFIX: Record<Variant, string> = {
+  default: "",
+  inverted: "-inverted",
+  accent: "-accent",
+  mono: "", // mono uses default (it's already monochrome black)
 };
+
+const MARK_RATIO = 1; // logo-mark.png is 290x290 → square
+const FULL_RATIO = 1746 / 299; // logo-full.png aspect ≈ 5.84
 
 interface LogoMarkProps {
   size?: number;
   variant?: Variant;
   className?: string;
-  /** Show the small accent dot at the brain core. Default true. */
-  showAccent?: boolean;
+  /** Disable the priority hint (only top-of-page logos should be priority). */
+  priority?: boolean;
 }
 
-/** Just the hexagonal mark — use anywhere you need a square brand symbol. */
+/** Just the hexagonal mark — square, themeable via variant. */
 export function LogoMark({
   size = 24,
   variant = "default",
   className,
-  showAccent = true,
+  priority = false,
 }: LogoMarkProps) {
-  const colors = VARIANT_TEXT[variant];
+  const src = `/logo-mark${VARIANT_SUFFIX[variant]}.png`;
   return (
-    <svg
+    <Image
+      src={src}
+      alt="The Company Brain"
       width={size}
       height={size}
-      viewBox="0 0 120 120"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={cn(colors.primary, "shrink-0", className)}
-      aria-label="The Company Brain"
-    >
-      {/* Hexagonal silhouette with 5 angular wedges carved out via even-odd
-          fill rule — the resulting negative space reads as an abstract brain /
-          neural network. Single path so theming with currentColor stays clean. */}
-      <path
-        fill="currentColor"
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="
-          M 60 6
-          L 106.78 32.99
-          L 106.78 86.99
-          L 60 113.98
-          L 13.22 86.99
-          L 13.22 32.99
-          Z
-
-          M 60 28
-          L 78 40
-          L 60 56
-          Z
-
-          M 86 44
-          L 92 64
-          L 72 60
-          Z
-
-          M 84 78
-          L 70 70
-          L 84 92
-          Z
-
-          M 56 78
-          L 38 84
-          L 50 100
-          Z
-
-          M 32 64
-          L 50 60
-          L 40 78
-          Z
-        "
-      />
-      {/* Accent dot at the core — small terracotta personality marker.
-          Sits inside the negative space at the visual center of the brain. */}
-      {showAccent && (
-        <circle
-          cx="60"
-          cy="62"
-          r="3.2"
-          className={variant === "mono" ? "" : colors.accent}
-          fill="currentColor"
-        />
-      )}
-    </svg>
+      priority={priority}
+      className={cn("shrink-0", className)}
+    />
   );
 }
 
 interface LogoProps {
+  /** Height in px of the rendered lockup. Default 28. */
   size?: number;
   variant?: Variant;
   className?: string;
-  /** Show the wordmark next to the icon. Default true. */
+  /** Show the wordmark next to the icon. Default true. When false, behaves
+   *  like LogoMark. */
   showText?: boolean;
-  /** Wrap the lockup in a Link to "/". Default true — set false when the
-   *  logo lives inside something that already routes (sidebar nav). */
+  /** Wrap the lockup in a Link to "/". Default true. */
   asLink?: boolean;
-  /** Single-line wordmark vs stacked two-line. Default "single". */
-  layout?: "single" | "stacked";
+  /** Pass true on the topmost above-the-fold logo so Next.js preloads it. */
+  priority?: boolean;
 }
 
-/** Full lockup — mark + wordmark — used in headers, login, video splash. */
+/** Full lockup — mark + wordmark, single image with the canonical typography. */
 export function Logo({
-  size = 24,
+  size = 28,
   variant = "default",
   className,
   showText = true,
   asLink = true,
-  layout = "single",
+  priority = false,
 }: LogoProps) {
-  const colors = VARIANT_TEXT[variant];
-
-  const content = (
-    <>
-      <LogoMark size={size} variant={variant} />
-      {showText && (
-        <span
-          className={cn(
-            "font-medium tracking-tight",
-            layout === "stacked" ? "leading-[1.05]" : ""
-          )}
-        >
-          {layout === "stacked" ? (
-            <span className="block">
-              <span className={colors.secondary}>The</span>{" "}
-              <span className={colors.primary}>Company</span>
-              <br />
-              <span className={colors.primary}>Brain</span>
-            </span>
-          ) : (
-            <span className="inline">
-              <span className={colors.secondary}>The</span>{" "}
-              <span className={colors.primary}>Company</span>{" "}
-              <span className={colors.primary}>Brain</span>
-            </span>
-          )}
-        </span>
-      )}
-    </>
-  );
-
-  const wrapperClass = cn(
-    "inline-flex items-center gap-2 group",
-    className
-  );
-
-  if (asLink) {
+  if (!showText) {
+    const inner = (
+      <LogoMark size={size} variant={variant} priority={priority} />
+    );
+    if (!asLink) return <span className={className}>{inner}</span>;
     return (
-      <Link href="/" className={wrapperClass}>
-        {content}
+      <Link href="/" className={cn("inline-flex items-center", className)}>
+        {inner}
       </Link>
     );
   }
 
-  return <span className={wrapperClass}>{content}</span>;
+  // Full lockup — wordmark baked into the image. Compute width from height.
+  const height = size;
+  const width = Math.round(size * FULL_RATIO);
+  const src = `/logo-full${VARIANT_SUFFIX[variant]}.png`;
+
+  const img = (
+    <Image
+      src={src}
+      alt="The Company Brain"
+      width={width}
+      height={height}
+      priority={priority}
+      className="shrink-0"
+      style={{ height, width: "auto" }}
+    />
+  );
+
+  if (!asLink) return <span className={className}>{img}</span>;
+  return (
+    <Link href="/" className={cn("inline-flex items-center", className)}>
+      {img}
+    </Link>
+  );
 }
