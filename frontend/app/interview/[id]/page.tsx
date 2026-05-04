@@ -39,7 +39,7 @@ export default function InterviewPage() {
   const employeeId = params?.id ?? "";
   const orgId = search?.get("org") || "tcb_demo";
   const isMock = search?.get("mock") === "1";
-  const theme: "light" | "dark" = search?.get("theme") === "light" ? "light" : "dark";
+  const theme: "light" | "dark" = search?.get("theme") === "dark" ? "dark" : "light";
   const isLight = theme === "light";
 
   const [phase, setPhase] = useState<Phase>("ready");
