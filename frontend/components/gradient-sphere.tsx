@@ -42,11 +42,11 @@ const PHASE_CONFIG: Record<SpherePhase, PhaseConfig> = {
   // paletteMult ~0.5 keeps t near 0.5 so smoothstep transitions are visible
   // and BOTH colors show across the surface (instead of snapping all-orange
   // or all-blue depending on which side faces the camera).
-  idle:        { noiseSpeed: 0.22, noiseFreq: 0.40, noiseAmp: 0.30, paletteMult: 0.50, rotationSpeed: 0.45, meshScale: 1.00 },
-  connecting:  { noiseSpeed: 0.40, noiseFreq: 0.40, noiseAmp: 0.34, paletteMult: 0.55, rotationSpeed: 0.65, meshScale: 1.02 },
-  listening:   { noiseSpeed: 0.24, noiseFreq: 0.40, noiseAmp: 0.32, paletteMult: 0.55, rotationSpeed: 0.50, meshScale: 1.00 },
-  speaking:    { noiseSpeed: 0.45, noiseFreq: 0.40, noiseAmp: 0.40, paletteMult: 0.65, rotationSpeed: 0.70, meshScale: 1.04 },
-  ended:       { noiseSpeed: 0.04, noiseFreq: 0.40, noiseAmp: 0.18, paletteMult: 0.40, rotationSpeed: 0.08, meshScale: 0.96 },
+  idle:        { noiseSpeed: 0.22, noiseFreq: 0.55, noiseAmp: 0.32, paletteMult: 0.55, rotationSpeed: 0.45, meshScale: 1.00 },
+  connecting:  { noiseSpeed: 0.40, noiseFreq: 0.55, noiseAmp: 0.36, paletteMult: 0.60, rotationSpeed: 0.65, meshScale: 1.02 },
+  listening:   { noiseSpeed: 0.24, noiseFreq: 0.55, noiseAmp: 0.34, paletteMult: 0.60, rotationSpeed: 0.50, meshScale: 1.00 },
+  speaking:    { noiseSpeed: 0.45, noiseFreq: 0.55, noiseAmp: 0.42, paletteMult: 0.70, rotationSpeed: 0.70, meshScale: 1.04 },
+  ended:       { noiseSpeed: 0.04, noiseFreq: 0.55, noiseAmp: 0.20, paletteMult: 0.40, rotationSpeed: 0.08, meshScale: 0.96 },
 };
 
 // Standard Ashima/Stefan-Gustavson 3D simplex noise — copy-pasted because
@@ -193,8 +193,8 @@ export function GradientSphere({ phase, level = 0, size = 360, className }: Prop
       u_noise_freq: { value: PHASE_CONFIG.idle.noiseFreq },
       u_noise_amp: { value: PHASE_CONFIG.idle.noiseAmp },
       u_palette_mult: { value: PHASE_CONFIG.idle.paletteMult },
-      u_color_a: { value: new THREE.Color(0xff8533) },   // bright terracotta hot
-      u_color_b: { value: new THREE.Color(0x4a9ccc) },   // bright slate-cyan cool
+      u_color_a: { value: new THREE.Color(0xff7a25) },   // vibrant terracotta hot
+      u_color_b: { value: new THREE.Color(0x3690cc) },   // vibrant cyan-blue cool
       u_color_dark: { value: new THREE.Color(0x141826) },// cool dark-slate (NOT warm) — keeps blue zones blue
     };
 

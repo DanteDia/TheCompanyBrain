@@ -234,7 +234,7 @@ export default function InterviewPage() {
           className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse 100% 60% at 50% 110%, rgba(0,0,0,0.5) 0%, transparent 60%)",
+              "radial-gradient(ellipse 120% 50% at 50% 110%, rgba(0,0,0,0.25) 0%, transparent 70%)",
           }}
         />
       </div>
