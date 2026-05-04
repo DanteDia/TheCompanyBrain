@@ -132,7 +132,7 @@ void main() {
   // Darken interior, edges keep saturation
   vec3 viewDir = vec3(0.0, 0.0, 1.0);
   float fresnel = pow(1.0 - abs(dot(normalize(v_normal), viewDir)), 1.8);
-  col = mix(u_color_dark, col, 0.35 + 0.65 * fresnel);
+  col = mix(u_color_dark, col, 0.55 + 0.45 * fresnel);  // keep saturation in dark zones
   gl_FragColor = vec4(col, 1.0);
 }
 `;
@@ -188,9 +188,9 @@ export function GradientSphere({ phase, level = 0, size = 360, className }: Prop
       u_noise_freq: { value: PHASE_CONFIG.idle.noiseFreq },
       u_noise_amp: { value: PHASE_CONFIG.idle.noiseAmp },
       u_palette_mult: { value: PHASE_CONFIG.idle.paletteMult },
-      u_color_a: { value: new THREE.Color(0xe07a30) },   // muted terracotta hot
-      u_color_b: { value: new THREE.Color(0x3a7fa6) },   // muted slate-blue cool
-      u_color_dark: { value: new THREE.Color(0x100c08) },// near-black sombra
+      u_color_a: { value: new THREE.Color(0xff8533) },   // bright terracotta hot
+      u_color_b: { value: new THREE.Color(0x4a9ccc) },   // bright slate-cyan cool
+      u_color_dark: { value: new THREE.Color(0x241814) },// dark warm-brown — contrasts page bg
     };
 
     // Filled mesh (faint, gives the sphere body)
@@ -217,7 +217,7 @@ export function GradientSphere({ phase, level = 0, size = 360, className }: Prop
         vec3 viewDir = vec3(0.0, 0.0, 1.0);
         float fresnel = pow(1.0 - abs(dot(normalize(v_normal), viewDir)), 1.4);
         vec3 col = mix(vec3(0.85, 0.86, 0.92), vec3(1.0, 0.97, 0.92), fresnel);
-        gl_FragColor = vec4(col, 0.42);  // soft enough to let the fill colors breathe through
+        gl_FragColor = vec4(col, 0.75);  // wireframe needs to be punchy on dark bg
       }
     `;
     const wireMaterial = new THREE.ShaderMaterial({
