@@ -2,7 +2,7 @@
 // Mirror del schema en backend/models/schemas.py
 
 export interface EvidenceSpan {
-  source_type: "interview" | "document" | "org_chart";
+  source_type: "interview" | "document" | "org_chart" | "manual_edit";
   source_id: string;
   speaker?: string;
   timestamp_seconds?: number;

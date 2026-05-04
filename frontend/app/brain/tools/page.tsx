@@ -14,7 +14,7 @@ export default function ToolsPage() {
   const TOOLS = brain.data.tools;
   const findPerson = (id?: string) => (id ? brain.data.people.find((p) => p.id === id) : undefined);
   const selected = TOOLS.find((t) => t.id === selectedId) || null;
-  const owner = selected ? findPerson((selected as any).owner_id || (selected.owners?.[0])) : null;
+  const owner = selected ? findPerson(selected.owner_id) : null;
 
   return (
     <div className="flex h-dvh">
@@ -49,7 +49,7 @@ export default function ToolsPage() {
               </thead>
               <tbody>
                 {TOOLS.map((t) => {
-                  const ownerPerson = findPerson((t as any).owner_id || t.owners?.[0]);
+                  const ownerPerson = findPerson(t.owner_id);
                   return (
                     <tr
                       key={t.id}
