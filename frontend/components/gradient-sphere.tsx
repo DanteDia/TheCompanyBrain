@@ -162,19 +162,22 @@ export function GradientSphere({ phase, level = 0, size = 360, className }: Prop
       powerPreference: "high-performance",
     });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(size, size, false);
+    renderer.setSize(size, size);  // updateStyle defaults true → canvas CSS matches buffer
     renderer.setClearColor(0x000000, 0); // transparent so it stacks on any bg
+    renderer.domElement.style.display = "block";
+    renderer.domElement.style.width = "100%";
+    renderer.domElement.style.height = "100%";
     container.appendChild(renderer.domElement);
 
     // Scene + camera
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
-    camera.position.set(0, 0, 3.2);  // closer = sphere fills more of frame
+    camera.position.set(0, 0, 4.0);  // breathing room around the sphere
 
     // Geometry — high-subdivision icosahedron for clean wireframe lattice
-    // detail=8 → 20 * 4^8 = 1.3M triangles. Heavy but matches Radical look.
-    // GPUs handle this fine; if low-end devices stutter, drop to 7.
-    const geometry = new THREE.IcosahedronGeometry(1.0, 7);
+    // detail=5 → 20 * 4^5 = 20480 triangles. Plenty of detail without
+    // sub-pixel wireframe lines that turn the sphere into a flat blob.
+    const geometry = new THREE.IcosahedronGeometry(1.0, 5);
 
     // Uniforms — start at idle, lerp toward target each frame
     const uniforms = {
@@ -206,6 +209,8 @@ export function GradientSphere({ phase, level = 0, size = 360, className }: Prop
       fragmentShader: FRAGMENT_SHADER,
       wireframe: true,
       transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,  // lines glow over the fill
     });
     const wireMesh = new THREE.Mesh(geometry, wireMaterial);
 
@@ -255,7 +260,7 @@ export function GradientSphere({ phase, level = 0, size = 360, className }: Prop
     const resizeObserver = new ResizeObserver(() => {
       const w = container.clientWidth || size;
       const h = container.clientHeight || size;
-      renderer.setSize(w, h, false);
+      renderer.setSize(w, h);
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
     });
