@@ -12,9 +12,14 @@ import { cn } from "@/lib/utils";
  *   logo-mark-accent.png      — icon only, terracotta tint
  *   logo-mark-inverted.png    — icon only, white (for dark bg)
  *
- *   logo-full.png             — mark + wordmark, dark on light bg
- *   logo-full-accent.png      — mark + wordmark, terracotta
- *   logo-full-inverted.png    — mark + wordmark, white
+ *   logo-full.svg             — mark + wordmark, vector (current)
+ *   logo-full-accent.png      — terracotta variant (legacy PNG)
+ *   logo-full-inverted.png    — white variant for dark bg (legacy PNG)
+ *
+ * The default lockup migrated to SVG in May 2026 — Tomy uploaded a
+ * higher-resolution mark+wordmark composite (2171x724). The variant
+ * PNGs still exist as fallbacks; once we have SVG variants for accent
+ * and inverted we can drop them.
  *
  * Next.js Image handles automatic WebP/AVIF serving + responsive srcsets, so
  * even though the source is raster the browser gets the optimized format.
@@ -30,7 +35,7 @@ const VARIANT_SUFFIX: Record<Variant, string> = {
 };
 
 const MARK_RATIO = 1; // logo-mark.png is 290x290 → square
-const FULL_RATIO = 1746 / 299; // logo-full.png aspect ≈ 5.84
+const FULL_RATIO = 2171 / 724; // logo-full.svg aspect ≈ 3.0
 
 interface LogoMarkProps {
   size?: number;
@@ -98,7 +103,7 @@ export function Logo({
   // Full lockup — wordmark baked into the image. Compute width from height.
   const height = size;
   const width = Math.round(size * FULL_RATIO);
-  const src = `/logo-full${VARIANT_SUFFIX[variant]}.png`;
+  const src = `/logo-full${VARIANT_SUFFIX[variant]}.svg`;
 
   const img = (
     <Image
