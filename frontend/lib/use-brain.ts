@@ -165,10 +165,22 @@ export function useBrain() {
     loading: boolean;
     error: Error | null;
     data: BrainData;
-  }>({ loading: true, error: null, data: FALLBACK });
+  }>({ loading: false, error: null, data: FALLBACK });
 
   useEffect(() => {
+    // Default: stay on FALLBACK (English mock data) so the /brain/* demo
+    // pages always read in English. Opt-in to live Skills File data via
+    // ?live=1 in the URL — for production deployments that have rich
+    // localized live data, callers can wrap this hook to force live.
+    if (typeof window !== "undefined") {
+      const sp = new URLSearchParams(window.location.search);
+      if (sp.get("live") !== "1") return;
+    } else {
+      return;
+    }
+
     let cancelled = false;
+    setState((s) => ({ ...s, loading: true }));
     (async () => {
       try {
         const sf = await getSkillsFile();
