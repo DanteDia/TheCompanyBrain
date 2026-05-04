@@ -270,7 +270,7 @@ export default function InterviewPage() {
               transition={{ duration: 0.4 }}
               className="flex flex-col items-center text-center"
             >
-              <GradientSphere phase="idle" size={300} />
+              <GradientSphere phase="idle" size={420} />
               <div className="mt-12 max-w-md">
                 <div className="text-[11px] uppercase tracking-wider text-stone-400 font-medium">
                   Entrevista · Company Brain
@@ -307,7 +307,7 @@ export default function InterviewPage() {
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="flex flex-col items-center text-center"
             >
-              <GradientSphere phase={orbPhase} level={audioLevel} size={420} />
+              <GradientSphere phase={orbPhase} level={audioLevel} size={520} />
               <div className="mt-10 h-6 text-sm font-medium text-stone-300">
                 {phase === "starting" ? (
                   <span className="inline-flex items-center gap-2">
@@ -367,7 +367,7 @@ export default function InterviewPage() {
               transition={{ duration: 0.4 }}
               className="flex flex-col items-center text-center"
             >
-              <GradientSphere phase="ended" size={260} />
+              <GradientSphere phase="ended" size={340} />
               <div className="mt-10 max-w-md">
                 <div className="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-950/60 ring-1 ring-accent-500/30 mb-4">
                   <Sparkles className="h-5 w-5 text-accent-300" strokeWidth={1.5} />

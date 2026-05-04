@@ -172,12 +172,12 @@ export function GradientSphere({ phase, level = 0, size = 360, className }: Prop
     // Scene + camera
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
-    camera.position.set(0, 0, 4.0);  // breathing room around the sphere
+    camera.position.set(0, 0, 3.0);  // tight crop — sphere fills the frame
 
     // Geometry — high-subdivision icosahedron for clean wireframe lattice
-    // detail=5 → 20 * 4^5 = 20480 triangles. Plenty of detail without
-    // sub-pixel wireframe lines that turn the sphere into a flat blob.
-    const geometry = new THREE.IcosahedronGeometry(1.0, 5);
+    // detail=6 → 20 * 4^6 = 81920 triangles. Dense enough to read as a
+    // smooth lattice but not so dense that lines blur into solid color.
+    const geometry = new THREE.IcosahedronGeometry(1.0, 6);
 
     // Uniforms — start at idle, lerp toward target each frame
     const uniforms = {
@@ -186,9 +186,9 @@ export function GradientSphere({ phase, level = 0, size = 360, className }: Prop
       u_noise_freq: { value: PHASE_CONFIG.idle.noiseFreq },
       u_noise_amp: { value: PHASE_CONFIG.idle.noiseAmp },
       u_palette_mult: { value: PHASE_CONFIG.idle.paletteMult },
-      u_color_a: { value: new THREE.Color(0xff8a2a) },   // saturated terracotta hot
-      u_color_b: { value: new THREE.Color(0x4fa1d8) },   // bright slate-cyan cool
-      u_color_dark: { value: new THREE.Color(0x0d0a08) },// deep warm-black sombra
+      u_color_a: { value: new THREE.Color(0xff7a1f) },   // bright terracotta hot
+      u_color_b: { value: new THREE.Color(0x3895d3) },   // saturated cyan-blue cool
+      u_color_dark: { value: new THREE.Color(0x14100c) },// dark warm-brown sombra
     };
 
     // Filled mesh (faint, gives the sphere body)
@@ -203,14 +203,29 @@ export function GradientSphere({ phase, level = 0, size = 360, className }: Prop
     fillMesh.scale.setScalar(0.99);
 
     // Wireframe overlay — uses a slightly inflated copy so edges sit on top
+    // Wireframe overlay — bright silver lattice so it actually shows up
+    // over the colored fill (matches the radicalsoftware reference). Uses a
+    // ShaderMaterial that re-runs the SAME vertex shader (so the deformation
+    // is identical to the fill mesh) but with a flat near-white fragment.
+    const WIRE_FRAGMENT = `
+      precision highp float;
+      varying vec3 v_normal;
+      void main() {
+        // Slightly fresnel-tinted silver — bright in the middle, fading at edges
+        vec3 viewDir = vec3(0.0, 0.0, 1.0);
+        float fresnel = pow(1.0 - abs(dot(normalize(v_normal), viewDir)), 1.4);
+        vec3 col = mix(vec3(0.85, 0.86, 0.92), vec3(1.0, 0.97, 0.92), fresnel);
+        gl_FragColor = vec4(col, 0.55);
+      }
+    `;
     const wireMaterial = new THREE.ShaderMaterial({
       uniforms,
       vertexShader: VERTEX_SHADER,
-      fragmentShader: FRAGMENT_SHADER,
+      fragmentShader: WIRE_FRAGMENT,
       wireframe: true,
       transparent: true,
       depthWrite: false,
-      blending: THREE.AdditiveBlending,  // lines glow over the fill
+      blending: THREE.AdditiveBlending,
     });
     const wireMesh = new THREE.Mesh(geometry, wireMaterial);
 
