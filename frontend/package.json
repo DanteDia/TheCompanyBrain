@@ -25,7 +25,8 @@
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-dropdown-menu": "^2.1.2",
     "@radix-ui/react-progress": "^1.1.0",
-    "retell-client-js-sdk": "^2.0.5"
+    "retell-client-js-sdk": "^2.0.5",
+    "three": "^0.160.0"
   },
   "devDependencies": {
     "typescript": "^5.6.3",
@@ -36,6 +37,7 @@
     "postcss": "^8.4.49",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.15.0",
-    "eslint-config-next": "^15.5.0"
+    "eslint-config-next": "^15.5.0",
+    "@types/three": "^0.160.0"
   }
 }

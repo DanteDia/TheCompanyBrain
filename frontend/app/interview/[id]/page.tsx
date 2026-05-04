@@ -16,7 +16,7 @@ import { useEffect, useRef, useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mic, MicOff, Loader2, AlertTriangle, Sparkles } from "lucide-react";
-import { VoiceOrb, type OrbPhase } from "@/components/voice-orb";
+import { GradientSphere, type SpherePhase } from "@/components/gradient-sphere";
 import { Logo } from "@/components/ui/logo";
 import { startWebCall, ApiError } from "@/lib/api-backend";
 
@@ -40,7 +40,7 @@ export default function InterviewPage() {
   const isMock = search?.get("mock") === "1";
 
   const [phase, setPhase] = useState<Phase>("ready");
-  const [orbPhase, setOrbPhase] = useState<OrbPhase>("idle");
+  const [orbPhase, setSpherePhase] = useState<SpherePhase>("idle");
   const [error, setError] = useState<string | null>(null);
   const [transcript, setTranscript] = useState<RetellTranscriptEntry[]>([]);
   const [elapsed, setElapsed] = useState(0);
@@ -92,10 +92,10 @@ export default function InterviewPage() {
   // Plays a synthetic call flow for testing the visuals.
   function startMockCall() {
     setPhase("starting");
-    setOrbPhase("connecting");
+    setSpherePhase("connecting");
     setTimeout(() => {
       setPhase("live");
-      setOrbPhase("speaking");
+      setSpherePhase("speaking");
       startTimer();
       // Add fake transcript entries on a timer
       const lines: Array<{ role: string; content: string; delayMs: number }> = [
@@ -112,7 +112,7 @@ export default function InterviewPage() {
         setTimeout(() => {
           setTranscript((cur) => [...cur, { role: l.role, content: l.content }]);
           // Toggle orb phase to mimic agent/user turns
-          setOrbPhase(l.role === "agent" ? "speaking" : "listening");
+          setSpherePhase(l.role === "agent" ? "speaking" : "listening");
         }, l.delayMs);
       });
     }, 1800);
@@ -121,7 +121,7 @@ export default function InterviewPage() {
   // ─────────────────────── REAL CALL ───────────────────────
   async function startRealCall() {
     setPhase("starting");
-    setOrbPhase("connecting");
+    setSpherePhase("connecting");
     setError(null);
     try {
       const RetellWebClient = await loadRetell();
@@ -131,12 +131,12 @@ export default function InterviewPage() {
 
       client.on("call_started", () => {
         setPhase("live");
-        setOrbPhase("listening");
+        setSpherePhase("listening");
         startTimer();
       });
       client.on("call_ended", () => {
         setPhase("ended");
-        setOrbPhase("ended");
+        setSpherePhase("ended");
         stopTimer();
         clientRef.current = null;
       });
@@ -144,13 +144,13 @@ export default function InterviewPage() {
         const msg = e instanceof Error ? e.message : String(e);
         setError(msg);
         setPhase("error");
-        setOrbPhase("ended");
+        setSpherePhase("ended");
         stopTimer();
         clientRef.current = null;
       });
       // Agent talking — drive orb to speaking
-      client.on("agent_start_talking", () => setOrbPhase("speaking"));
-      client.on("agent_stop_talking", () => setOrbPhase("listening"));
+      client.on("agent_start_talking", () => setSpherePhase("speaking"));
+      client.on("agent_stop_talking", () => setSpherePhase("listening"));
       // Live transcript
       client.on(
         "update",
@@ -171,7 +171,7 @@ export default function InterviewPage() {
       const msg = e instanceof ApiError ? `${e.status} — ${e.message}` : (e as Error).message;
       setError(msg);
       setPhase("error");
-      setOrbPhase("ended");
+      setSpherePhase("ended");
     }
   }
 
@@ -186,7 +186,7 @@ export default function InterviewPage() {
   function handleEnd() {
     if (isMock) {
       setPhase("ended");
-      setOrbPhase("ended");
+      setSpherePhase("ended");
       stopTimer();
       // Stop further mock transcript additions by clearing timeouts is unclean
       // here; but since each setTimeout fires independently, we accept harmless
@@ -195,7 +195,7 @@ export default function InterviewPage() {
     }
     try { clientRef.current?.stopCall(); } catch {}
     setPhase("ended");
-    setOrbPhase("ended");
+    setSpherePhase("ended");
     stopTimer();
     clientRef.current = null;
   }
@@ -220,30 +220,30 @@ export default function InterviewPage() {
   };
 
   return (
-    <div className="relative h-dvh w-full overflow-hidden bg-stone-50">
-      {/* Ambient gradient backdrop */}
+    <div className="relative h-dvh w-full overflow-hidden bg-[#0a0807] text-stone-100">
+      {/* Ambient backdrop — deep warm-black with subtle terracotta glow + vignette */}
       <div className="absolute inset-0 -z-10">
         <div
           className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse 120% 80% at 50% 40%, rgba(254,243,226,1) 0%, rgba(250,238,222,0.6) 35%, rgba(245,245,244,0) 70%)",
+              "radial-gradient(ellipse 80% 60% at 50% 45%, rgba(120,55,25,0.25) 0%, rgba(40,20,10,0.4) 40%, rgba(10,8,7,1) 75%)",
           }}
         />
         <div
-          className="absolute inset-x-0 top-0 h-1/2"
+          className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(245,169,97,0.18) 0%, transparent 60%)",
+              "radial-gradient(ellipse 100% 60% at 50% 110%, rgba(0,0,0,0.5) 0%, transparent 60%)",
           }}
         />
       </div>
 
       {/* Top bar */}
       <header className="absolute top-0 inset-x-0 z-10 flex items-center justify-between px-6 py-5">
-        <Logo />
+        <Logo variant="inverted" priority />
         {phase === "live" && (
-          <div className="flex items-center gap-2 rounded-full border border-stone-200 bg-white/80 backdrop-blur-sm px-3 py-1 text-xs font-mono text-stone-700 shadow-sm">
+          <div className="flex items-center gap-2 rounded-full border border-stone-700/50 bg-stone-900/70 backdrop-blur-sm px-3 py-1 text-xs font-mono text-stone-300 shadow-sm">
             <span className="relative flex h-1.5 w-1.5">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-red-500" />
@@ -252,7 +252,7 @@ export default function InterviewPage() {
           </div>
         )}
         {isMock && phase !== "live" && (
-          <div className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-[10px] font-medium uppercase tracking-wider text-amber-700">
+          <div className="rounded-full border border-amber-700/40 bg-amber-950/40 px-3 py-1 text-[10px] font-medium uppercase tracking-wider text-amber-300">
             Mock mode — visualización sin call real
           </div>
         )}
@@ -270,28 +270,28 @@ export default function InterviewPage() {
               transition={{ duration: 0.4 }}
               className="flex flex-col items-center text-center"
             >
-              <VoiceOrb phase="idle" size={260} />
+              <GradientSphere phase="idle" size={300} />
               <div className="mt-12 max-w-md">
-                <div className="text-[11px] uppercase tracking-wider text-stone-500 font-medium">
+                <div className="text-[11px] uppercase tracking-wider text-stone-400 font-medium">
                   Entrevista · Company Brain
                 </div>
-                <h1 className="mt-3 text-3xl md:text-4xl tracking-tight font-medium text-stone-900">
+                <h1 className="mt-3 text-3xl md:text-4xl tracking-tight font-medium text-stone-50">
                   Te voy a hacer unas preguntas cortas.
                 </h1>
-                <p className="mt-4 text-stone-600 text-base md:text-lg leading-relaxed">
+                <p className="mt-4 text-stone-300 text-base md:text-lg leading-relaxed">
                   ~7 minutos. Hablá natural, como con un colega. Tu
                   input es lo que va a armar el sistema interno de tu empresa.
                 </p>
                 <div className="mt-8 flex flex-col items-center gap-3">
                   <button
                     onClick={handleStart}
-                    className="group inline-flex items-center gap-2 rounded-full bg-stone-900 px-7 py-3.5 text-sm font-medium text-white shadow-lg shadow-stone-900/20 transition-all hover:bg-accent-600 hover:shadow-accent-500/30"
+                    className="group inline-flex items-center gap-2 rounded-full bg-stone-50 px-7 py-3.5 text-sm font-medium text-stone-900 shadow-lg shadow-black/30 transition-all hover:bg-accent-400 hover:text-stone-50 hover:shadow-accent-500/40"
                   >
                     <Mic className="h-4 w-4" />
                     Empezar entrevista
                   </button>
                   <p className="text-xs text-stone-500">
-                    Vas a darle permiso al micrófono cuando lo pida tu navegador.
+                    Vas a darle permiso al microfono cuando lo pida tu navegador.
                   </p>
                 </div>
               </div>
@@ -307,8 +307,8 @@ export default function InterviewPage() {
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="flex flex-col items-center text-center"
             >
-              <VoiceOrb phase={orbPhase} level={audioLevel} size={320} />
-              <div className="mt-10 h-6 text-sm font-medium text-stone-700">
+              <GradientSphere phase={orbPhase} level={audioLevel} size={420} />
+              <div className="mt-10 h-6 text-sm font-medium text-stone-300">
                 {phase === "starting" ? (
                   <span className="inline-flex items-center gap-2">
                     <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -338,8 +338,8 @@ export default function InterviewPage() {
                       animate={{ opacity: 1, y: 0 }}
                       className={
                         t.role === "agent"
-                          ? "text-stone-800"
-                          : "text-stone-500 italic"
+                          ? "text-stone-100"
+                          : "text-stone-400 italic"
                       }
                     >
                       {t.role === "agent" ? "" : "tú: "}
@@ -351,7 +351,7 @@ export default function InterviewPage() {
 
               <button
                 onClick={handleEnd}
-                className="mt-10 inline-flex items-center gap-2 rounded-full border border-stone-300 bg-white/70 backdrop-blur-sm px-5 py-2.5 text-sm font-medium text-stone-700 shadow-sm transition-all hover:border-stone-500 hover:bg-white"
+                className="mt-10 inline-flex items-center gap-2 rounded-full border border-stone-700/60 bg-stone-900/60 backdrop-blur-sm px-5 py-2.5 text-sm font-medium text-stone-200 shadow-sm transition-all hover:border-stone-500 hover:bg-stone-900/90"
               >
                 <MicOff className="h-3.5 w-3.5" />
                 Terminar entrevista
@@ -367,18 +367,18 @@ export default function InterviewPage() {
               transition={{ duration: 0.4 }}
               className="flex flex-col items-center text-center"
             >
-              <VoiceOrb phase="ended" size={220} />
+              <GradientSphere phase="ended" size={260} />
               <div className="mt-10 max-w-md">
-                <div className="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-50 mb-4">
-                  <Sparkles className="h-5 w-5 text-accent-600" strokeWidth={1.5} />
+                <div className="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-950/60 ring-1 ring-accent-500/30 mb-4">
+                  <Sparkles className="h-5 w-5 text-accent-300" strokeWidth={1.5} />
                 </div>
-                <h2 className="text-2xl tracking-tight font-medium text-stone-900">
-                  Listo — ¡gracias!
+                <h2 className="text-2xl tracking-tight font-medium text-stone-50">
+                  Listo — gracias!
                 </h2>
-                <p className="mt-3 text-stone-600 text-base leading-relaxed">
+                <p className="mt-3 text-stone-300 text-base leading-relaxed">
                   El Brain está procesando lo que charlamos. En segundos vas a
                   ver tu información integrada en{" "}
-                  <a href="/brain/people" className="text-accent-700 underline-offset-4 hover:underline">
+                  <a href="/brain/people" className="text-accent-300 underline-offset-4 hover:underline">
                     el grafo de la empresa
                   </a>
                   .
@@ -397,22 +397,22 @@ export default function InterviewPage() {
               animate={{ opacity: 1 }}
               className="flex flex-col items-center text-center max-w-md"
             >
-              <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50">
-                <AlertTriangle className="h-5 w-5 text-red-600" strokeWidth={1.5} />
+              <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-red-950/60 ring-1 ring-red-500/30">
+                <AlertTriangle className="h-5 w-5 text-red-400" strokeWidth={1.5} />
               </div>
-              <h2 className="text-2xl tracking-tight font-medium text-stone-900">
+              <h2 className="text-2xl tracking-tight font-medium text-stone-50">
                 No pudimos iniciar la entrevista
               </h2>
-              <p className="mt-3 text-stone-600 text-sm leading-relaxed">
+              <p className="mt-3 text-stone-300 text-sm leading-relaxed">
                 {error || "Error desconocido"}
               </p>
               <button
                 onClick={() => {
                   setError(null);
                   setPhase("ready");
-                  setOrbPhase("idle");
+                  setSpherePhase("idle");
                 }}
-                className="mt-6 rounded-full border border-stone-300 bg-white px-5 py-2 text-sm font-medium text-stone-700 hover:border-stone-500"
+                className="mt-6 rounded-full border border-stone-700/60 bg-stone-900/60 px-5 py-2 text-sm font-medium text-stone-200 hover:border-stone-500 hover:bg-stone-900/90"
               >
                 Reintentar
               </button>
@@ -426,7 +426,7 @@ export default function InterviewPage() {
 
       {/* Footer */}
       <footer className="absolute bottom-0 inset-x-0 z-10 flex items-center justify-center px-6 py-5">
-        <div className="text-[10px] text-stone-400 font-mono">
+        <div className="text-[10px] text-stone-600 font-mono">
           {employeeId ? `id · ${employeeId}` : "—"}
           {orgId && ` · org · ${orgId}`}
         </div>
