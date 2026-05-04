@@ -121,15 +121,35 @@ float fbm(vec3 p) {
 
 // 5-stop palette ramp: deep blue → cyan → cream/orange → red → dark.
 // Lookup samples this in the fragment shader to avoid muddy mid-tones.
-const PALETTE_GLSL = `
+const PALETTE_GLSL_DARK = `
 vec3 palette(float t) {
-  // Hand-tuned stops matching the radicalsoftware sphere vibe.
+  // Stops tuned for dark bg — bright zones glow with AdditiveBlending.
   vec3 c0 = vec3(0.04, 0.05, 0.10);    // deep midnight
   vec3 c1 = vec3(0.18, 0.55, 0.92);    // bright cyan-blue
   vec3 c2 = vec3(0.95, 0.88, 0.78);    // warm cream highlight
   vec3 c3 = vec3(1.00, 0.50, 0.15);    // bright orange
   vec3 c4 = vec3(0.55, 0.10, 0.04);    // deep red-rust
   vec3 c5 = vec3(0.06, 0.03, 0.02);    // near-black warm
+
+  t = clamp(t, 0.0, 1.0);
+  if (t < 0.20)      return mix(c0, c1, t / 0.20);
+  else if (t < 0.40) return mix(c1, c2, (t - 0.20) / 0.20);
+  else if (t < 0.60) return mix(c2, c3, (t - 0.40) / 0.20);
+  else if (t < 0.80) return mix(c3, c4, (t - 0.60) / 0.20);
+  else               return mix(c4, c5, (t - 0.80) / 0.20);
+}
+`;
+
+const PALETTE_GLSL_LIGHT = `
+vec3 palette(float t) {
+  // Stops tuned for light bg — deeper saturation so colors READ against
+  // white. Light/pastel colors would just disappear.
+  vec3 c0 = vec3(0.10, 0.08, 0.05);    // near-black
+  vec3 c1 = vec3(0.20, 0.36, 0.62);    // deep slate blue
+  vec3 c2 = vec3(0.65, 0.50, 0.32);    // warm bronze midtone
+  vec3 c3 = vec3(0.85, 0.36, 0.08);    // saturated terracotta
+  vec3 c4 = vec3(0.45, 0.08, 0.03);    // deep brick red
+  vec3 c5 = vec3(0.08, 0.05, 0.04);    // warm near-black
 
   t = clamp(t, 0.0, 1.0);
   if (t < 0.20)      return mix(c0, c1, t / 0.20);
@@ -170,10 +190,10 @@ void main() {
 }
 `;
 
-// Wireframe fragment — palette-sampled color, double-sided, additive
-// blending. Front+back faces add up so overlap glows.
-const WIRE_FRAGMENT = `
-${PALETTE_GLSL}
+// Wireframe fragment — palette-sampled color. Two variants generated
+// from the theme prop: dark uses AdditiveBlending, light uses Normal.
+const wireFragment = (paletteSrc: string, isLight: boolean) => `
+${paletteSrc}
 precision highp float;
 uniform float u_palette_mult;
 varying float v_color_t;
@@ -189,15 +209,17 @@ void main() {
   float ndotv = abs(dot(normalize(v_normal), viewDir));
   float silhouette = smoothstep(0.0, 0.4, ndotv);
 
-  gl_FragColor = vec4(col * 1.15, silhouette * 0.9);
+  // Light theme: deepen the color a touch since NormalBlending wont add
+  // brightness like Additive does, plus we render on white bg.
+  ${isLight ? "col *= 0.75;" : "col *= 1.15;"}
+  gl_FragColor = vec4(col, silhouette * ${isLight ? 0.95 : 0.9});
 }
 `;
 
 // Soft fill behind the wireframe — gives the sphere body so it's not pure
-// stick-figure. Uses the same palette but at lower intensity, so the
-// wireframe still dominates visually.
-const FILL_FRAGMENT = `
-${PALETTE_GLSL}
+// stick-figure. Uses the same palette but at lower intensity.
+const fillFragment = (paletteSrc: string, isLight: boolean) => `
+${paletteSrc}
 precision highp float;
 uniform float u_palette_mult;
 varying float v_color_t;
@@ -219,9 +241,12 @@ interface Props {
   level?: number;
   size?: number;
   className?: string;
+  /** "dark" (default) glows on dark bg via AdditiveBlending. "light"
+   *  uses dark wireframe + NormalBlending so it reads on white bg. */
+  theme?: "dark" | "light";
 }
 
-export function GradientSphere({ phase, level = 0, size = 360, className }: Props) {
+export function GradientSphere({ phase, level = 0, size = 360, className, theme = "dark" }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const phaseRef = useRef<SpherePhase>(phase);
   const levelRef = useRef<number>(level);
@@ -232,6 +257,11 @@ export function GradientSphere({ phase, level = 0, size = 360, className }: Prop
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
+
+    const isLight = theme === "light";
+    const paletteSrc = isLight ? PALETTE_GLSL_LIGHT : PALETTE_GLSL_DARK;
+    const wireSrc = wireFragment(paletteSrc, isLight);
+    const fillSrc = fillFragment(paletteSrc, isLight);
 
     const renderer = new THREE.WebGLRenderer({
       antialias: true,
@@ -266,7 +296,7 @@ export function GradientSphere({ phase, level = 0, size = 360, className }: Prop
     const fillMaterial = new THREE.ShaderMaterial({
       uniforms,
       vertexShader: VERTEX_SHADER,
-      fragmentShader: FILL_FRAGMENT,
+      fragmentShader: fillSrc,
       transparent: true,
       side: THREE.DoubleSide,
       depthWrite: false,
@@ -280,13 +310,15 @@ export function GradientSphere({ phase, level = 0, size = 360, className }: Prop
     const wireMaterial = new THREE.ShaderMaterial({
       uniforms,
       vertexShader: VERTEX_SHADER,
-      fragmentShader: WIRE_FRAGMENT,
+      fragmentShader: wireSrc,
       wireframe: true,
       transparent: true,
       side: THREE.DoubleSide,
-      blending: THREE.AdditiveBlending,
+      // Dark theme: AdditiveBlending so back+front lines glow together.
+      // Light theme: NormalBlending — additive on white bg blows everything to white.
+      blending: isLight ? THREE.NormalBlending : THREE.AdditiveBlending,
       depthWrite: false,
-      depthTest: false, // back faces show through
+      depthTest: !isLight, // dark theme shows back faces through; light theme draws cleanly on white
     });
     const wireMesh = new THREE.Mesh(geometry, wireMaterial);
 
@@ -349,7 +381,7 @@ export function GradientSphere({ phase, level = 0, size = 360, className }: Prop
         container.removeChild(renderer.domElement);
       }
     };
-  }, [size]);
+  }, [size, theme]);
 
   return (
     <div

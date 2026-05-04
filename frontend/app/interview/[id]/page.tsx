@@ -18,6 +18,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Mic, MicOff, Loader2, AlertTriangle, Sparkles } from "lucide-react";
 import { GradientSphere, type SpherePhase } from "@/components/gradient-sphere";
 import { Logo } from "@/components/ui/logo";
+import { cn } from "@/lib/utils";
 import { startWebCall, ApiError } from "@/lib/api-backend";
 
 type Phase = "ready" | "starting" | "live" | "ended" | "error";
@@ -38,6 +39,8 @@ export default function InterviewPage() {
   const employeeId = params?.id ?? "";
   const orgId = search?.get("org") || "tcb_demo";
   const isMock = search?.get("mock") === "1";
+  const theme: "light" | "dark" = search?.get("theme") === "light" ? "light" : "dark";
+  const isLight = theme === "light";
 
   const [phase, setPhase] = useState<Phase>("ready");
   const [orbPhase, setSpherePhase] = useState<SpherePhase>("idle");
@@ -220,30 +223,40 @@ export default function InterviewPage() {
   };
 
   return (
-    <div className="relative h-dvh w-full overflow-hidden bg-[#0a0807] text-stone-100">
-      {/* Ambient backdrop — deep warm-black with subtle terracotta glow + vignette */}
+    <div className={cn(
+      "relative h-dvh w-full overflow-hidden",
+      isLight ? "bg-stone-50 text-stone-900" : "bg-[#0a0807] text-stone-100"
+    )}>
+      {/* Ambient backdrop */}
       <div className="absolute inset-0 -z-10">
         <div
           className="absolute inset-0"
           style={{
-            background:
-              "radial-gradient(ellipse 80% 60% at 50% 45%, rgba(120,55,25,0.25) 0%, rgba(40,20,10,0.4) 40%, rgba(10,8,7,1) 75%)",
+            background: isLight
+              ? "radial-gradient(ellipse 90% 70% at 50% 40%, rgba(254,243,226,1) 0%, rgba(250,238,222,0.6) 40%, rgba(245,245,244,0) 75%)"
+              : "radial-gradient(ellipse 80% 60% at 50% 45%, rgba(120,55,25,0.25) 0%, rgba(40,20,10,0.4) 40%, rgba(10,8,7,1) 75%)",
           }}
         />
         <div
           className="absolute inset-0"
           style={{
-            background:
-              "radial-gradient(ellipse 120% 50% at 50% 110%, rgba(0,0,0,0.25) 0%, transparent 70%)",
+            background: isLight
+              ? "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(245,169,97,0.18) 0%, transparent 60%)"
+              : "radial-gradient(ellipse 120% 50% at 50% 110%, rgba(0,0,0,0.25) 0%, transparent 70%)",
           }}
         />
       </div>
 
       {/* Top bar */}
       <header className="absolute top-0 inset-x-0 z-10 flex items-center justify-between px-6 py-5">
-        <Logo variant="inverted" priority />
+        <Logo variant={isLight ? "default" : "inverted"} priority />
         {phase === "live" && (
-          <div className="flex items-center gap-2 rounded-full border border-stone-700/50 bg-stone-900/70 backdrop-blur-sm px-3 py-1 text-xs font-mono text-stone-300 shadow-sm">
+          <div className={cn(
+              "flex items-center gap-2 rounded-full backdrop-blur-sm px-3 py-1 text-xs font-mono shadow-sm",
+              isLight
+                ? "border border-stone-200 bg-white/80 text-stone-700"
+                : "border border-stone-700/50 bg-stone-900/70 text-stone-300"
+            )}>
             <span className="relative flex h-1.5 w-1.5">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-red-500" />
@@ -252,7 +265,12 @@ export default function InterviewPage() {
           </div>
         )}
         {isMock && phase !== "live" && (
-          <div className="rounded-full border border-amber-700/40 bg-amber-950/40 px-3 py-1 text-[10px] font-medium uppercase tracking-wider text-amber-300">
+          <div className={cn(
+              "rounded-full px-3 py-1 text-[10px] font-medium uppercase tracking-wider",
+              isLight
+                ? "border border-amber-200 bg-amber-50 text-amber-700"
+                : "border border-amber-700/40 bg-amber-950/40 text-amber-300"
+            )}>
             Mock mode — visualización sin call real
           </div>
         )}
@@ -270,12 +288,18 @@ export default function InterviewPage() {
               transition={{ duration: 0.4 }}
               className="flex flex-col items-center text-center"
             >
-              <GradientSphere phase="idle" size={360} />
+              <GradientSphere phase="idle" size={360} theme={theme} />
               <div className="mt-12 max-w-md">
-                <div className="text-[11px] uppercase tracking-wider text-stone-400 font-medium">
+                <div className={cn(
+                  "text-[11px] uppercase tracking-wider font-medium",
+                  isLight ? "text-stone-500" : "text-stone-400"
+                )}>
                   Entrevista · Company Brain
                 </div>
-                <h1 className="mt-3 text-3xl md:text-4xl tracking-tight font-medium text-stone-50">
+                <h1 className={cn(
+                  "mt-3 text-3xl md:text-4xl tracking-tight font-medium",
+                  isLight ? "text-stone-900" : "text-stone-50"
+                )}>
                   Te voy a hacer unas preguntas cortas.
                 </h1>
                 <p className="mt-4 text-stone-300 text-base md:text-lg leading-relaxed">
@@ -285,12 +309,17 @@ export default function InterviewPage() {
                 <div className="mt-8 flex flex-col items-center gap-3">
                   <button
                     onClick={handleStart}
-                    className="group inline-flex items-center gap-2 rounded-full bg-stone-50 px-7 py-3.5 text-sm font-medium text-stone-900 shadow-lg shadow-black/30 transition-all hover:bg-accent-400 hover:text-stone-50 hover:shadow-accent-500/40"
+                    className={cn(
+                      "group inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-medium shadow-lg transition-all",
+                      isLight
+                        ? "bg-stone-900 text-stone-50 shadow-stone-900/20 hover:bg-accent-600 hover:shadow-accent-500/30"
+                        : "bg-stone-50 text-stone-900 shadow-black/30 hover:bg-accent-400 hover:text-stone-50 hover:shadow-accent-500/40"
+                    )}
                   >
                     <Mic className="h-4 w-4" />
                     Empezar entrevista
                   </button>
-                  <p className="text-xs text-stone-500">
+                  <p className={cn("text-xs", isLight ? "text-stone-500" : "text-stone-500")}>
                     Vas a darle permiso al microfono cuando lo pida tu navegador.
                   </p>
                 </div>
@@ -307,8 +336,8 @@ export default function InterviewPage() {
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="flex flex-col items-center text-center"
             >
-              <GradientSphere phase={orbPhase} level={audioLevel} size={460} />
-              <div className="mt-10 h-6 text-sm font-medium text-stone-300">
+              <GradientSphere phase={orbPhase} level={audioLevel} size={460} theme={theme} />
+              <div className={cn("mt-10 h-6 text-sm font-medium", isLight ? "text-stone-700" : "text-stone-300")}>
                 {phase === "starting" ? (
                   <span className="inline-flex items-center gap-2">
                     <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -336,11 +365,11 @@ export default function InterviewPage() {
                       key={`${i}-${t.content.slice(0, 16)}`}
                       initial={{ opacity: 0, y: 6 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className={
+                      className={cn(
                         t.role === "agent"
-                          ? "text-stone-100"
-                          : "text-stone-400 italic"
-                      }
+                          ? (isLight ? "text-stone-900" : "text-stone-100")
+                          : (isLight ? "text-stone-500 italic" : "text-stone-400 italic")
+                      )}
                     >
                       {t.role === "agent" ? "" : "tú: "}
                       {t.content}
@@ -351,7 +380,12 @@ export default function InterviewPage() {
 
               <button
                 onClick={handleEnd}
-                className="mt-10 inline-flex items-center gap-2 rounded-full border border-stone-700/60 bg-stone-900/60 backdrop-blur-sm px-5 py-2.5 text-sm font-medium text-stone-200 shadow-sm transition-all hover:border-stone-500 hover:bg-stone-900/90"
+                className={cn(
+                "mt-10 inline-flex items-center gap-2 rounded-full backdrop-blur-sm px-5 py-2.5 text-sm font-medium shadow-sm transition-all",
+                isLight
+                  ? "border border-stone-300 bg-white/70 text-stone-700 hover:border-stone-500 hover:bg-white"
+                  : "border border-stone-700/60 bg-stone-900/60 text-stone-200 hover:border-stone-500 hover:bg-stone-900/90"
+              )}
               >
                 <MicOff className="h-3.5 w-3.5" />
                 Terminar entrevista
@@ -367,18 +401,21 @@ export default function InterviewPage() {
               transition={{ duration: 0.4 }}
               className="flex flex-col items-center text-center"
             >
-              <GradientSphere phase="ended" size={300} />
+              <GradientSphere phase="ended" size={300} theme={theme} />
               <div className="mt-10 max-w-md">
-                <div className="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-950/60 ring-1 ring-accent-500/30 mb-4">
-                  <Sparkles className="h-5 w-5 text-accent-300" strokeWidth={1.5} />
+                <div className={cn(
+                  "mx-auto inline-flex h-12 w-12 items-center justify-center rounded-2xl mb-4",
+                  isLight ? "bg-accent-50" : "bg-accent-950/60 ring-1 ring-accent-500/30"
+                )}>
+                  <Sparkles className={cn("h-5 w-5", isLight ? "text-accent-600" : "text-accent-300")} strokeWidth={1.5} />
                 </div>
-                <h2 className="text-2xl tracking-tight font-medium text-stone-50">
+                <h2 className={cn("text-2xl tracking-tight font-medium", isLight ? "text-stone-900" : "text-stone-50")}>
                   Listo — gracias!
                 </h2>
-                <p className="mt-3 text-stone-300 text-base leading-relaxed">
+                <p className={cn("mt-3 text-base leading-relaxed", isLight ? "text-stone-600" : "text-stone-300")}>
                   El Brain está procesando lo que charlamos. En segundos vas a
                   ver tu información integrada en{" "}
-                  <a href="/brain/people" className="text-accent-300 underline-offset-4 hover:underline">
+                  <a href="/brain/people" className="text-accent-700 underline-offset-4 hover:underline dark:text-accent-300">
                     el grafo de la empresa
                   </a>
                   .
@@ -397,13 +434,16 @@ export default function InterviewPage() {
               animate={{ opacity: 1 }}
               className="flex flex-col items-center text-center max-w-md"
             >
-              <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-red-950/60 ring-1 ring-red-500/30">
-                <AlertTriangle className="h-5 w-5 text-red-400" strokeWidth={1.5} />
+              <div className={cn(
+                "mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl",
+                isLight ? "bg-red-50" : "bg-red-950/60 ring-1 ring-red-500/30"
+              )}>
+                <AlertTriangle className={cn("h-5 w-5", isLight ? "text-red-600" : "text-red-400")} strokeWidth={1.5} />
               </div>
-              <h2 className="text-2xl tracking-tight font-medium text-stone-50">
+              <h2 className={cn("text-2xl tracking-tight font-medium", isLight ? "text-stone-900" : "text-stone-50")}>
                 No pudimos iniciar la entrevista
               </h2>
-              <p className="mt-3 text-stone-300 text-sm leading-relaxed">
+              <p className={cn("mt-3 text-sm leading-relaxed", isLight ? "text-stone-600" : "text-stone-300")}>
                 {error || "Error desconocido"}
               </p>
               <button
@@ -412,7 +452,12 @@ export default function InterviewPage() {
                   setPhase("ready");
                   setSpherePhase("idle");
                 }}
-                className="mt-6 rounded-full border border-stone-700/60 bg-stone-900/60 px-5 py-2 text-sm font-medium text-stone-200 hover:border-stone-500 hover:bg-stone-900/90"
+                className={cn(
+                "mt-6 rounded-full px-5 py-2 text-sm font-medium transition-all",
+                isLight
+                  ? "border border-stone-300 bg-white text-stone-700 hover:border-stone-500"
+                  : "border border-stone-700/60 bg-stone-900/60 text-stone-200 hover:border-stone-500 hover:bg-stone-900/90"
+              )}
               >
                 Reintentar
               </button>
