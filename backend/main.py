@@ -47,6 +47,7 @@ from backend.channels.gchat import GoogleChatChannel
 from backend.channels.web import WebChannel
 from backend.channels.slack import SlackChannel
 from backend.channels.whatsapp import WhatsAppChannel
+from backend.utils.jira_client import JiraNotConfiguredError, get_jira_client
 from backend.config import settings
 from backend.models.schemas import SkillsFile
 from backend.utils.org_chart_loader import load_org_chart_from_text
@@ -663,6 +664,235 @@ async def _slack_qa_background(
         payload=msg_payload,
         thread_ts=thread_ts,
     )
+
+
+# ─── Atlassian / Jira — discover catalogue + create tickets ──────────────────
+
+
+@app.get("/api/jira/discover")
+async def jira_discover() -> JSONResponse:
+    """Return all service desks + their request types. Use once after creating
+    the Jira project to figure out the IDs to wire into the agent's
+    `propose_create_ticket` flow.
+
+    Auth: relies on JIRA_BASE_URL/JIRA_EMAIL/JIRA_API_TOKEN env vars. No org
+    isolation — single-tenant for the demo.
+    """
+    jira = get_jira_client()
+    try:
+        desks = await jira.list_service_desks()
+    except JiraNotConfiguredError as e:
+        raise HTTPException(status_code=503, detail=str(e))
+
+    out: list[dict[str, Any]] = []
+    for desk in desks:
+        try:
+            request_types = await jira.list_request_types(desk["id"])
+        except Exception as e:  # noqa: BLE001
+            request_types = [{"_error": str(e)}]
+        out.append(
+            {
+                "service_desk_id": desk.get("id"),
+                "project_key": desk.get("projectKey"),
+                "project_name": desk.get("projectName"),
+                "request_types": [
+                    {
+                        "id": rt.get("id"),
+                        "name": rt.get("name"),
+                        "description": rt.get("description"),
+                        "issue_type_id": rt.get("issueTypeId"),
+                    }
+                    for rt in request_types
+                ],
+            }
+        )
+    return JSONResponse({"service_desks": out})
+
+
+class CreateTicketBody(BaseModel):
+    service_desk_id: str
+    request_type_id: str
+    summary: str
+    description: Optional[str] = None
+    raise_on_behalf_of: Optional[str] = Field(
+        None, description="Email of the actual requester. Bot must be JSM agent."
+    )
+    request_field_values: Optional[dict[str, Any]] = None
+
+
+@app.post("/api/tickets/create")
+async def create_ticket(body: CreateTicketBody) -> JSONResponse:
+    """RPC: create a JSM request directly. Used both as a debug endpoint and
+    as the path the Slack button-click handler delegates to."""
+    jira = get_jira_client()
+    try:
+        result = await jira.create_request(
+            service_desk_id=body.service_desk_id,
+            request_type_id=body.request_type_id,
+            summary=body.summary,
+            description=body.description,
+            request_field_values=body.request_field_values,
+            raise_on_behalf_of=body.raise_on_behalf_of,
+        )
+    except JiraNotConfiguredError as e:
+        raise HTTPException(status_code=503, detail=str(e))
+    except Exception as e:  # noqa: BLE001
+        raise HTTPException(status_code=502, detail=f"Jira API error: {e}")
+
+    return JSONResponse(
+        {
+            "ok": True,
+            "issue_key": result.get("issueKey"),
+            "web_url": (result.get("_links") or {}).get("web"),
+            "raw": result,
+        }
+    )
+
+
+# ─── Slack interactivity (button clicks) ─────────────────────────────────────
+
+
+@app.post("/channels/slack/interactivity")
+async def slack_interactivity(request: Request) -> JSONResponse:
+    """Handle Slack interactive payloads — buttons, modals, etc.
+
+    For now we only handle the `create_ticket` button on the Q&A response
+    card. When the user clicks it, we:
+      1. Verify the request is from Slack (signing secret).
+      2. Parse the action and `value` (which carries portal_id, request_type
+         _id, summary, description packaged when the original message was
+         sent).
+      3. Call jira_client.create_request to actually create the ticket.
+      4. Update the original message in-place so the buttons disappear and
+         the user sees "✅ Ticket BLUR-N creado · [link]".
+
+    Slack delivers form-encoded body with a single `payload` field that is
+    JSON-encoded.
+    """
+    body = await request.body()
+    timestamp = request.headers.get("X-Slack-Request-Timestamp", "")
+    signature = request.headers.get("X-Slack-Signature", "")
+    if not SLACK.verify_signature(body, timestamp, signature):
+        return JSONResponse({"error": "invalid signature"}, status_code=401)
+
+    # Slack sends application/x-www-form-urlencoded with a single `payload` field
+    from urllib.parse import parse_qs
+
+    decoded = parse_qs(body.decode("utf-8"))
+    payload_raw = (decoded.get("payload") or [""])[0]
+    if not payload_raw:
+        return JSONResponse({"error": "missing payload"}, status_code=400)
+    try:
+        payload = json.loads(payload_raw)
+    except json.JSONDecodeError:
+        return JSONResponse({"error": "invalid payload json"}, status_code=400)
+
+    actions = payload.get("actions") or []
+    if not actions:
+        return JSONResponse({"ok": True, "ignored": True})
+    action = actions[0]
+
+    if action.get("action_id") != "create_ticket":
+        # Future: handle other action ids (followup buttons etc.)
+        return JSONResponse({"ok": True, "ignored": True})
+
+    try:
+        ticket_args = json.loads(action.get("value") or "{}")
+    except json.JSONDecodeError:
+        return JSONResponse({"error": "invalid action value"}, status_code=400)
+
+    # Pull message coords so we can edit it in place
+    channel_id = (payload.get("channel") or {}).get("id", "")
+    message_ts = (payload.get("message") or {}).get("ts", "")
+    user_email = (payload.get("user") or {}).get("email")  # may be empty if scope
+                                                            # doesn't include users:read.email
+
+    # Run the create + the message edit in the background so we ack within 3s.
+    import asyncio
+    asyncio.create_task(
+        _slack_create_ticket_and_update(
+            channel_id=channel_id,
+            message_ts=message_ts,
+            ticket_args=ticket_args,
+            requester_email=user_email,
+        )
+    )
+    return JSONResponse({"ok": True})
+
+
+async def _slack_create_ticket_and_update(
+    *,
+    channel_id: str,
+    message_ts: str,
+    ticket_args: dict[str, Any],
+    requester_email: Optional[str],
+) -> None:
+    """Background: create JSM request, then chat.update the message."""
+    import structlog
+    log = structlog.get_logger("slack_create_ticket")
+    jira = get_jira_client()
+    try:
+        result = await jira.create_request(
+            service_desk_id=ticket_args["service_desk_id"],
+            request_type_id=ticket_args["request_type_id"],
+            summary=ticket_args.get("summary") or "Solicitud creada desde Slack",
+            description=ticket_args.get("description"),
+            raise_on_behalf_of=requester_email,
+        )
+        issue_key = result.get("issueKey", "—")
+        web_url = (result.get("_links") or {}).get("web", "")
+        ok_payload = {
+            "blocks": [
+                {
+                    "type": "context",
+                    "elements": [
+                        {"type": "mrkdwn", "text": ":white_check_mark: *Ticket creado*"}
+                    ],
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": (
+                            f"*<{web_url}|{issue_key}>*\n"
+                            f"_{ticket_args.get('summary', '')}_"
+                            if web_url
+                            else f"*{issue_key}*\n_{ticket_args.get('summary', '')}_"
+                        ),
+                    },
+                },
+            ],
+            "text": f"Ticket {issue_key} creado",
+        }
+    except Exception as e:  # noqa: BLE001
+        log.warning("slack.create_ticket_failed", error=str(e))
+        ok_payload = {
+            "blocks": [
+                {
+                    "type": "context",
+                    "elements": [
+                        {"type": "mrkdwn", "text": ":x: *No pude crear el ticket*"}
+                    ],
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": f"_{e}_\n\nProbá creándolo manual en el portal.",
+                    },
+                },
+            ],
+            "text": "Error creating ticket",
+        }
+    if channel_id and message_ts:
+        try:
+            await SLACK.update_message(
+                channel=channel_id,
+                ts=message_ts,
+                payload=ok_payload,
+            )
+        except Exception as e:  # noqa: BLE001
+            log.warning("slack.update_after_ticket_failed", error=str(e))
 
 
 @app.post("/channels/whatsapp/webhook")

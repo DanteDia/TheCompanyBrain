@@ -72,6 +72,14 @@ class Settings(BaseSettings):
     slack_bot_token: Optional[str] = None  # xoxb-... (Bot User OAuth Token)
     slack_signing_secret: Optional[str] = None  # for verifying request signatures
 
+    # ── Atlassian Jira / JSM ─────────────────────────────────────────────────
+    # Used by the agent to actually CREATE tickets on behalf of the user, not
+    # just route them to the right portal. Requires API token from
+    # https://id.atlassian.com/manage-profile/security/api-tokens
+    jira_base_url: Optional[str] = None  # e.g. "https://companybrain.atlassian.net"
+    jira_email: Optional[str] = None     # email of the bot's Atlassian account
+    jira_api_token: Optional[str] = None
+
     # ── Google Calendar ──────────────────────────────────────────────────────
     gcp_service_account_json_path: Optional[str] = None
     gcp_service_account_json: Optional[str] = Field(
