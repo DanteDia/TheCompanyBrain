@@ -736,33 +736,27 @@ async def _slack_qa_background(
             proposed = _detect_ticket_intent(text)
 
         if proposed:
-            # Show why we picked this in the description for the demo
-            reasoning = proposed.get("reasoning")
             ticket_payload = {
                 "service_desk_id": str(proposed.get("service_desk_id", "2")),
                 "request_type_id": str(proposed.get("request_type_id", "10")),
                 "summary": (proposed.get("summary") or text)[:200],
                 "description": proposed.get("description") or text,
             }
-            blocks = msg_payload.setdefault("blocks", [])
-            # Optional: small context block above the buttons explaining what
-            # ticket the agent inferred — helps the user trust the action.
-            blocks.append(
+            ticket_blocks = [
+                # Tiny context line above the buttons explaining what the
+                # agent inferred — builds trust without being noisy.
                 {
                     "type": "context",
                     "elements": [
                         {
                             "type": "mrkdwn",
                             "text": (
-                                f":robot_face: _Detecté que esto se resuelve con un ticket._\n"
-                                f"*Tipo:* {proposed.get('request_type_name', 'Get IT help')}\n"
-                                f"*Resumen propuesto:* {ticket_payload['summary']}"
+                                f":robot_face: _Puedo crear un ticket por vos._  "
+                                f"*{ticket_payload['summary']}*"
                             ),
                         }
                     ],
-                }
-            )
-            blocks.append(
+                },
                 {
                     "type": "actions",
                     "elements": [
@@ -788,7 +782,20 @@ async def _slack_qa_background(
                             "value": "cancel",
                         },
                     ],
-                }
+                },
+            ]
+            # Insert RIGHT AFTER the summary section so the CTA is visible
+            # without scrolling. The summary is the first section block in
+            # format_response (after the "Brain" context chip). Find it and
+            # splice the ticket blocks in.
+            blocks = msg_payload.setdefault("blocks", [])
+            insert_idx = 1  # skip header chip if present
+            for i, b in enumerate(blocks):
+                if b.get("type") == "section":
+                    insert_idx = i + 1
+                    break
+            msg_payload["blocks"] = (
+                blocks[:insert_idx] + ticket_blocks + blocks[insert_idx:]
             )
 
     # 3. Edit the placeholder in place when possible — keeps the channel clean

@@ -153,42 +153,14 @@ class SlackChannel(ChannelAdapter):
                 }
             )
 
-        # Citations (collapsed-ish: just first 2 quotes inline)
-        citations = answer.get("citations") or []
-        if citations:
-            quotes = "\n".join(
-                f"> _{c.get('quote', '')[:120]}_"
-                + (f" — {c.get('speaker')}" if c.get("speaker") else "")
-                for c in citations[:2]
-            )
-            blocks.append(
-                {
-                    "type": "context",
-                    "elements": [
-                        {"type": "mrkdwn", "text": f"*Citas*\n{quotes}"}
-                    ],
-                }
-            )
-
-        # Follow-up suggestions as buttons
-        follow_ups = answer.get("follow_ups") or []
-        if follow_ups:
-            buttons = [
-                {
-                    "type": "button",
-                    "text": {
-                        "type": "plain_text",
-                        "text": (fu.get("text") or "")[:75],
-                        "emoji": True,
-                    },
-                    "action_id": f"followup_{i}",
-                    "value": (fu.get("text") or "")[:2000],
-                }
-                for i, fu in enumerate(follow_ups[:3])
-                if fu.get("text")
-            ]
-            if buttons:
-                blocks.append({"type": "actions", "elements": buttons})
+        # NOTE: Citations and follow-up question buttons are intentionally
+        # OMITTED from Slack responses.
+        #   Citations — surface interview transcripts/speakers, which is
+        #     sensitive employee data. Privacy boundary: keep them in the web
+        #     /ask UI where the audience is admins, not in DM channels.
+        #   Follow-ups — competed with the create-ticket CTA below and made
+        #     the message feel like an interrogation ("how many licences?"
+        #     etc). Slack stays focused: answer + person + action.
 
         # Plain-text fallback for notifications and accessibility
         fallback = summary or "Respuesta del Brain"
