@@ -592,6 +592,57 @@ async def slack_events(request: Request, background: BackgroundTasks) -> JSONRes
     return JSONResponse({"ok": True})
 
 
+def _detect_ticket_intent(query: str) -> Optional[dict[str, Any]]:
+    """Heuristic detector — should we offer to create a Jira ticket?
+
+    Demo-grade keyword matcher. The proper version would route through the
+    same portal_router that already maps queries → portal + request_type_id,
+    but for the v1 Slack demo this is enough to trigger the button on the
+    obvious onboarding queries ("necesito acceso a X", "blanqueo password").
+
+    Returns the payload to put in the button's `value` field, or None if no
+    button should be shown. Currently maps everything to request_type_id=10
+    (Get IT help) which has no required custom fields — keeps the demo
+    working without per-request-type field discovery.
+    """
+    q = (query or "").lower().strip()
+    if not q:
+        return None
+
+    base = {
+        "service_desk_id": "2",
+        "request_type_id": "10",
+        "summary": query[:100],
+        "description": query,
+    }
+
+    # Access requests
+    if any(kw in q for kw in [
+        "necesito acceso", "no puedo entrar", "no puedo acceder",
+        "alta de cuenta", "request access", "dame acceso",
+        "darme acceso", "pedir acceso", "solicitar acceso",
+    ]):
+        return {**base, "summary": f"Solicitud de acceso — {query[:80]}"}
+
+    # Password reset / unlock
+    if any(kw in q for kw in [
+        "blanquear", "blanqueo", "olvide mi", "olvidé mi", "olvide la",
+        "olvidé la", "reset password", "resetear", "contraseña",
+        "password", "clave", "se me bloqueo", "se me bloqueó",
+    ]):
+        return {**base, "summary": f"Blanqueo / reset — {query[:80]}"}
+
+    # Hardware / VPN / generic IT
+    if any(kw in q for kw in [
+        "crear ticket", "abrir ticket", "abrir incidente", "abrir caso",
+        "subir ticket", "levantar ticket", "no me anda", "no funciona",
+        "está caido", "esta caido", "está caída", "vpn",
+    ]):
+        return base
+
+    return None
+
+
 async def _slack_qa_background(
     *,
     text: str,
@@ -645,6 +696,39 @@ async def _slack_qa_background(
         # Trades a small quality dip for ~3x lower latency on Slack DMs.
         answer = await answer_query(query=text, skills_file=sf, fast=True)
         msg_payload = SLACK.format_response(answer)
+
+        # If the query looks like a ticketable request, append a "Crear ticket"
+        # button. Click goes to /channels/slack/interactivity which calls Jira.
+        ticket_intent = _detect_ticket_intent(text)
+        if ticket_intent:
+            msg_payload.setdefault("blocks", []).append(
+                {
+                    "type": "actions",
+                    "elements": [
+                        {
+                            "type": "button",
+                            "text": {
+                                "type": "plain_text",
+                                "text": ":white_check_mark: Crear ticket en Jira",
+                                "emoji": True,
+                            },
+                            "style": "primary",
+                            "action_id": "create_ticket",
+                            "value": json.dumps(ticket_intent)[:1900],
+                        },
+                        {
+                            "type": "button",
+                            "text": {
+                                "type": "plain_text",
+                                "text": "Cancelar",
+                                "emoji": True,
+                            },
+                            "action_id": "cancel_ticket",
+                            "value": "cancel",
+                        },
+                    ],
+                }
+            )
 
     # 3. Edit the placeholder in place when possible — keeps the channel clean
     if placeholder_ts:
@@ -792,7 +876,38 @@ async def slack_interactivity(request: Request) -> JSONResponse:
         return JSONResponse({"ok": True, "ignored": True})
     action = actions[0]
 
-    if action.get("action_id") != "create_ticket":
+    action_id = action.get("action_id")
+
+    # Cancel button — just remove the actions block from the message
+    if action_id == "cancel_ticket":
+        channel_id = (payload.get("channel") or {}).get("id", "")
+        message_ts = (payload.get("message") or {}).get("ts", "")
+        original_blocks = (payload.get("message") or {}).get("blocks") or []
+        # Drop the actions block so the buttons disappear, leave the rest
+        kept_blocks = [b for b in original_blocks if b.get("type") != "actions"]
+        if channel_id and message_ts:
+            try:
+                await SLACK.update_message(
+                    channel=channel_id,
+                    ts=message_ts,
+                    payload={
+                        "blocks": kept_blocks
+                        + [
+                            {
+                                "type": "context",
+                                "elements": [
+                                    {"type": "mrkdwn", "text": "_Cancelado por el usuario_"}
+                                ],
+                            }
+                        ],
+                        "text": "Cancelado",
+                    },
+                )
+            except Exception:  # noqa: BLE001
+                pass
+        return JSONResponse({"ok": True})
+
+    if action_id != "create_ticket":
         # Future: handle other action ids (followup buttons etc.)
         return JSONResponse({"ok": True, "ignored": True})
 
