@@ -108,12 +108,22 @@ uniform float u_noise_speed;
 uniform float u_noise_freq;
 uniform float u_noise_amp;
 varying float v_noise;
+varying float v_color_noise;
 varying vec3 v_normal;
 void main() {
   vec3 pos = position;
+  // Displacement noise: drives bulges
   float n = snoise(pos * u_noise_freq + vec3(u_time * u_noise_speed));
   pos += normal * n * u_noise_amp;
   v_noise = n;
+  // Color noise: independent field at different freq/phase. Decoupled
+  // from displacement so the visible surface isn't always dominated by
+  // the "+noise = bulge toward camera" bias.
+  v_color_noise = snoise(
+    position * (u_noise_freq * 1.4) +
+    vec3(73.1, 19.7, -54.3) +
+    vec3(u_time * u_noise_speed * 0.7)
+  );
   v_normal = normalize(normalMatrix * normal);
   gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
 }
@@ -126,12 +136,13 @@ uniform vec3 u_color_b;     // cool — slate
 uniform vec3 u_color_dark;  // dark zones
 uniform float u_palette_mult;
 varying float v_noise;
+varying float v_color_noise;
 varying vec3 v_normal;
 void main() {
-  // Tight smoothstep on the noise -> bimodal split: most surface lands as
-  // either definite blue or definite orange, with a thin transition. This
-  // produces the patchy zones in the Radical reference.
-  float t = v_noise * u_palette_mult + 0.5;
+  // Use the INDEPENDENT color noise, not the displacement one. Keeps
+  // both palette colors visible regardless of how the bulges are oriented
+  // relative to the camera.
+  float t = v_color_noise * u_palette_mult + 0.5;
   vec3 col = mix(u_color_b, u_color_a, smoothstep(0.35, 0.65, t));
 
   // Fresnel for edge glow + soft inner shadow
