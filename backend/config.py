@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     environment: str = "development"
     log_level: str = "INFO"
     default_timezone: str = "America/Argentina/Buenos_Aires"
-    default_org_id: str = "banco_demo"
+    default_org_id: str = "blur_bank"
     # Public-facing frontend (Vercel) — used in Calendar invites so the
     # employee gets a clickable link to the in-browser web call.
     frontend_url: str = "https://www.thecompanybrain.xyz"

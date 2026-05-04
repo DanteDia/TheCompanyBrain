@@ -41,7 +41,7 @@ async def build_brain(
     people = load_org_chart(org_chart_path)
     skills = SkillsFile(
         organization_id=org_id,
-        organization_name="Banco Demo",
+        organization_name="Blur Bank",
         generated_at=datetime.now(timezone.utc),
     )
     merge_extraction_into_skills_file(skills, people=people)

@@ -120,7 +120,7 @@ async def health() -> dict[str, Any]:
 async def upload_org_chart(
     file: UploadFile = File(...),
     organization_id: str = Form(default_factory=lambda: settings.default_org_id),
-    organization_name: str = Form(default="Banco Demo"),
+    organization_name: str = Form(default="Blur Bank"),
 ) -> dict[str, Any]:
     if not file.filename.lower().endswith(".csv"):
         raise HTTPException(400, "expected a .csv file")
@@ -195,7 +195,7 @@ async def _seed_from_sample_inner(only: Optional[str] = None) -> dict[str, Any]:
     sb = _supabase()
     sf = sb.load_skills_file(settings.default_org_id) or SkillsFile(
         organization_id=settings.default_org_id,
-        organization_name="Banco Demo",
+        organization_name="Blur Bank",
         generated_at=datetime.now(timezone.utc),
     )
     seeded_org_chart = False
@@ -294,7 +294,7 @@ async def seed_portals() -> dict[str, Any]:
     sb = _supabase()
     sf = sb.load_skills_file(settings.default_org_id) or SkillsFile(
         organization_id=settings.default_org_id,
-        organization_name="Banco Demo",
+        organization_name="Blur Bank",
         generated_at=datetime.now(timezone.utc),
     )
 

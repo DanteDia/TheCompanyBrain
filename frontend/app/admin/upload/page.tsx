@@ -24,7 +24,7 @@ export default function UploadPage() {
   const [result, setResult] = useState<UploadResult | null>(null);
   const [scheduled, setScheduled] = useState<{ count: number; meet_links: string[] } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [orgId, setOrgId] = useState("banco_demo");
+  const [orgId, setOrgId] = useState("blur_bank");
 
   async function handleFile(file: File) {
     if (!file.name.toLowerCase().endsWith(".csv")) {
