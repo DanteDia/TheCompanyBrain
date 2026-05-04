@@ -455,7 +455,7 @@ type IntegrationDef = Omit<Integration, "description"> & {
 };
 
 const INTEGRATIONS_RAW: IntegrationDef[] = [
-  // ─── ACTIVOS (configurados) ────────────────────────────────────────
+  // ─── PRINCIPALES (orden curado para landing) ───────────────────────
   {
     id: "slack",
     name: "Slack",
@@ -469,7 +469,7 @@ const INTEGRATIONS_RAW: IntegrationDef[] = [
   },
   {
     id: "google_sso",
-    name: "Google Workspace SSO",
+    name: "Google Workspace",
     category: "identity",
     status: "connected",
     description: {
@@ -477,52 +477,6 @@ const INTEGRATIONS_RAW: IntegrationDef[] = [
       en: "Login and permissions via Google Workspace. Domain-wide delegation supported.",
     },
     logoKey: "google_drive",
-  },
-
-  // ─── DISPONIBLES ───────────────────────────────────────────────────
-  {
-    id: "google_chat",
-    name: "Google Chat",
-    category: "channel",
-    status: "available",
-    description: {
-      es: "Bot que responde DM y menciones en tus canales de Google Chat. Auth via Workspace.",
-      en: "Bot that answers DMs and mentions in your Google Chat spaces. Auth via Workspace.",
-    },
-    logoKey: "google_chat",
-  },
-  {
-    id: "google_drive",
-    name: "Google Drive",
-    category: "source",
-    status: "available",
-    description: {
-      es: "Indexamos docs, sheets y slides de carpetas que selecciones. Re-sync incremental.",
-      en: "We index docs, sheets and slides from folders you choose. Incremental re-sync.",
-    },
-    logoKey: "google_drive",
-  },
-  {
-    id: "notion",
-    name: "Notion",
-    category: "source",
-    status: "available",
-    description: {
-      es: "Sync de databases y pages con permission-aware extraction.",
-      en: "Sync of databases and pages with permission-aware extraction.",
-    },
-    logoKey: "notion",
-  },
-  {
-    id: "confluence",
-    name: "Confluence",
-    category: "source",
-    status: "available",
-    description: {
-      es: "Spaces y páginas con dueños y last-modified intactos para auditoría.",
-      en: "Spaces and pages with owners and last-modified preserved for audit.",
-    },
-    logoKey: "confluence",
   },
   {
     id: "jira",
@@ -536,6 +490,28 @@ const INTEGRATIONS_RAW: IntegrationDef[] = [
     logoKey: "jira",
   },
   {
+    id: "confluence",
+    name: "Confluence",
+    category: "source",
+    status: "available",
+    description: {
+      es: "Spaces y páginas con dueños y last-modified intactos para auditoría.",
+      en: "Spaces and pages with owners and last-modified preserved for audit.",
+    },
+    logoKey: "confluence",
+  },
+  {
+    id: "notion",
+    name: "Notion",
+    category: "source",
+    status: "available",
+    description: {
+      es: "Sync de databases y pages con permission-aware extraction.",
+      en: "Sync of databases and pages with permission-aware extraction.",
+    },
+    logoKey: "notion",
+  },
+  {
     id: "asana",
     name: "Asana",
     category: "source",
@@ -545,6 +521,50 @@ const INTEGRATIONS_RAW: IntegrationDef[] = [
       en: "Tasks, projects and portfolios. Sync with permissions preserved.",
     },
     logoKey: "asana",
+  },
+  {
+    id: "clickup",
+    name: "ClickUp",
+    category: "source",
+    status: "available",
+    description: {
+      es: "Tasks, docs y goals. Sync incremental con respeto a permisos.",
+      en: "Tasks, docs and goals. Incremental sync that respects permissions.",
+    },
+    logoKey: "clickup",
+  },
+  {
+    id: "gemini_ai_notes",
+    name: "Gemini AI Notes",
+    category: "source",
+    status: "available",
+    description: {
+      es: "Notas de meetings tomadas por Gemini. Captura decisiones y action items.",
+      en: "Meeting notes taken by Gemini. Captures decisions and action items.",
+    },
+    logoKey: "gemini",
+  },
+  {
+    id: "zoom",
+    name: "Zoom",
+    category: "source",
+    status: "available",
+    description: {
+      es: "Transcripts de meetings con consentimiento. Captura decisiones operativas.",
+      en: "Meeting transcripts with consent. Captures operational decisions.",
+    },
+    logoKey: "zoom",
+  },
+  {
+    id: "whatsapp",
+    name: "WhatsApp Business",
+    category: "channel",
+    status: "available",
+    description: {
+      es: "Tu Brain accesible vía WhatsApp para empleados en campo.",
+      en: "Your Brain accessible via WhatsApp for field employees.",
+    },
+    logoKey: "whatsapp",
   },
   {
     id: "monday",
@@ -568,6 +588,19 @@ const INTEGRATIONS_RAW: IntegrationDef[] = [
     },
     logoKey: "linear",
   },
+  {
+    id: "ms_teams",
+    name: "Microsoft Teams",
+    category: "channel",
+    status: "available",
+    description: {
+      es: "Bot Framework con SSO Azure AD. Disponible Q3 2026.",
+      en: "Bot Framework with Azure AD SSO. Available Q3 2026.",
+    },
+    logoKey: "ms_teams",
+  },
+
+  // ─── DEMÁS ─────────────────────────────────────────────────────────
   {
     id: "salesforce",
     name: "Salesforce",
@@ -601,40 +634,27 @@ const INTEGRATIONS_RAW: IntegrationDef[] = [
     },
     logoKey: "okta",
   },
-
-  // ─── PRÓXIMAMENTE ──────────────────────────────────────────────────
   {
-    id: "ms_teams",
-    name: "Microsoft Teams",
+    id: "google_chat",
+    name: "Google Chat",
     category: "channel",
-    status: "coming_soon",
+    status: "available",
     description: {
-      es: "Bot Framework con SSO Azure AD. Disponible Q3 2026.",
-      en: "Bot Framework with Azure AD SSO. Available Q3 2026.",
+      es: "Bot que responde DM y menciones en tus canales de Google Chat. Auth via Workspace.",
+      en: "Bot that answers DMs and mentions in your Google Chat spaces. Auth via Workspace.",
     },
-    logoKey: "ms_teams",
+    logoKey: "google_chat",
   },
   {
-    id: "whatsapp",
-    name: "WhatsApp Business",
-    category: "channel",
-    status: "coming_soon",
-    description: {
-      es: "Tu Brain accesible vía WhatsApp para empleados en campo. Q3 2026.",
-      en: "Your Brain accessible via WhatsApp for field employees. Q3 2026.",
-    },
-    logoKey: "whatsapp",
-  },
-  {
-    id: "zoom",
-    name: "Zoom",
+    id: "google_drive",
+    name: "Google Drive",
     category: "source",
-    status: "coming_soon",
+    status: "available",
     description: {
-      es: "Transcripts de meetings con consentimiento. Captura decisiones operativas.",
-      en: "Meeting transcripts with consent. Captures operational decisions.",
+      es: "Indexamos docs, sheets y slides de carpetas que selecciones. Re-sync incremental.",
+      en: "We index docs, sheets and slides from folders you choose. Incremental re-sync.",
     },
-    logoKey: "zoom",
+    logoKey: "google_drive",
   },
 ];
 

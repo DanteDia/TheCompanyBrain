@@ -23,78 +23,78 @@ type Scenario =
     };
 
 const SCENARIOS: Scenario[] = [
-  // 1 — Project leadership
+  // 1 — Bloomberg vendor (success/person)
   {
     type: "success",
     question: {
-      es: "¿Quién está liderando el proyecto Cuenta Joven?",
-      en: "Who's leading the Youth Account project?",
+      es: "Tengo un problema descargando archivos Excel desde Bloomberg Terminal — ¿quién maneja la relación con ese proveedor?",
+      en: "I'm having issues downloading Excel files from Bloomberg Terminal — who handles that vendor relationship?",
     },
     answerText: {
-      es: "**Martín Suárez** (Analista Senior de Riesgos) está liderando el proyecto Cuenta Joven. Sponsor: **Carlos Méndez** (VP de Riesgo). Lanzamiento previsto para Q3 2026.",
-      en: "**Martín Suárez** (Senior Risk Analyst) is leading the Youth Account project. Sponsor: **Carlos Méndez** (VP of Risk). Launch planned for Q3 2026.",
+      es: "**Tomás Ledesma** (Sysadmin, Tecnología) maneja Bloomberg para el equipo de Trading. La relación comercial la lleva **Mariana** (CEO), pero los temas técnicos van a Tomás vía Mesa de Ayuda. Regla informal: nunca contactes a Bloomberg directo sin avisarle a IT.",
+      en: "**Tomás Ledesma** (Sysadmin, Tech) handles Bloomberg for the Trading team. The commercial relationship is owned by **Mariana** (CEO), but technical issues route to Tomás via the IT Service Desk. Unwritten rule: never contact Bloomberg support directly without looping in IT.",
     },
     person: {
-      name: "Martín Suárez",
+      name: "Tomás Ledesma",
       role: {
-        es: "Analista Senior · Riesgos",
-        en: "Senior Analyst · Risk",
+        es: "Sysadmin · Tecnología",
+        en: "Sysadmin · Tech",
       },
-      email: "martin@bind.com.ar",
-      ext: "2487",
+      email: "tomas@blurbank.com",
+      ext: "1408",
     },
   },
 
-  // 2 — Paternity policy
+  // 2 — App reviews / build new tool (policy with steps)
   {
     type: "policy",
     question: {
-      es: "¿Cuál es la política de licencia por paternidad?",
-      en: "What's the paternity leave policy?",
+      es: "Quiero construir algo que nos ayude a responder reseñas de la app del banco. ¿Cómo lo hago?",
+      en: "I want to build something that helps us reply to our bank app reviews. How do I do it?",
     },
     answerText: {
-      es: "Tu banco otorga **30 días corridos** de licencia por paternidad, **45 días si es nacimiento múltiple**. Aprobación automática — no requiere autorización del manager.",
-      en: "Your bank grants **30 calendar days** of paternity leave, **45 days for multiple births**. Automatic approval — no manager sign-off required.",
+      es: "Cuatro pasos: (1) Spec con **Sofia Romano** (Mobile Lead). (2) Las APIs de App Store y Google Play las maneja Sofia. (3) Para usar Claude Enterprise necesitás security review con **Tomás Ledesma**. (4) Abrí un Request a Change en Mesa de Ayuda. Política interna: no se pueden usar LLMs sin enterprise account.",
+      en: "Four steps: (1) Spec with **Sofia Romano** (Mobile Lead). (2) App Store and Google Play APIs are owned by Sofia. (3) To use Claude Enterprise you need a security review with **Tomás Ledesma**. (4) Open a Request a Change ticket in the IT Service Desk. Internal policy: no LLM API usage without enterprise account.",
     },
     facts: [
       {
-        label: { es: "Días", en: "Days" },
-        value: { es: "30 corridos", en: "30 calendar" },
+        label: { es: "Owner del spec", en: "Spec owner" },
+        value: { es: "Sofia Romano", en: "Sofia Romano" },
       },
       {
-        label: { es: "Plazo de aviso", en: "Notice" },
-        value: { es: "60 días antes", en: "60 days ahead" },
+        label: { es: "API keys", en: "API keys" },
+        value: { es: "Sofia (Mobile)", en: "Sofia (Mobile)" },
       },
       {
-        label: { es: "Aprobación", en: "Approval" },
-        value: { es: "Automática", en: "Automatic" },
+        label: { es: "Security review", en: "Security review" },
+        value: { es: "Tomás Ledesma", en: "Tomás Ledesma" },
       },
       {
-        label: { es: "Sistema", en: "System" },
-        value: { es: "Workday → RRHH", en: "Workday → HR" },
+        label: { es: "Ticket type", en: "Ticket type" },
+        value: { es: "Request a change", en: "Request a change" },
       },
     ],
   },
 
-  // 3 — Vendor contracts
+  // 3 — HR contract change (success/person)
   {
     type: "success",
     question: {
-      es: "¿Quién aprueba contratos con proveedores?",
-      en: "Who approves vendor contracts?",
+      es: "Tengo un problema con mi contrato. Mi jefe me dijo que iban a hacer un cambio pero no me llegó nada. ¿Con quién en HR hablo?",
+      en: "I have a contract issue. My manager said there'd be a change but nothing arrived. Who in HR should I talk to?",
     },
     answerText: {
-      es: "Para contratos con proveedores externos, la aprobación final la da **Laura Gómez** (CFO). Si el monto supera USD 50.000, requiere también firma de **Mariana Torres** (CEO). Pasa por Legales antes de la firma.",
-      en: "Vendor contracts require final approval from **Laura Gómez** (CFO). Above USD 50,000, **Mariana Torres** (CEO) signature is also required. Routes through Legal before signature.",
+      es: "Hablá con **Patricia Gómez** (HR Business Partner). Si pasaron 5 días desde que tu manager te avisó y nada llegó, lo más probable es que esté atascado en Legal — pasa el 90% de las veces. Solución: ping directo a Patricia o abrí un ticket en Mesa de Ayuda con tag HR Ops.",
+      en: "Talk to **Patricia Gómez** (HR Business Partner). If 5 business days passed since your manager mentioned the change and nothing's landed, it's almost certainly stuck in Legal — happens 90% of the time. Fix: ping Patricia directly or open an IT Service Desk ticket tagged HR Ops.",
     },
     person: {
-      name: "Laura Gómez",
+      name: "Patricia Gómez",
       role: {
-        es: "CFO · Finanzas",
-        en: "CFO · Finance",
+        es: "HR Business Partner · People",
+        en: "HR Business Partner · People",
       },
-      email: "laura@bind.com.ar",
-      ext: "1014",
+      email: "patricia@blurbank.com",
+      ext: "2103",
     },
   },
 ];

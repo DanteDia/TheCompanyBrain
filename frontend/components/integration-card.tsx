@@ -30,6 +30,7 @@ import {
   ZoomLogo,
   FigmaLogo,
   OktaLogo,
+  GeminiLogo,
 } from "./brand-logos";
 
 const LOGO_MAP: Record<LogoKey, React.ComponentType<{ className?: string }>> = {
@@ -55,6 +56,7 @@ const LOGO_MAP: Record<LogoKey, React.ComponentType<{ className?: string }>> = {
   zoom: ZoomLogo,
   figma: FigmaLogo,
   okta: OktaLogo,
+  gemini: GeminiLogo,
 };
 
 export function IntegrationCard({ integration }: { integration: Integration }) {

@@ -145,7 +145,8 @@ export type LogoKey =
   | "linear"
   | "zoom"
   | "figma"
-  | "okta";
+  | "okta"
+  | "gemini";
 
 export interface Integration {
   id: string;
