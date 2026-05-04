@@ -30,7 +30,7 @@ export default function ProcessesPage() {
             <p className="mt-2 text-stone-600">
               {brain.loading
                 ? "Cargando…"
-                : `${PROCESSES.length} procesos operativos extraídos de las entrevistas y documentos${
+                : `${PROCESSES.length} operational processes extracted from interviews and documents${
                     brain.data.source === "live" ? "" : " (mock)"
                   }.`}
             </p>

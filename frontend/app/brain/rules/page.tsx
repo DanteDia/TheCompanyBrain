@@ -22,7 +22,7 @@ export default function RulesPage() {
         <p className="mt-2 text-stone-600 max-w-2xl">
           {brain.loading
             ? "Cargando…"
-            : `${RULES.length} reglas tribales capturadas de las entrevistas. Cosas que nadie escribió en Confluence pero que todos saben.`}
+            : `${RULES.length} tribal rules captured from interviews. Things nobody wrote in Confluence but everyone knows.`}
         </p>
       </header>
 
@@ -31,7 +31,7 @@ export default function RulesPage() {
           <Lightbulb className="h-10 w-10 mx-auto text-stone-300 mb-3" strokeWidth={1.5} />
           <div className="text-stone-700 font-medium">No rules yet</div>
           <p className="text-sm text-stone-500 mt-1 max-w-md mx-auto">
-            Subí entrevistas y procesalas en /admin/upload — las reglas aparecen acá.
+            Upload interviews and process them in /admin/upload — rules show up here.
           </p>
         </div>
       ) : (

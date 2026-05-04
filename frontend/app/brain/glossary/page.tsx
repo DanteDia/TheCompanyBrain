@@ -10,12 +10,12 @@ const FALLBACK_TERMS: Array<{ term: string; definition: string }> = [
   {
     term: "Score Blur",
     definition:
-      "Score crediticio interno. Fórmula: (Veraz × 0.6) + (Antigüedad meses × 0.3) + (Saldo promedio × 0.1).",
+      "Internal credit score. Formula: (Veraz × 0.6) + (Age months × 0.3) + (Average balance × 0.1).",
   },
   {
     term: "BCRA",
     definition:
-      "Banco Central de la República Argentina. Regulador del sistema financiero argentino.",
+      "Central Bank of the Argentine Republic. Regulator of the Argentine financial system.",
   },
   {
     term: "DTI",
@@ -24,11 +24,11 @@ const FALLBACK_TERMS: Array<{ term: string; definition: string }> = [
   },
   {
     term: "LTV",
-    definition: "Loan-to-value. Porcentaje del valor del activo cubierto por el préstamo.",
+    definition: "Loan-to-value. Percentage of asset value covered by the loan.",
   },
   {
     term: "PLAFT",
-    definition: "Prevención de Lavado de Activos y Financiamiento del Terrorismo.",
+    definition: "Anti-Money Laundering and Counter-Terrorist Financing prevention.",
   },
 ];
 
@@ -53,7 +53,7 @@ export default function GlossaryPage() {
         <p className="mt-2 text-stone-600">
           {brain.loading
             ? "Cargando…"
-            : `${TERMS.length} términos${
+            : `${TERMS.length} terms${
                 sourceLabel === "fallback" ? " (fallback)" : ""
               } — siglas, productos, jerga interna.`}
         </p>

@@ -34,7 +34,7 @@ export default function IntegrationsPage() {
       />
       <Section
         title="Identity y SSO"
-        subtitle="Cómo se autentican tus usuarios"
+        subtitle="How your users authenticate"
         items={identity}
       />
     </div>

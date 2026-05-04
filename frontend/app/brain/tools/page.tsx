@@ -149,7 +149,7 @@ export default function ToolsPage() {
 
             <div className="space-y-2">
               <div className="text-[10px] uppercase tracking-wider text-stone-500 font-medium">
-                Cómo conseguir acceso
+                How to request access
               </div>
               <div className="rounded-md border border-stone-200 bg-stone-50/40 p-3 text-sm text-stone-700">
                 {selected.access_path}
@@ -176,7 +176,7 @@ export default function ToolsPage() {
             </div>
 
             <Button variant="outline" size="sm" className="w-full">
-              Ver auditoría de accesos
+              View access audit
             </Button>
           </div>
         </aside>

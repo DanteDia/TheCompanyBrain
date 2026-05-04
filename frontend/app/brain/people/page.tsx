@@ -115,7 +115,7 @@ export default function PeoplePage() {
           <div className="p-5">
             <PersonCard id={selected} />
             <div className="mt-4 text-xs text-stone-500 italic">
-              Para ver el transcript completo de la entrevista, abrí{" "}
+              To view the full interview transcript, open{" "}
               <span className="font-mono text-stone-700">/admin/interviews</span>.
             </div>
           </div>

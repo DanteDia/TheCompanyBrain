@@ -17,7 +17,7 @@ export default function RelationshipsPage() {
 
       <div className="rounded-xl border border-dashed border-stone-300 p-16 text-center">
         <Network className="h-12 w-12 mx-auto text-stone-300 mb-3" strokeWidth={1.5} />
-        <div className="text-stone-700 font-medium">Visualización del grafo</div>
+        <div className="text-stone-700 font-medium">Graph visualization</div>
         <p className="text-sm text-stone-500 mt-1 max-w-md mx-auto">
           Force-directed layout con react-flow — V1.5. Cut del weekend de YC; mostrar como
           tabla en /brain/people si hace falta.

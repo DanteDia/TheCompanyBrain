@@ -42,7 +42,7 @@ export function ScheduleDemoModal({ open, onClose }: Props) {
       ref={dialogRef}
       role="dialog"
       aria-modal="true"
-      aria-label="Agendar demo guiada"
+      aria-label="Schedule guided demo"
       className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/70 backdrop-blur-sm p-4 md:p-8 animate-fade-in"
       onClick={onClose}
     >
@@ -60,7 +60,7 @@ export function ScheduleDemoModal({ open, onClose }: Props) {
         <iframe
           src={CAL_URL}
           className="w-full h-[80vh] md:h-[720px] border-0 block"
-          title="Agendar demo guiada con Company Brain"
+          title="Schedule a guided demo with Company Brain"
           allow="camera; microphone; geolocation"
         />
       </div>

@@ -83,7 +83,7 @@ export default function UploadPage() {
             Upload org chart
           </h1>
           <p className="mt-2 text-stone-600 max-w-2xl">
-            Upload a CSV con la lista de empleados. Then we schedule
+            Upload a CSV with the list of employees. Then we schedule
             interviews with Google Calendar and a voice agent extracts how they work.
           </p>
         </div>
@@ -147,10 +147,10 @@ export default function UploadPage() {
               <Upload className="h-10 w-10 mx-auto text-stone-400 mb-4" strokeWidth={1.5} />
             )}
             <div className="text-lg font-medium text-stone-900">
-              {loading ? "Subiendo y procesando…" : "Arrastrá tu organigrama acá"}
+              {loading ? "Uploading and processing…" : "Drag your org chart here"}
             </div>
             <div className="text-sm text-stone-500 mt-1">
-              CSV con columnas: <span className="font-mono">id, name, email, role, area, manager_id, phone</span>
+              CSV with columns: <span className="font-mono">id, name, email, role, area, manager_id, phone</span>
             </div>
             <Button variant="outline" className="mt-6" disabled={loading}>
               <FileText className="h-4 w-4" />
@@ -178,7 +178,7 @@ export default function UploadPage() {
                 </div>
               </div>
               <Button variant="ghost" size="sm" onClick={() => { setStep("upload"); setResult(null); }}>
-                Subir otro CSV
+                Upload another CSV
               </Button>
             </div>
 
@@ -209,7 +209,7 @@ export default function UploadPage() {
                   {result.total_in_brain > result.preview.length && (
                     <tr>
                       <td colSpan={4} className="px-3 py-2 text-xs text-stone-400 italic">
-                        …y {result.total_in_brain - result.preview.length} más
+                        …and {result.total_in_brain - result.preview.length} more
                       </td>
                     </tr>
                   )}
@@ -220,17 +220,17 @@ export default function UploadPage() {
 
           <Card className="p-5 bg-accent-50/40 border-accent-200">
             <div className="text-sm font-medium text-stone-900 mb-2">
-              Próximo paso: agendar entrevistas
+              Next step: schedule interviews
             </div>
             <p className="text-sm text-stone-600 mb-4">
-              Mandamos una invitación de Google Calendar (con Meet auto-generado) a
-              cada empleado, distribuyéndolas en slots de 15 min de Lunes a Viernes 9-18.
+              We send a Google Calendar invite (with auto-generated Meet) to
+              each employee, distributed in 15-min slots Mon-Fri 9-18.
               Cada llamada la conduce un agente de voz Retell que les hace 13 preguntas
               en ~7 minutos.
             </p>
             <p className="text-xs text-stone-500 italic mb-4">
-              Nota V1: hoy distribuimos en slots cronológicos. La integración para
-              consultar availability de cada empleado vía Calendar freebusy queda V1.5.
+              V1 note: today we distribute chronologically. The integration to
+              check each employee's availability via Calendar freebusy is V1.5.
             </p>
             <div className="flex gap-2">
               <Button onClick={handleSchedule} disabled={loading}>
@@ -254,7 +254,7 @@ export default function UploadPage() {
             {scheduled.count} invitaciones enviadas
           </div>
           <p className="text-sm text-stone-600 mt-1">
-            Cada empleado recibió un Google Calendar invite con link a Meet.
+            Each employee received a Google Calendar invite with a Meet link.
           </p>
 
           {scheduled.meet_links.length > 0 && (
@@ -276,7 +276,7 @@ export default function UploadPage() {
 
           <div className="mt-6">
             <Button variant="outline" onClick={() => { setStep("upload"); setScheduled(null); setResult(null); }}>
-              Subir otra empresa
+              Upload another company
             </Button>
           </div>
         </Card>
