@@ -39,11 +39,12 @@ interface PhaseConfig {
 // rotationSpeed 0.42, divisions 177. Their freq is mapped to our shader by
 // trial — their 0.34 → our 0.55 reads visually identical (same "swell size").
 const PHASE_CONFIG: Record<SpherePhase, PhaseConfig> = {
-  idle:        { noiseSpeed: 0.18, noiseFreq: 0.55, noiseAmp: 0.16, paletteMult: 0.80, rotationSpeed: 0.30, meshScale: 1.00 },
-  connecting:  { noiseSpeed: 0.35, noiseFreq: 0.55, noiseAmp: 0.20, paletteMult: 0.86, rotationSpeed: 0.55, meshScale: 1.02 },
-  listening:   { noiseSpeed: 0.20, noiseFreq: 0.55, noiseAmp: 0.18, paletteMult: 0.86, rotationSpeed: 0.42, meshScale: 1.00 },
-  speaking:    { noiseSpeed: 0.40, noiseFreq: 0.55, noiseAmp: 0.26, paletteMult: 0.92, rotationSpeed: 0.55, meshScale: 1.05 },
-  ended:       { noiseSpeed: 0.04, noiseFreq: 0.55, noiseAmp: 0.10, paletteMult: 0.50, rotationSpeed: 0.05, meshScale: 0.96 },
+  // Big amp + low freq → wavy bulges like the Radical reference.
+  idle:        { noiseSpeed: 0.22, noiseFreq: 0.40, noiseAmp: 0.32, paletteMult: 0.86, rotationSpeed: 0.35, meshScale: 1.00 },
+  connecting:  { noiseSpeed: 0.40, noiseFreq: 0.40, noiseAmp: 0.36, paletteMult: 0.90, rotationSpeed: 0.55, meshScale: 1.02 },
+  listening:   { noiseSpeed: 0.24, noiseFreq: 0.40, noiseAmp: 0.34, paletteMult: 0.88, rotationSpeed: 0.42, meshScale: 1.00 },
+  speaking:    { noiseSpeed: 0.45, noiseFreq: 0.40, noiseAmp: 0.42, paletteMult: 0.95, rotationSpeed: 0.60, meshScale: 1.04 },
+  ended:       { noiseSpeed: 0.04, noiseFreq: 0.40, noiseAmp: 0.18, paletteMult: 0.55, rotationSpeed: 0.05, meshScale: 0.96 },
 };
 
 // Standard Ashima/Stefan-Gustavson 3D simplex noise — copy-pasted because
@@ -175,9 +176,10 @@ export function GradientSphere({ phase, level = 0, size = 360, className }: Prop
     camera.position.set(0, 0, 3.0);  // tight crop — sphere fills the frame
 
     // Geometry — high-subdivision icosahedron for clean wireframe lattice
-    // detail=6 → 20 * 4^6 = 81920 triangles. Dense enough to read as a
-    // smooth lattice but not so dense that lines blur into solid color.
-    const geometry = new THREE.IcosahedronGeometry(1.0, 6);
+    // detail=7 → 20 * 4^7 = 327680 triangles. Dense fabric-like lattice
+    // — only readable because the wireframe shader is bright silver,
+    // not tinted by the fill color underneath.
+    const geometry = new THREE.IcosahedronGeometry(1.0, 7);
 
     // Uniforms — start at idle, lerp toward target each frame
     const uniforms = {
@@ -186,9 +188,9 @@ export function GradientSphere({ phase, level = 0, size = 360, className }: Prop
       u_noise_freq: { value: PHASE_CONFIG.idle.noiseFreq },
       u_noise_amp: { value: PHASE_CONFIG.idle.noiseAmp },
       u_palette_mult: { value: PHASE_CONFIG.idle.paletteMult },
-      u_color_a: { value: new THREE.Color(0xff7a1f) },   // bright terracotta hot
-      u_color_b: { value: new THREE.Color(0x3895d3) },   // saturated cyan-blue cool
-      u_color_dark: { value: new THREE.Color(0x14100c) },// dark warm-brown sombra
+      u_color_a: { value: new THREE.Color(0xe07a30) },   // muted terracotta hot
+      u_color_b: { value: new THREE.Color(0x3a7fa6) },   // muted slate-blue cool
+      u_color_dark: { value: new THREE.Color(0x100c08) },// near-black sombra
     };
 
     // Filled mesh (faint, gives the sphere body)
@@ -215,7 +217,7 @@ export function GradientSphere({ phase, level = 0, size = 360, className }: Prop
         vec3 viewDir = vec3(0.0, 0.0, 1.0);
         float fresnel = pow(1.0 - abs(dot(normalize(v_normal), viewDir)), 1.4);
         vec3 col = mix(vec3(0.85, 0.86, 0.92), vec3(1.0, 0.97, 0.92), fresnel);
-        gl_FragColor = vec4(col, 0.55);
+        gl_FragColor = vec4(col, 0.42);  // soft enough to let the fill colors breathe through
       }
     `;
     const wireMaterial = new THREE.ShaderMaterial({
