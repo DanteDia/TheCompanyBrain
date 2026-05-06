@@ -49,6 +49,34 @@ export const STRINGS: Dict = {
   },
   "try.back_to_landing": { es: "Volver", en: "Back" },
 
+  // /interview — live call screen UI
+  "interview.status.ready": { es: "Cuando quieras", en: "Ready when you are" },
+  "interview.status.starting": { es: "Conectando…", en: "Connecting…" },
+  "interview.status.speaking": { es: "El agente está hablando", en: "The agent is talking" },
+  "interview.status.listening": { es: "Te escucho — adelante", en: "I'm listening — go ahead" },
+  "interview.status.live": { es: "En vivo", en: "Live" },
+  "interview.status.ended": { es: "Entrevista terminada", en: "Interview finished" },
+  "interview.status.error": { es: "Algo salió mal", en: "Something went wrong" },
+  "interview.you_label": { es: "vos: ", en: "you: " },
+  "interview.end_button": { es: "Terminar entrevista", en: "End interview" },
+  "interview.done_title": { es: "Listo — ¡gracias!", en: "Done — thanks!" },
+  "interview.done_subtitle_pre": {
+    es: "El Brain está procesando lo que conversamos. En segundos vas a ver tu información integrada en ",
+    en: "The Brain is processing what we talked about. In seconds you'll see your information integrated into ",
+  },
+  "interview.done_subtitle_link": {
+    es: "el grafo de la empresa",
+    en: "the company graph",
+  },
+  "interview.duration_label": { es: "duración:", en: "duration:" },
+  "interview.error_title": { es: "No pudimos iniciar la entrevista", en: "We couldn't start the interview" },
+  "interview.error_unknown": { es: "Error desconocido", en: "Unknown error" },
+  "interview.retry": { es: "Reintentar", en: "Retry" },
+  "interview.error_contact": {
+    es: "Si el problema persiste, escribinos a tomas@thecompanybrain.xyz",
+    en: "If the problem persists, write to tomas@thecompanybrain.xyz",
+  },
+
   // Hero
   "hero.badge": {
     es: "Diseñado para banca regulada en LATAM",

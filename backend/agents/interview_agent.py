@@ -154,6 +154,44 @@ def create_or_update_agent(employee_name: str) -> dict[str, Any]:
         return data
 
 
+def _set_agent_language(language: str) -> None:
+    """PATCH the live Retell agent so its STT/TTS pipeline matches the
+    request language. Called per call from initiate_web_call /
+    initiate_phone_call.
+
+    Why this exists: Retell's "multi" language mode requires a truly
+    multilingual voice, and even then it auto-detects the language from
+    the FIRST audio frames — which can default to English (or German if
+    the voice is Adrian). The reliable way is to set the language code
+    explicitly per call.
+
+    Race: if two calls in different languages start within milliseconds,
+    the second PATCH wins for the first call's first response. For demo
+    traffic that's negligible; if it ever becomes a real issue we can
+    create two agents (one per language) and dispatch by id.
+    """
+    if not settings.retell_agent_id:
+        return
+    code = "es-419" if language == "es" else "en-US"
+    # 11labs-Sarah is multilingual (English + Spanish); keeps voice
+    # consistent across languages so the agent identity stays the same.
+    payload = {"language": code, "voice_id": "11labs-Sarah"}
+    with httpx.Client(
+        base_url="https://api.retellai.com",
+        headers={
+            "Authorization": f"Bearer {settings.retell_api_key}",
+            "Content-Type": "application/json",
+        },
+        timeout=15.0,
+    ) as c:
+        try:
+            r = c.patch(f"/update-agent/{settings.retell_agent_id}", json=payload)
+            r.raise_for_status()
+            log.info("retell.agent_language_set", language=code)
+        except Exception as e:  # noqa: BLE001
+            log.warning("retell.agent_language_patch_failed", error=str(e))
+
+
 def initiate_phone_call(
     *,
     agent_id: str,
@@ -166,6 +204,7 @@ def initiate_phone_call(
     demo: bool = False,
 ) -> dict[str, Any]:
     """Trigger an outbound call. Retell + Twilio handle the rest."""
+    _set_agent_language(language)
     payload = {
         "agent_id": agent_id,
         "from_number": settings.twilio_from_number,
@@ -207,6 +246,7 @@ def initiate_web_call(
     demo: bool = False,
 ) -> dict[str, Any]:
     """Create a web-call (browser-based) — for testing without Twilio."""
+    _set_agent_language(language)
     payload = {
         "agent_id": agent_id,
         "metadata": {

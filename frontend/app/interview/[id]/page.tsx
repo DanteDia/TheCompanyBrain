@@ -19,6 +19,8 @@ import { Mic, MicOff, Loader2, AlertTriangle } from "lucide-react";
 import { GradientSphere, type SpherePhase } from "@/components/gradient-sphere";
 import { Logo } from "@/components/ui/logo";
 import { startWebCall, ApiError } from "@/lib/api-backend";
+import { t } from "@/lib/i18n";
+import { useLocale } from "@/components/locale-toggle";
 import { getOrgLanguage } from "@/lib/org-settings";
 
 type Phase = "ready" | "starting" | "live" | "ended" | "error";
@@ -41,6 +43,8 @@ export default function InterviewPage() {
   const isMock = search?.get("mock") === "1";
   const isDemo = search?.get("demo") === "1";
   const langOverride = (search?.get("lang") as "en" | "es" | null) || null;
+  const [globalLocale] = useLocale();
+  const uiLocale: "en" | "es" = langOverride ?? globalLocale;
 
   const [phase, setPhase] = useState<Phase>("ready");
   const [orbPhase, setSpherePhase] = useState<SpherePhase>("idle");
@@ -223,16 +227,16 @@ export default function InterviewPage() {
   const showError = phase === "error";
 
   const statusText: Record<Phase, string> = {
-    ready: "Ready when you are",
-    starting: "Connecting…",
+    ready: t("interview.status.ready", uiLocale),
+    starting: t("interview.status.starting", uiLocale),
     live:
       orbPhase === "speaking"
-        ? "The agent is talking"
+        ? t("interview.status.speaking", uiLocale)
         : orbPhase === "listening"
-        ? "I'm listening — go ahead"
-        : "Live",
-    ended: "Interview finished",
-    error: "Something went wrong",
+        ? t("interview.status.listening", uiLocale)
+        : t("interview.status.live", uiLocale),
+    ended: t("interview.status.ended", uiLocale),
+    error: t("interview.status.error", uiLocale),
   };
 
   return (
@@ -352,15 +356,15 @@ export default function InterviewPage() {
                 }}
               >
                 <div className="space-y-2 text-sm leading-relaxed">
-                  {transcript.slice(-6).map((t, i) => (
+                  {transcript.slice(-6).map((entry, i) => (
                     <motion.div
-                      key={`${i}-${t.content.slice(0, 16)}`}
+                      key={`${i}-${entry.content.slice(0, 16)}`}
                       initial={{ opacity: 0, y: 6 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className={t.role === "agent" ? "text-stone-900" : "text-stone-500 italic"}
+                      className={entry.role === "agent" ? "text-stone-900" : "text-stone-500 italic"}
                     >
-                      {t.role === "agent" ? "" : "you: "}
-                      {t.content}
+                      {entry.role === "agent" ? "" : t("interview.you_label", uiLocale)}
+                      {entry.content}
                     </motion.div>
                   ))}
                 </div>
@@ -371,7 +375,7 @@ export default function InterviewPage() {
                 className="fixed bottom-6 left-1/2 -translate-x-1/2 z-20 inline-flex items-center gap-2 rounded-full border border-stone-300 bg-white/90 backdrop-blur-sm px-5 py-2.5 text-sm font-medium text-stone-700 shadow-md transition-all hover:border-stone-500 hover:bg-white"
               >
                 <MicOff className="h-3.5 w-3.5" />
-                End interview
+                {t("interview.end_button", uiLocale)}
               </button>
             </motion.div>
           )}
@@ -387,17 +391,17 @@ export default function InterviewPage() {
               <GradientSphere phase="ended" size={260} theme="light" />
               <div className="mt-10 max-w-md">
                 <h2 className="text-2xl tracking-tight font-medium text-stone-900">
-                  Done — thanks!
+                  {t("interview.done_title", uiLocale)}
                 </h2>
                 <p className="mt-3 text-base leading-relaxed text-stone-600">
-                  The Brain is processing what we talked about. In seconds you'll see your information integrated into{" "}
+                  {t("interview.done_subtitle_pre", uiLocale)}
                   <a href="/brain/people" className="text-accent-700 underline-offset-4 hover:underline">
-                    the company graph
+                    {t("interview.done_subtitle_link", uiLocale)}
                   </a>
                   .
                 </p>
                 <div className="mt-2 text-xs text-stone-500 font-mono">
-                  duration: {fmtTime(elapsed)}
+                  {t("interview.duration_label", uiLocale)} {fmtTime(elapsed)}
                 </div>
               </div>
             </motion.div>
@@ -414,10 +418,10 @@ export default function InterviewPage() {
                 <AlertTriangle className="h-5 w-5 text-red-600" strokeWidth={1.5} />
               </div>
               <h2 className="text-2xl tracking-tight font-medium text-stone-900">
-                We couldn't start the interview
+                {t("interview.error_title", uiLocale)}
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-stone-600">
-                {error || "Unknown error"}
+                {error || t("interview.error_unknown", uiLocale)}
               </p>
               <button
                 onClick={() => {
@@ -427,10 +431,10 @@ export default function InterviewPage() {
                 }}
                 className="mt-6 rounded-full border border-stone-300 bg-white px-5 py-2 text-sm font-medium text-stone-700 transition-all hover:border-stone-500"
               >
-                Retry
+                {t("interview.retry", uiLocale)}
               </button>
               <p className="mt-4 text-xs text-stone-500">
-                If the problem persists, write to tomas@thecompanybrain.xyz
+                {t("interview.error_contact", uiLocale)}
               </p>
             </motion.div>
           )}
