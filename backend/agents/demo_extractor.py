@@ -14,9 +14,9 @@ import re
 from typing import Any
 
 import structlog
-from anthropic import Anthropic
 
 from backend.config import settings
+from backend.utils.claude_client import call_with_retry
 
 log = structlog.get_logger()
 
@@ -101,14 +101,10 @@ def extract_demo_contributions(
     """
     if not transcript or len(transcript.strip()) < 60:
         return []
-    if not settings.anthropic_api_key:
-        log.warning("demo_extractor.no_api_key")
-        return []
-
-    client = Anthropic(api_key=settings.anthropic_api_key)
     try:
-        response = client.messages.create(
-            model="claude-haiku-4-5-20251001",
+        response = call_with_retry(
+            settings.model_router,  # haiku — fast + cheap
+            fallback_model=settings.model_qa_fast_fallback,
             max_tokens=1200,
             messages=[
                 {
@@ -127,8 +123,10 @@ def extract_demo_contributions(
 
     text = ""
     for block in response.content:
-        if hasattr(block, "text"):
-            text += block.text
+        if getattr(block, "type", None) == "text":
+            text += getattr(block, "text", "") or ""
+        elif hasattr(block, "text"):
+            text += block.text or ""
     contributions = _parse_response(text)
     log.info(
         "demo_extractor.completed",
