@@ -116,6 +116,20 @@ export const STRINGS: Dict = {
   },
   "demo_end.cta_schedule": { es: "Agendar demo guiada", en: "Schedule guided demo" },
   "demo_end.cta_try_another": { es: "Probar otro rol", en: "Try another role" },
+  "demo_end.cta_review": { es: "Revisar lo capturado", en: "Review what was captured" },
+  "demo_end.review_eyebrow": { es: "Revisión", en: "Review" },
+  "demo_end.review_title": {
+    es: "Confirmá lo que el agente entendió.",
+    en: "Confirm what the agent understood.",
+  },
+  "demo_end.review_intro": {
+    es: "Los nombres de personas y herramientas son los datos donde el agente más se equivoca. Tomate 30 segundos para confirmar o marcar lo que esté mal.",
+    en: "Names of people and tools are where the agent makes the most mistakes. Take 30 seconds to confirm or flag anything that's off.",
+  },
+  "demo_end.review_footer": {
+    es: "En producción, las correcciones se sincronizan al grafo y reentrenan el extractor para esa empresa. Acá solo es visual.",
+    en: "In production, corrections sync back to the graph and retrain the extractor for that company. Here it's purely visual.",
+  },
 
   // Hero
   "hero.badge": {
