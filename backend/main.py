@@ -328,7 +328,7 @@ async def api_inspect_retell_agent() -> dict[str, Any]:
     if not settings.retell_agent_id:
         raise HTTPException(400, "RETELL_AGENT_ID not set")
     headers = {"Authorization": f"Bearer {settings.retell_api_key}"}
-    base = "https://api.retellai.com/v2"
+    base = "https://api.retellai.com"
     out: dict[str, Any] = {}
     with _httpx.Client(headers=headers, timeout=20.0) as c:
         try:

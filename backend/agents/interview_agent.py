@@ -97,8 +97,20 @@ def create_or_update_agent(employee_name: str) -> dict[str, Any]:
     """
     sys_prompt = _system_prompt_for_employee(employee_name)
 
+    # Agent/LLM CRUD endpoints don't live under /v2 in the current Retell API
+    # (only call-creation endpoints do). Build a sibling client at the root.
+    def _root_client() -> httpx.Client:
+        return httpx.Client(
+            base_url="https://api.retellai.com",
+            headers={
+                "Authorization": f"Bearer {settings.retell_api_key}",
+                "Content-Type": "application/json",
+            },
+            timeout=30.0,
+        )
+
     if settings.retell_agent_id:
-        with _client() as c:
+        with _root_client() as c:
             # Discover the LLM id from the existing agent
             ar = c.get(f"/get-agent/{settings.retell_agent_id}")
             ar.raise_for_status()
@@ -131,7 +143,7 @@ def create_or_update_agent(employee_name: str) -> dict[str, Any]:
             return data
 
     # No existing agent — create LLM first, then agent pointing at it.
-    with _client() as c:
+    with _root_client() as c:
         llm_create = {
             "model": "claude-sonnet-4",
             "general_prompt": sys_prompt,
