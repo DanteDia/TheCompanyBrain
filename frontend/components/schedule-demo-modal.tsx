@@ -1,16 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 
-// Where the calendar widget lives. Replace with your Cal.com / Calendly /
-// Zoho Bookings URL once you've set it up.
-//
-// For Cal.com (recommended, free):
-//   1. Sign up at https://cal.com with tomas@thebraincompany.xyz
-//   2. Pick a username (e.g. tomas-cb) → your link becomes cal.com/tomas-cb
-//   3. Create a "30min Demo" event type
-//   4. Paste the event URL here:
+// Cal.com event URL. Override per-environment via NEXT_PUBLIC_BOOKING_URL.
 const CAL_URL =
   process.env.NEXT_PUBLIC_BOOKING_URL || "https://cal.com/tomas-.-thecompanybrain";
 
@@ -21,6 +15,12 @@ interface Props {
 
 export function ScheduleDemoModal({ open, onClose }: Props) {
   const dialogRef = useRef<HTMLDivElement | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  // Portal target: only on client. Avoids SSR/hydration mismatch.
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -35,19 +35,24 @@ export function ScheduleDemoModal({ open, onClose }: Props) {
     };
   }, [open, onClose]);
 
-  if (!open) return null;
+  if (!open || !mounted) return null;
 
-  return (
+  // Render at document.body via Portal so the fixed positioning escapes
+  // any ancestor that creates a containing block (e.g., the SiteHeader,
+  // which uses `backdrop-blur-md` — backdrop-filter creates a fixed
+  // containing block, so a `fixed inset-0` child gets positioned relative
+  // to the header instead of the viewport. Portal sidesteps that entirely.
+  return createPortal(
     <div
       ref={dialogRef}
       role="dialog"
       aria-modal="true"
       aria-label="Schedule guided demo"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/70 backdrop-blur-sm p-4 md:p-8 animate-fade-in"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-stone-900/70 backdrop-blur-sm p-4 md:p-8 animate-fade-in"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden"
+        className="relative w-full max-w-4xl max-h-full bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -59,11 +64,12 @@ export function ScheduleDemoModal({ open, onClose }: Props) {
         </button>
         <iframe
           src={CAL_URL}
-          className="w-full h-[80vh] md:h-[720px] border-0 block"
+          className="w-full h-[min(720px,calc(100vh-4rem))] border-0 block"
           title="Schedule a guided demo with Company Brain"
           allow="camera; microphone; geolocation"
         />
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
