@@ -15,6 +15,7 @@ export const STRINGS: Dict = {
   "nav.pricing": { es: "Pricing", en: "Pricing" },
   "nav.signin": { es: "Iniciar sesión", en: "Sign in" },
   "nav.demo": { es: "Probar la demo", en: "Try the demo" },
+  "nav.book_demo": { es: "Agendar demo", en: "Book a demo" },
   "nav.demo_call": { es: "Demo call", en: "Demo call" },
   "nav.ask_brain": { es: "Hablar con la Brain", en: "Ask the Brain" },
 
