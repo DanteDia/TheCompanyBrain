@@ -20,6 +20,7 @@ import { Avatar } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { ORGANIZATION } from "@/lib/mock-data";
 import { AdminPasswordGate } from "@/components/admin-password-gate";
+import { LocaleToggle, useLocale } from "@/components/locale-toggle";
 
 const NAV_GROUPS = [
   {
