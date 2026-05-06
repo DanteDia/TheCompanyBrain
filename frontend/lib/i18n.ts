@@ -117,6 +117,9 @@ export const STRINGS: Dict = {
   "demo_end.cta_schedule": { es: "Agendar demo guiada", en: "Schedule guided demo" },
   "demo_end.cta_try_another": { es: "Probar otro rol", en: "Try another role" },
   "demo_end.cta_review": { es: "Revisar lo capturado", en: "Review what was captured" },
+  "demo_end.cta_review_loading": { es: "Procesando…", en: "Processing…" },
+  "demo_end.review_badge_real": { es: "Real", en: "Real" },
+  "demo_end.review_badge_preview": { es: "Vista previa", en: "Preview" },
   "demo_end.review_eyebrow": { es: "Revisión", en: "Review" },
   "demo_end.review_title": {
     es: "Confirmá lo que el agente entendió.",

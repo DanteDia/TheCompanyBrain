@@ -193,11 +193,15 @@ function ReviewModal({
   open,
   onClose,
   persona,
+  contribs,
+  isReal,
   locale,
 }: {
   open: boolean;
   onClose: () => void;
   persona: DemoPersona;
+  contribs: Contribution[];
+  isReal: boolean;
   locale: "en" | "es";
 }) {
   return (
@@ -221,8 +225,19 @@ function ReviewModal({
           >
             <header className="flex items-start justify-between px-6 py-5 border-b border-stone-100">
               <div>
-                <div className="text-[10px] font-mono uppercase tracking-wider text-stone-500">
-                  {t("demo_end.review_eyebrow", locale)}
+                <div className="flex items-center gap-2">
+                  <div className="text-[10px] font-mono uppercase tracking-wider text-stone-500">
+                    {t("demo_end.review_eyebrow", locale)}
+                  </div>
+                  <span
+                    className={`text-[9px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded ${
+                      isReal
+                        ? "bg-emerald-100 text-emerald-700 ring-1 ring-emerald-200/60"
+                        : "bg-stone-100 text-stone-500 ring-1 ring-stone-200"
+                    }`}
+                  >
+                    {isReal ? t("demo_end.review_badge_real", locale) : t("demo_end.review_badge_preview", locale)}
+                  </span>
                 </div>
                 <h3 className="text-lg font-medium tracking-tight text-stone-900 mt-1">
                   {t("demo_end.review_title", locale)}
@@ -242,7 +257,7 @@ function ReviewModal({
             </p>
 
             <div className="px-6 py-4 space-y-2 overflow-y-auto">
-              {persona.contributions.map((c, i) => (
+              {contribs.map((c, i) => (
                 <ReviewRow key={i} contribution={c} locale={locale} />
               ))}
             </div>
@@ -264,11 +279,19 @@ export function DemoContributionAnim({
   locale,
   durationLabel,
   onScheduleDemo,
+  extractedContribs,
+  extracting,
 }: {
   persona: DemoPersona;
   locale: "en" | "es";
   durationLabel: string;
   onScheduleDemo: () => void;
+  /** Real entities pulled by Haiku from the call transcript. When provided,
+   *  the Review modal shows these instead of the curated mocks. */
+  extractedContribs?: Contribution[] | null;
+  /** True while Haiku is still running; we show a small loading hint
+   *  on the Review CTA. */
+  extracting?: boolean;
 }) {
   const contribs = persona.contributions;
   const [pulseKey, setPulseKey] = useState(0);
@@ -298,7 +321,14 @@ export function DemoContributionAnim({
 
   return (
     <div className="flex flex-col items-center text-center max-w-3xl px-4">
-      <ReviewModal open={reviewOpen} onClose={() => setReviewOpen(false)} persona={persona} locale={locale} />
+      <ReviewModal
+        open={reviewOpen}
+        onClose={() => setReviewOpen(false)}
+        persona={persona}
+        contribs={extractedContribs && extractedContribs.length > 0 ? extractedContribs : persona.contributions}
+        isReal={Boolean(extractedContribs && extractedContribs.length > 0)}
+        locale={locale}
+      />
 
       {/* Header */}
       <motion.div
@@ -439,10 +469,15 @@ export function DemoContributionAnim({
       >
         <button
           onClick={() => setReviewOpen(true)}
-          className="inline-flex items-center gap-2 rounded-full bg-stone-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-stone-800 transition-colors"
+          disabled={extracting}
+          className="inline-flex items-center gap-2 rounded-full bg-stone-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-stone-800 transition-colors disabled:opacity-60"
         >
-          <Eye className="h-4 w-4" strokeWidth={1.8} />
-          {t("demo_end.cta_review", locale)}
+          {extracting ? (
+            <span className="h-4 w-4 inline-block rounded-full border-2 border-white/40 border-t-white animate-spin" />
+          ) : (
+            <Eye className="h-4 w-4" strokeWidth={1.8} />
+          )}
+          {extracting ? t("demo_end.cta_review_loading", locale) : t("demo_end.cta_review", locale)}
         </button>
         <button
           onClick={onScheduleDemo}

@@ -18,7 +18,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Mic, MicOff, Loader2, AlertTriangle } from "lucide-react";
 import { GradientSphere, type SpherePhase } from "@/components/gradient-sphere";
 import { Logo } from "@/components/ui/logo";
-import { startWebCall, ApiError } from "@/lib/api-backend";
+import { startWebCall, ApiError, analyzeDemoTranscript, type DemoExtractedContribution } from "@/lib/api-backend";
 import { t } from "@/lib/i18n";
 import { useLocale } from "@/components/locale-toggle";
 import { DemoContributionAnim } from "@/components/demo-contribution-anim";
@@ -49,6 +49,8 @@ export default function InterviewPage() {
   const [globalLocale] = useLocale();
   const uiLocale: "en" | "es" = langOverride ?? globalLocale;
   const [bookingOpen, setBookingOpen] = useState(false);
+  const [extractedContribs, setExtractedContribs] = useState<DemoExtractedContribution[] | null>(null);
+  const [extracting, setExtracting] = useState(false);
   const demoPersona = isDemo ? findDemoPersona(employeeId) : undefined;
 
   const [phase, setPhase] = useState<Phase>("ready");
@@ -79,6 +81,37 @@ export default function InterviewPage() {
       if (mockTimerRef.current) clearInterval(mockTimerRef.current);
     };
   }, []);
+
+  // After a real demo call ends, run Haiku extraction on the transcript so
+  // the Review modal shows the actual nodes the agent captured. Mock mode
+  // skips this — the mock transcript is canned and would produce nonsense.
+  useEffect(() => {
+    if (phase !== "ended") return;
+    if (!isDemo || isMock) return;
+    if (transcript.length === 0) return;
+    let cancelled = false;
+    setExtracting(true);
+    const transcriptText = transcript
+      .map((t) => `${t.role}: ${t.content}`)
+      .join("\n");
+    analyzeDemoTranscript(transcriptText)
+      .then((r) => {
+        if (cancelled) return;
+        if (r.contributions && r.contributions.length > 0) {
+          setExtractedContribs(r.contributions);
+        }
+      })
+      .catch((e) => {
+        // Silent fallback — DemoContributionAnim will use persona.contributions.
+        console.warn("demo extraction failed", e);
+      })
+      .finally(() => {
+        if (!cancelled) setExtracting(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [phase, isDemo, isMock]);
 
   function startTimer() {
     const t0 = Date.now();
@@ -397,6 +430,8 @@ export default function InterviewPage() {
                 locale={uiLocale}
                 durationLabel={`${t("interview.duration_label", uiLocale)} ${fmtTime(elapsed)}`}
                 onScheduleDemo={() => setBookingOpen(true)}
+                extractedContribs={extractedContribs}
+                extracting={extracting}
               />
             </motion.div>
           )}

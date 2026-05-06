@@ -52,6 +52,27 @@ export async function getInterviews(organization_id?: string): Promise<Interview
   return request<InterviewsResponse>(`/api/interviews${qs}`);
 }
 
+export interface DemoExtractedContribution {
+  type: "tool" | "person" | "process" | "rule";
+  label: { en: string; es: string };
+}
+
+export interface DemoAnalyzeResponse {
+  ok: boolean;
+  contributions: DemoExtractedContribution[];
+}
+
+export async function analyzeDemoTranscript(
+  transcript: string,
+  role: string = "",
+  area: string = ""
+): Promise<DemoAnalyzeResponse> {
+  return request<DemoAnalyzeResponse>("/api/demo/analyze", {
+    method: "POST",
+    body: JSON.stringify({ transcript, role, area }),
+  });
+}
+
 export async function startWebCall(
   employee_id: string,
   organization_id?: string,

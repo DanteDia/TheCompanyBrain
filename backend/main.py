@@ -322,6 +322,28 @@ async def api_test_set_lang(language: str = "es") -> dict[str, Any]:
     return {"input_language": language, "result": result}
 
 
+class DemoAnalyzeRequest(BaseModel):
+    transcript: str
+    role: str = ""
+    area: str = ""
+
+
+@app.post("/api/demo/analyze")
+async def api_demo_analyze(req: DemoAnalyzeRequest) -> dict[str, Any]:
+    """Run Haiku on the demo-call transcript and return structured
+    contributions. Used by the /interview Review modal to show the
+    visitor what the agent actually captured (vs. the curated mocks).
+    """
+    from backend.agents.demo_extractor import extract_demo_contributions
+
+    contributions = extract_demo_contributions(
+        transcript=req.transcript,
+        role=req.role,
+        area=req.area,
+    )
+    return {"ok": True, "contributions": contributions}
+
+
 @app.get("/api/admin/inspect-agent")
 async def api_inspect_retell_agent() -> dict[str, Any]:
     """Return the live Retell agent + its LLM as Retell sees them.
