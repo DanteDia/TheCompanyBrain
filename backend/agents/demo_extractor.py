@@ -109,10 +109,11 @@ def extract_demo_contributions(
             messages=[
                 {
                     "role": "user",
-                    "content": EXTRACTION_PROMPT.format(
-                        role=role or "employee",
-                        area=area or "their area",
-                        transcript=transcript[:8000],
+                    "content": (
+                        EXTRACTION_PROMPT
+                        .replace("{role}", role or "employee")
+                        .replace("{area}", area or "their area")
+                        .replace("{transcript}", transcript[:8000])
                     ),
                 }
             ],
@@ -158,10 +159,11 @@ def _diagnose(*, transcript: str, role: str = "", area: str = "") -> dict[str, A
             messages=[
                 {
                     "role": "user",
-                    "content": EXTRACTION_PROMPT.format(
-                        role=role or "employee",
-                        area=area or "their area",
-                        transcript=transcript[:8000],
+                    "content": (
+                        EXTRACTION_PROMPT
+                        .replace("{role}", role or "employee")
+                        .replace("{area}", area or "their area")
+                        .replace("{transcript}", transcript[:8000])
                     ),
                 }
             ],
