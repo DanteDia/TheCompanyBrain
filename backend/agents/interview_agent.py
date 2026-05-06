@@ -154,28 +154,17 @@ def create_or_update_agent(employee_name: str) -> dict[str, Any]:
         return data
 
 
-def _set_agent_language(language: str) -> None:
+def _set_agent_language(language: str) -> dict[str, Any]:
     """PATCH the live Retell agent so its STT/TTS pipeline matches the
-    request language. Called per call from initiate_web_call /
-    initiate_phone_call.
-
-    Why this exists: Retell's "multi" language mode requires a truly
-    multilingual voice, and even then it auto-detects the language from
-    the FIRST audio frames — which can default to English (or German if
-    the voice is Adrian). The reliable way is to set the language code
-    explicitly per call.
-
-    Race: if two calls in different languages start within milliseconds,
-    the second PATCH wins for the first call's first response. For demo
-    traffic that's negligible; if it ever becomes a real issue we can
-    create two agents (one per language) and dispatch by id.
+    request language. Returns the patched agent (or error detail).
     """
     if not settings.retell_agent_id:
-        return
+        return {"skipped": True}
     code = "es-419" if language == "es" else "en-US"
-    # 11labs-Sarah is multilingual (English + Spanish); keeps voice
-    # consistent across languages so the agent identity stays the same.
-    payload = {"language": code, "voice_id": "11labs-Sarah"}
+    # 11labs-Cimo was the original voice for this agent and is known to
+    # work in Retell. Pin it consistently across languages so the agent
+    # identity stays the same regardless of language.
+    payload = {"language": code, "voice_id": "11labs-Cimo"}
     with httpx.Client(
         base_url="https://api.retellai.com",
         headers={
@@ -184,12 +173,20 @@ def _set_agent_language(language: str) -> None:
         },
         timeout=15.0,
     ) as c:
-        try:
-            r = c.patch(f"/update-agent/{settings.retell_agent_id}", json=payload)
-            r.raise_for_status()
-            log.info("retell.agent_language_set", language=code)
-        except Exception as e:  # noqa: BLE001
-            log.warning("retell.agent_language_patch_failed", error=str(e))
+        r = c.patch(f"/update-agent/{settings.retell_agent_id}", json=payload)
+        if r.status_code >= 400:
+            log.warning(
+                "retell.agent_language_patch_failed",
+                status=r.status_code,
+                body=r.text[:500],
+                payload=payload,
+            )
+            # Don't raise — we still want the call to proceed even if the
+            # language patch fails. But return the error detail so the
+            # debug endpoint can surface it.
+            return {"ok": False, "status": r.status_code, "body": r.text[:500], "payload": payload}
+        log.info("retell.agent_language_set", language=code)
+        return {"ok": True, "patched": r.json(), "payload": payload}
 
 
 def initiate_phone_call(

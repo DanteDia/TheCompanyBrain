@@ -314,6 +314,14 @@ async def seed_portals() -> dict[str, Any]:
     }
 
 
+@app.post("/api/admin/test-set-lang")
+async def api_test_set_lang(language: str = "es") -> dict[str, Any]:
+    """Run _set_agent_language(language) and return the result. Pure debug."""
+    from backend.agents.interview_agent import _set_agent_language
+    result = _set_agent_language(language)
+    return {"input_language": language, "result": result}
+
+
 @app.get("/api/admin/inspect-agent")
 async def api_inspect_retell_agent() -> dict[str, Any]:
     """Return the live Retell agent + its LLM as Retell sees them.
