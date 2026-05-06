@@ -21,10 +21,16 @@ export function SiteHeader() {
             <a href="#integraciones" className="hover:text-stone-900 transition-colors">
               {t("nav.integrations", locale)}
             </a>
+            <Link
+              href="/try"
+              className="hover:text-stone-900 transition-colors font-medium text-stone-700"
+            >
+              {t("nav.demo_call", locale)}
+            </Link>
           </nav>
           <div className="flex items-center gap-2">
             <LocaleToggle locale={locale} onChange={setLocale} />
-            <Link href="/ask">
+            <Link href="/try">
               <Button variant="default" size="sm">
                 {t("nav.demo", locale)}
               </Button>

@@ -441,6 +441,7 @@ class InitiateCallRequest(BaseModel):
     employee_id: str
     organization_id: str = Field(default_factory=lambda: settings.default_org_id)
     language: str = "en"  # "en" or "es" — drives the agent's spoken language
+    demo: bool = False  # True from /try public lobby — call won't be persisted to the org skills file
 
 
 @app.post("/api/call/initiate")
@@ -467,6 +468,7 @@ async def api_initiate_call(req: InitiateCallRequest) -> dict[str, Any]:
         employee_role=person.role or "",
         employee_area=person.area or "",
         language=req.language,
+        demo=req.demo,
     )
     return {"ok": True, "call_id": result.get("call_id"), "agent_id": agent_id}
 
@@ -502,6 +504,7 @@ async def api_initiate_web_call(req: InitiateCallRequest) -> dict[str, Any]:
         employee_role=person.role or "",
         employee_area=person.area or "",
         language=req.language,
+        demo=req.demo,
     )
     call_id = result.get("call_id", "")
     access_token = result.get("access_token", "")
@@ -533,8 +536,16 @@ async def retell_webhook(request: Request, background: BackgroundTasks) -> dict[
     metadata = call.get("metadata") or {}
     employee_id = metadata.get("employee_id")
     org_id = metadata.get("organization_id") or settings.default_org_id
+    is_demo = bool(metadata.get("demo"))
     transcript_payload = call.get("transcript_object") or call.get("transcript") or []
     duration = float(call.get("duration_ms", 0)) / 1000.0
+
+    # Demo calls (from /try public lobby) are not persisted into the org's
+    # skills file, so we don't pollute Blur Bank's seed with extractions
+    # from anonymous visitors. We still log the call_id for audit.
+    if is_demo:
+        log.info("retell.webhook.demo_call_skipped", call_id=call_id, employee_id=employee_id)
+        return {"ok": True, "call_id": call_id, "demo": True, "persisted": False}
 
     transcript = (
         normalize_retell_transcript(transcript_payload)
