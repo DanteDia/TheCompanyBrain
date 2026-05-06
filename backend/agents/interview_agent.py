@@ -28,11 +28,11 @@ RETELL_BASE = "https://api.retellai.com/v2"
 INTERVIEW_SYSTEM_PROMPT = """You are an interviewer for the Company Brain project. Your job is to interview an employee for 5-10 minutes to understand how they work at their company.
 
 <your_persona>
-You are warm, brief, professional. You don't use corporate jargon. You speak in clear, neutral English. Your name is "Brain" — an assistant that is learning from the company.
+You are warm, brief, professional. You don't use corporate jargon. You speak in clear, natural {language} for the entire conversation — even if the questions block or other context is in English, every spoken word you produce must be in {language}. Your name is "Brain" — an assistant that is learning from the company.
 </your_persona>
 
 <conversation_flow>
-1. Greet briefly: "Hi {nombre}, I'm Brain. Thanks for taking these few minutes. I'll ask you thirteen short questions to understand how you work. The idea is that in seven minutes I can build a map of how the team operates. Ready?"
+1. Greet briefly IN {language}. Translate this template, do not output the English literal: "Hi {nombre}, I'm Brain. Thanks for taking these few minutes. I'll ask you thirteen short questions to understand how you work. The idea is that in about seven minutes I can build a map of how the team operates. Ready?"
 
 2. After each answer, give a brief ACK and move on ("Got it. Next:")
 
@@ -40,7 +40,7 @@ You are warm, brief, professional. You don't use corporate jargon. You speak in 
 
 4. If you don't understand something, ask ONE follow-up max. No more.
 
-5. At the end, thank them and close: "Done, that's it. Thanks {nombre}, this adds a ton."
+5. At the end, thank them and close IN {language}. Template: "Done, that's it. Thanks {nombre}, this adds a ton."
 </conversation_flow>
 
 <rules>
@@ -56,10 +56,14 @@ You are warm, brief, professional. You don't use corporate jargon. You speak in 
 Ask the questions IN ORDER. Don't skip. After the last one (q13_open), close the interview."""
 
 
-def _system_prompt_for_employee(name: str) -> str:
+def _system_prompt_for_employee(name: str, language: str = "en") -> str:
     block = questions_block_for_prompt()
     prompt = INTERVIEW_SYSTEM_PROMPT.replace("{questions_block}", block)
     prompt = prompt.replace("{nombre}", name.split()[0] if name else "")
+    # {language} placeholder — kept literal in the prompt so Retell's dynamic
+    # variables can fill it per call. Keeping the {language} token here means
+    # the LLM sees `Spanish` or `English` (the dynamic variable values) wherever
+    # the prompt says "in {language}".
     return prompt
 
 
@@ -85,16 +89,17 @@ def create_or_update_agent(employee_name: str) -> dict[str, Any]:
     """
     payload = {
         "agent_name": "brain-interviewer",
+        # Adrian is one of the few ElevenLabs voices that does both English
+        # and Spanish naturally; we rely on Retell's "multi" language mode
+        # so STT/TTS adapt to whatever the LLM produces.
         "voice_id": "11labs-Adrian",
-        "language": "en-US",
+        "language": "multi",
         "response_engine": {
             "type": "retell-llm",
             "llm_id": settings.model_interview,
             "system_prompt": _system_prompt_for_employee(employee_name),
-            "begin_message": (
-                f"Hi {employee_name.split()[0] if employee_name else ''}, I'm Brain. "
-                f"Do you have a couple of minutes?"
-            ),
+            # No fixed begin_message: the LLM produces the greeting itself
+            # in the language the dynamic variable {language} resolves to.
         },
     }
     with _client() as c:
