@@ -111,23 +111,10 @@ def create_or_update_agent(employee_name: str) -> dict[str, Any]:
 
     if settings.retell_agent_id:
         with _root_client() as c:
-            # Discover the LLM id from the existing agent
-            ar = c.get(f"/get-agent/{settings.retell_agent_id}")
-            ar.raise_for_status()
-            agent_data = ar.json()
-            llm_id = (agent_data.get("response_engine") or {}).get("llm_id")
-            if not llm_id:
-                raise RuntimeError("Could not discover llm_id from existing agent")
-
-            # PATCH the LLM (prompt + clear hardcoded greeting)
-            llm_patch = {
-                "general_prompt": sys_prompt,
-                "begin_message": "",
-            }
-            lr = c.patch(f"/update-retell-llm/{llm_id}", json=llm_patch)
-            lr.raise_for_status()
-
-            # PATCH the agent (voice + multi-language so STT/TTS adapt)
+            # Production already has a great multilingual + role-aware
+            # general_prompt on the LLM. Don't clobber it — only PATCH
+            # the agent itself to switch STT/TTS to multi-language with
+            # a multilingual voice.
             agent_patch = {
                 "voice_id": "11labs-Adrian",
                 "language": "multi",
@@ -136,9 +123,10 @@ def create_or_update_agent(employee_name: str) -> dict[str, Any]:
             r.raise_for_status()
             data = r.json()
             log.info(
-                "retell.agent_upserted",
+                "retell.agent_language_patched",
                 agent_id=data.get("agent_id"),
-                llm_id=llm_id,
+                language=data.get("language"),
+                voice_id=data.get("voice_id"),
             )
             return data
 
