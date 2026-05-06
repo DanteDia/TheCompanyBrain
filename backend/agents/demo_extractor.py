@@ -134,3 +134,51 @@ def extract_demo_contributions(
         transcript_chars=len(transcript),
     )
     return contributions
+
+
+
+def _diagnose(*, transcript: str, role: str = "", area: str = "") -> dict[str, Any]:
+    """Same as extract_demo_contributions but returns the raw model text
+    and any parsing intermediate state. Pure debug — not for prod use."""
+    out: dict[str, Any] = {
+        "input": {
+            "transcript_chars": len(transcript or ""),
+            "role": role,
+            "area": area,
+        },
+    }
+    if not transcript or len(transcript.strip()) < 60:
+        out["error"] = "transcript too short (<60 chars)"
+        return out
+    try:
+        response = call_with_retry(
+            settings.model_router,
+            fallback_model=settings.model_qa_fast_fallback,
+            max_tokens=1200,
+            messages=[
+                {
+                    "role": "user",
+                    "content": EXTRACTION_PROMPT.format(
+                        role=role or "employee",
+                        area=area or "their area",
+                        transcript=transcript[:8000],
+                    ),
+                }
+            ],
+        )
+    except Exception as e:
+        out["error"] = f"call_with_retry exception: {type(e).__name__}: {e}"
+        return out
+
+    text = ""
+    for block in response.content:
+        if getattr(block, "type", None) == "text":
+            text += getattr(block, "text", "") or ""
+        elif hasattr(block, "text"):
+            text += block.text or ""
+    out["raw_text"] = text
+    out["raw_text_chars"] = len(text)
+    parsed = _parse_response(text)
+    out["parsed_contributions"] = parsed
+    out["parsed_count"] = len(parsed)
+    return out

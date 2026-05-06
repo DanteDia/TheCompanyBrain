@@ -329,13 +329,16 @@ class DemoAnalyzeRequest(BaseModel):
 
 
 @app.post("/api/demo/analyze")
-async def api_demo_analyze(req: DemoAnalyzeRequest) -> dict[str, Any]:
+async def api_demo_analyze(req: DemoAnalyzeRequest, debug: bool = False) -> dict[str, Any]:
     """Run Haiku on the demo-call transcript and return structured
     contributions. Used by the /interview Review modal to show the
     visitor what the agent actually captured (vs. the curated mocks).
+    Pass ?debug=1 for diagnostics.
     """
-    from backend.agents.demo_extractor import extract_demo_contributions
+    from backend.agents.demo_extractor import extract_demo_contributions, _diagnose
 
+    if debug:
+        return _diagnose(transcript=req.transcript, role=req.role, area=req.area)
     contributions = extract_demo_contributions(
         transcript=req.transcript,
         role=req.role,
