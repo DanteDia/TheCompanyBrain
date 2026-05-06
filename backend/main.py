@@ -314,6 +314,40 @@ async def seed_portals() -> dict[str, Any]:
     }
 
 
+@app.get("/api/admin/inspect-agent")
+async def api_inspect_retell_agent() -> dict[str, Any]:
+    """Return the live Retell agent + its LLM as Retell sees them.
+
+    Used to debug the multi-language switch — we need to know what
+    response_engine.type the agent has, the llm_id, and the current
+    language/voice/prompt before figuring out the right PATCH shape.
+    """
+    import httpx as _httpx
+    if not settings.retell_api_key:
+        raise HTTPException(400, "RETELL_API_KEY not set")
+    if not settings.retell_agent_id:
+        raise HTTPException(400, "RETELL_AGENT_ID not set")
+    headers = {"Authorization": f"Bearer {settings.retell_api_key}"}
+    base = "https://api.retellai.com/v2"
+    out: dict[str, Any] = {}
+    with _httpx.Client(headers=headers, timeout=20.0) as c:
+        try:
+            ar = c.get(f"{base}/get-agent/{settings.retell_agent_id}")
+            out["agent_status"] = ar.status_code
+            out["agent"] = ar.json() if ar.status_code == 200 else ar.text
+        except Exception as e:
+            out["agent_error"] = str(e)
+        try:
+            llm_id = (out.get("agent") or {}).get("response_engine", {}).get("llm_id")
+            if llm_id:
+                lr = c.get(f"{base}/get-retell-llm/{llm_id}")
+                out["llm_status"] = lr.status_code
+                out["llm"] = lr.json() if lr.status_code == 200 else lr.text
+        except Exception as e:
+            out["llm_error"] = str(e)
+    return out
+
+
 @app.post("/api/admin/refresh-agent")
 async def api_refresh_retell_agent() -> dict[str, Any]:
     """Force-PATCH the existing Retell agent with the current
@@ -326,10 +360,21 @@ async def api_refresh_retell_agent() -> dict[str, Any]:
     that change the prompt or language.
     """
     from backend.agents.interview_agent import create_or_update_agent
+    import traceback as _tb
 
     if not settings.retell_agent_id:
         raise HTTPException(400, "RETELL_AGENT_ID is not set")
-    agent = create_or_update_agent("Demo")
+    try:
+        agent = create_or_update_agent("Demo")
+    except Exception as e:
+        # Surface the underlying detail so we can debug from curl, not Render logs.
+        detail = str(e)
+        if hasattr(e, "response") and getattr(e, "response", None) is not None:
+            try:
+                detail = f"{detail} | body: {e.response.text[:500]}"
+            except Exception:
+                pass
+        raise HTTPException(500, f"refresh-agent failed: {detail} | trace: {_tb.format_exc()[-500:]}")
     return {
         "ok": True,
         "agent_id": agent.get("agent_id"),
