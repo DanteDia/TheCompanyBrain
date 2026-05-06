@@ -76,6 +76,28 @@ export const STRINGS: Dict = {
     es: "Si el problema persiste, escribinos a tomas@thecompanybrain.xyz",
     en: "If the problem persists, write to tomas@thecompanybrain.xyz",
   },
+  "interview.eyebrow": { es: "Entrevista · Company Brain", en: "Interview · Company Brain" },
+  "interview.ready_title": {
+    es: "Te voy a hacer unas preguntas cortas.",
+    en: "I'll ask you a few short questions.",
+  },
+  "interview.ready_subtitle": {
+    es: "~7 minutos. Hablá natural, como con un colega. Tu input es lo que arma el sistema interno de tu empresa.",
+    en: "~7 minutes. Speak naturally, like with a colleague. Your input is what builds your company's internal system.",
+  },
+  "interview.start_button": { es: "Iniciar entrevista", en: "Start interview" },
+  "interview.mic_hint": {
+    es: "Vas a darle permiso al micrófono cuando el navegador te lo pida.",
+    en: "You'll grant mic permission when your browser asks.",
+  },
+  "interview.demo_badge": {
+    es: "Demo — máx 5 min, no se guarda nada",
+    en: "Demo mode — 5 min max, nothing is saved",
+  },
+  "interview.mock_badge": {
+    es: "Modo mock — sólo UI, sin llamada real",
+    en: "Mock mode — UI only, no live call",
+  },
 
   // Hero
   "hero.badge": {

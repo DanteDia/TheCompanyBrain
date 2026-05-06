@@ -273,12 +273,12 @@ export default function InterviewPage() {
         )}
         {isDemo && phase !== "live" && (
           <div className="rounded-full border border-stone-300 bg-white px-3 py-1 text-[10px] font-medium uppercase tracking-wider text-stone-700">
-            Demo mode — 5 min max, nothing is saved
+            {t("interview.demo_badge", uiLocale)}
           </div>
         )}
         {isMock && phase !== "live" && (
           <div className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-[10px] font-medium uppercase tracking-wider text-amber-700">
-            Mock mode — UI only, no live call
+            {t("interview.mock_badge", uiLocale)}
           </div>
         )}
       </header>
@@ -298,14 +298,13 @@ export default function InterviewPage() {
               <GradientSphere phase="idle" size={360} theme="light" />
               <div className="mt-12 max-w-md">
                 <div className="text-[11px] uppercase tracking-wider text-stone-500 font-medium">
-                  Interview · Company Brain
+                  {t("interview.eyebrow", uiLocale)}
                 </div>
                 <h1 className="mt-3 text-3xl md:text-4xl tracking-tight font-medium text-stone-900">
-                  I'll ask you a few short questions.
+                  {t("interview.ready_title", uiLocale)}
                 </h1>
                 <p className="mt-4 text-base md:text-lg leading-relaxed text-stone-600">
-                  ~7 minutes. Speak naturally, like with a colleague.
-                  Your input is what builds your company's internal system.
+                  {t("interview.ready_subtitle", uiLocale)}
                 </p>
                 <div className="mt-8 flex flex-col items-center gap-3">
                   <button
@@ -313,10 +312,10 @@ export default function InterviewPage() {
                     className="group inline-flex items-center gap-2 rounded-full bg-stone-900 px-7 py-3.5 text-sm font-medium text-stone-50 shadow-lg shadow-stone-900/20 transition-all hover:bg-accent-600 hover:shadow-accent-500/30"
                   >
                     <Mic className="h-4 w-4" />
-                    Start interview
+                    {t("interview.start_button", uiLocale)}
                   </button>
                   <p className="text-xs text-stone-500">
-                    You'll grant mic permission when your browser asks.
+                    {t("interview.mic_hint", uiLocale)}
                   </p>
                 </div>
               </div>
