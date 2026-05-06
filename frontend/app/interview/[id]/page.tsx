@@ -290,7 +290,7 @@ export default function InterviewPage() {
 
       {/* Main content */}
       <main className="relative z-0 flex h-full flex-col items-center justify-center px-6">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="popLayout">
           {showStart && (
             <motion.div
               key="start"
