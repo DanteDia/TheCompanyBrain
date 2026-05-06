@@ -13,6 +13,8 @@ import {
   FileCheck,
   Eye,
   ArrowRight,
+  Mic,
+  MessageCircle,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { SiteHeader } from "@/components/site-header";
@@ -55,20 +57,43 @@ export default function LandingPage() {
                 <BrainNetwork />
               </div>
 
-              <div className="flex flex-wrap items-center gap-3">
-                <Link href="/ask">
-                  <Button size="lg">
-                    {t("hero.cta_primary", locale)}
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </Link>
-                <Button
-                  variant="outline"
-                  size="lg"
+              <div className="flex flex-col gap-3">
+                <div className="flex flex-wrap items-stretch gap-3">
+                  <Link href="/try" className="group">
+                    <Button size="lg" className="h-auto py-3 px-5">
+                      <Mic className="h-4 w-4" />
+                      <span className="flex flex-col items-start leading-tight ml-1">
+                        <span className="text-sm font-semibold">
+                          {t("hero.cta_voice", locale)}
+                        </span>
+                        <span className="text-[11px] font-normal opacity-70">
+                          {t("hero.cta_voice_sub", locale)}
+                        </span>
+                      </span>
+                      <ArrowRight className="h-4 w-4 ml-1 transition-transform group-hover:translate-x-0.5" />
+                    </Button>
+                  </Link>
+                  <Link href="/ask" className="group">
+                    <Button variant="outline" size="lg" className="h-auto py-3 px-5">
+                      <MessageCircle className="h-4 w-4" />
+                      <span className="flex flex-col items-start leading-tight ml-1">
+                        <span className="text-sm font-semibold">
+                          {t("hero.cta_chat", locale)}
+                        </span>
+                        <span className="text-[11px] font-normal opacity-70">
+                          {t("hero.cta_chat_sub", locale)}
+                        </span>
+                      </span>
+                    </Button>
+                  </Link>
+                </div>
+                <button
+                  type="button"
                   onClick={() => setBookingOpen(true)}
+                  className="text-sm text-stone-500 hover:text-stone-900 transition-colors self-start underline-offset-4 hover:underline"
                 >
-                  {t("hero.cta_secondary", locale)}
-                </Button>
+                  {t("hero.cta_schedule", locale)}
+                </button>
               </div>
             </div>
 

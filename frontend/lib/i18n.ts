@@ -62,7 +62,13 @@ export const STRINGS: Dict = {
     es: "Confluence indexa lo que escribiste. Glean busca en Slack. Pero las reglas no escritas, los flujos reales, quién aprueba qué — eso vive en cabezas. Entrevistamos a tu equipo con un agente de voz y bajamos ese conocimiento tácito a un sistema auditable y consultable.",
     en: "Confluence indexes what you wrote. Glean searches Slack. But unwritten rules, real workflows, who approves what — that lives in people's heads. We interview your team with a voice agent and bring that tacit knowledge into an auditable, queryable system.",
   },
-  "hero.cta_primary": { es: "Ver el producto en vivo", en: "See it live" },
+  "hero.cta_voice": { es: "Demo de voz", en: "Voice demo" },
+  "hero.cta_voice_sub": { es: "Hablá con el agente", en: "Talk to the agent" },
+  "hero.cta_chat": { es: "Demo de chat", en: "Chat demo" },
+  "hero.cta_chat_sub": { es: "Preguntale al brain", en: "Ask the brain" },
+  "hero.cta_schedule": { es: "Agendar demo guiada", en: "Schedule guided demo" },
+  // Legacy keys preserved for any callers still using them — point to the voice demo by default.
+  "hero.cta_primary": { es: "Demo de voz", en: "Voice demo" },
   "hero.cta_secondary": { es: "Agendar demo guiada", en: "Schedule guided demo" },
 
   // Sección problema
