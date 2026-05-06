@@ -99,6 +99,23 @@ export const STRINGS: Dict = {
     en: "Mock mode — UI only, no live call",
   },
 
+  // /interview demo end-screen — animation showing the contribution to the brain
+  "demo_end.eyebrow": { es: "Tu aporte", en: "Your contribution" },
+  "demo_end.title": {
+    es: "Esto es lo que el Brain aprendió de vos.",
+    en: "Here's what the Brain just learned from you.",
+  },
+  "demo_end.subtitle": {
+    es: "Cada pieza que mencionaste se mueve hacia el grafo de la empresa: herramientas, personas, procesos y reglas no escritas. Así crece el Brain con cada entrevista.",
+    en: "Every piece you mentioned moves into the company graph: tools, people, processes, and unwritten rules. This is how the Brain grows with each interview.",
+  },
+  "demo_end.note": {
+    es: "En la demo no se persiste nada. En producción, esto se integra al Skills File de tu empresa y queda disponible vía Slack, web o WhatsApp.",
+    en: "In the demo nothing is saved. In production this gets integrated into your company's Skills File and stays queryable via Slack, web, or WhatsApp.",
+  },
+  "demo_end.cta_schedule": { es: "Agendar demo guiada", en: "Schedule guided demo" },
+  "demo_end.cta_try_another": { es: "Probar otro rol", en: "Try another role" },
+
   // Hero
   "hero.badge": {
     es: "Diseñado para banca regulada en LATAM",

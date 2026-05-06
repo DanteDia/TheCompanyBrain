@@ -8,6 +8,13 @@
 // role + area via Retell `retell_llm_dynamic_variables`.
 // ───────────────────────────────────────────────────────────────────
 
+export type ContributionType = "tool" | "person" | "process" | "rule";
+
+export interface Contribution {
+  label: { en: string; es: string };
+  type: ContributionType;
+}
+
 export interface DemoPersona {
   /** Existing employee_id in the tcb_demo skills file. */
   employee_id: string;
@@ -23,6 +30,9 @@ export interface DemoPersona {
   initials: string;
   /** Tailwind color hint for the avatar tile. */
   accent: "amber" | "sky" | "rose" | "emerald" | "violet";
+  /** Mock pieces of knowledge the agent would have extracted from this persona's
+   *  interview. Used for the post-call animation. */
+  contributions: Contribution[];
 }
 
 export const DEMO_PERSONAS: DemoPersona[] = [
@@ -37,6 +47,15 @@ export const DEMO_PERSONAS: DemoPersona[] = [
     },
     initials: "TL",
     accent: "sky",
+    contributions: [
+      { type: "tool", label: { en: "Salesforce admin", es: "Salesforce admin" } },
+      { type: "tool", label: { en: "SharePoint", es: "SharePoint" } },
+      { type: "process", label: { en: "VPN provisioning", es: "Provisión de VPN" } },
+      { type: "process", label: { en: "IT onboarding flow", es: "Flujo de onboarding IT" } },
+      { type: "person", label: { en: "Mariana Torres (CEO)", es: "Mariana Torres (CEO)" } },
+      { type: "rule", label: { en: "Never email Bloomberg directly", es: "Nunca contactar a Bloomberg directo" } },
+      { type: "tool", label: { en: "AWS console", es: "Consola AWS" } },
+    ],
   },
   {
     employee_id: "analyst_sr",
@@ -49,6 +68,14 @@ export const DEMO_PERSONAS: DemoPersona[] = [
     },
     initials: "MS",
     accent: "amber",
+    contributions: [
+      { type: "tool", label: { en: "Salesforce Credits", es: "Salesforce Créditos" } },
+      { type: "process", label: { en: "Exception approval", es: "Aprobación de excepciones" } },
+      { type: "rule", label: { en: "Collateral threshold rule", es: "Regla de umbral de colateral" } },
+      { type: "tool", label: { en: "Score Blur", es: "Score Blur" } },
+      { type: "person", label: { en: "Ana López (Credit Mgr)", es: "Ana López (Gte. Créditos)" } },
+      { type: "process", label: { en: "Credit evaluation flow", es: "Flujo de evaluación crediticia" } },
+    ],
   },
   {
     employee_id: "account_off",
@@ -61,6 +88,14 @@ export const DEMO_PERSONAS: DemoPersona[] = [
     },
     initials: "RP",
     accent: "rose",
+    contributions: [
+      { type: "process", label: { en: "Complaint handling", es: "Manejo de reclamos" } },
+      { type: "process", label: { en: "Consumer defense filing", es: "Trámite de defensa al consumidor" } },
+      { type: "rule", label: { en: "In-person priority cases", es: "Casos prioritarios presenciales" } },
+      { type: "person", label: { en: "Diego Ramírez (Ops Mgr)", es: "Diego Ramírez (Gte. Ops)" } },
+      { type: "tool", label: { en: "Branch CRM", es: "CRM de Sucursal" } },
+      { type: "process", label: { en: "Escalation to Backoffice", es: "Escalación a Backoffice" } },
+    ],
   },
   {
     employee_id: "hr_lead",
@@ -73,6 +108,14 @@ export const DEMO_PERSONAS: DemoPersona[] = [
     },
     initials: "VR",
     accent: "emerald",
+    contributions: [
+      { type: "process", label: { en: "Onboarding playbook", es: "Playbook de onboarding" } },
+      { type: "tool", label: { en: "Benefits matrix", es: "Matriz de beneficios" } },
+      { type: "rule", label: { en: "Leave-of-absence policy", es: "Política de licencias" } },
+      { type: "person", label: { en: "Mariana Torres (CEO)", es: "Mariana Torres (CEO)" } },
+      { type: "process", label: { en: "Quarterly reviews", es: "Reviews trimestrales" } },
+      { type: "rule", label: { en: "Culture rituals", es: "Rituales de cultura" } },
+    ],
   },
   {
     employee_id: "gte_ops",
@@ -85,6 +128,14 @@ export const DEMO_PERSONAS: DemoPersona[] = [
     },
     initials: "DR",
     accent: "violet",
+    contributions: [
+      { type: "process", label: { en: "SLA tracking", es: "Seguimiento de SLAs" } },
+      { type: "process", label: { en: "Branch ops coordination", es: "Coordinación de ops de sucursales" } },
+      { type: "person", label: { en: "Roberto Pascual", es: "Roberto Pascual" } },
+      { type: "person", label: { en: "Sofía Méndez (Backoffice)", es: "Sofía Méndez (Backoffice)" } },
+      { type: "rule", label: { en: "Decision-making chain", es: "Cadena de decisiones" } },
+      { type: "tool", label: { en: "Operational dashboard", es: "Dashboard operativo" } },
+    ],
   },
 ];
 

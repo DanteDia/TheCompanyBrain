@@ -21,6 +21,9 @@ import { Logo } from "@/components/ui/logo";
 import { startWebCall, ApiError } from "@/lib/api-backend";
 import { t } from "@/lib/i18n";
 import { useLocale } from "@/components/locale-toggle";
+import { DemoContributionAnim } from "@/components/demo-contribution-anim";
+import { findDemoPersona } from "@/lib/demo-personas";
+import { ScheduleDemoModal } from "@/components/schedule-demo-modal";
 import { getOrgLanguage } from "@/lib/org-settings";
 
 type Phase = "ready" | "starting" | "live" | "ended" | "error";
@@ -45,6 +48,8 @@ export default function InterviewPage() {
   const langOverride = (search?.get("lang") as "en" | "es" | null) || null;
   const [globalLocale] = useLocale();
   const uiLocale: "en" | "es" = langOverride ?? globalLocale;
+  const [bookingOpen, setBookingOpen] = useState(false);
+  const demoPersona = isDemo ? findDemoPersona(employeeId) : undefined;
 
   const [phase, setPhase] = useState<Phase>("ready");
   const [orbPhase, setSpherePhase] = useState<SpherePhase>("idle");
@@ -379,7 +384,23 @@ export default function InterviewPage() {
             </motion.div>
           )}
 
-          {showEnded && (
+          {showEnded && isDemo && demoPersona && (
+            <motion.div
+              key="ended-demo"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4 }}
+              className="flex flex-col items-center"
+            >
+              <DemoContributionAnim
+                persona={demoPersona}
+                locale={uiLocale}
+                durationLabel={`${t("interview.duration_label", uiLocale)} ${fmtTime(elapsed)}`}
+                onScheduleDemo={() => setBookingOpen(true)}
+              />
+            </motion.div>
+          )}
+          {showEnded && !(isDemo && demoPersona) && (
             <motion.div
               key="ended"
               initial={{ opacity: 0 }}
@@ -440,6 +461,7 @@ export default function InterviewPage() {
         </AnimatePresence>
       </main>
 
+      <ScheduleDemoModal open={bookingOpen} onClose={() => setBookingOpen(false)} />
 
     </div>
   );
