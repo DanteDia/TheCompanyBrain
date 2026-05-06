@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 import {
   Users,
   Wrench,
@@ -25,14 +24,12 @@ import { BeforeAfterAnimation } from "@/components/before-after-animation";
 import { IntegrationCard } from "@/components/integration-card";
 import { BrainNetwork } from "@/components/brain-network";
 import { RotatingWord } from "@/components/rotating-word";
-import { ScheduleDemoModal } from "@/components/schedule-demo-modal";
 import { INTEGRATIONS } from "@/lib/mock-data";
 import { useLocale } from "@/components/locale-toggle";
 import { t } from "@/lib/i18n";
 
 export default function LandingPage() {
   const [locale] = useLocale();
-  const [bookingOpen, setBookingOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-stone-50">
@@ -84,16 +81,10 @@ export default function LandingPage() {
                           {t("hero.cta_chat_sub", locale)}
                         </span>
                       </span>
+                      <ArrowRight className="h-4 w-4 ml-1 transition-transform group-hover:translate-x-0.5" />
                     </Button>
                   </Link>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setBookingOpen(true)}
-                  className="text-sm text-stone-500 hover:text-stone-900 transition-colors self-start underline-offset-4 hover:underline"
-                >
-                  {t("hero.cta_schedule", locale)}
-                </button>
               </div>
             </div>
 
@@ -254,7 +245,6 @@ export default function LandingPage() {
         </div>
       </footer>
 
-      <ScheduleDemoModal open={bookingOpen} onClose={() => setBookingOpen(false)} />
     </div>
   );
 }

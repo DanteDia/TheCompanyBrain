@@ -1,13 +1,16 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { Logo } from "@/components/ui/logo";
 import { Button } from "@/components/ui/button";
 import { LocaleToggle, useLocale } from "@/components/locale-toggle";
+import { ScheduleDemoModal } from "@/components/schedule-demo-modal";
 import { t } from "@/lib/i18n";
 
 export function SiteHeader() {
   const [locale, setLocale] = useLocale();
+  const [bookingOpen, setBookingOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-30 border-b border-stone-200/80 bg-white/80 backdrop-blur-md">
@@ -30,14 +33,21 @@ export function SiteHeader() {
           </nav>
           <div className="flex items-center gap-2">
             <LocaleToggle locale={locale} onChange={setLocale} />
-            <Link href="/try">
-              <Button variant="default" size="sm">
-                {t("nav.demo", locale)}
-              </Button>
-            </Link>
+            <Button
+              variant="default"
+              size="sm"
+              onClick={() => setBookingOpen(true)}
+            >
+              {t("nav.book_demo", locale)}
+            </Button>
           </div>
         </div>
       </div>
+
+      <ScheduleDemoModal
+        open={bookingOpen}
+        onClose={() => setBookingOpen(false)}
+      />
     </header>
   );
 }
