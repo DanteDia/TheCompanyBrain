@@ -15,6 +15,39 @@ export const STRINGS: Dict = {
   "nav.pricing": { es: "Pricing", en: "Pricing" },
   "nav.signin": { es: "Iniciar sesión", en: "Sign in" },
   "nav.demo": { es: "Probar la demo", en: "Try the demo" },
+  "nav.demo_call": { es: "Demo call", en: "Demo call" },
+  "nav.ask_brain": { es: "Hablar con la Brain", en: "Ask the Brain" },
+
+  // /try — public voice-demo lobby
+  "try.eyebrow": { es: "Demo en vivo", en: "Live demo" },
+  "try.title": {
+    es: "Hablá 3 minutos con la Brain.",
+    en: "Have a 3-minute conversation with the Brain.",
+  },
+  "try.subtitle": {
+    es: "Esta es la misma entrevista que usamos para entender cómo trabaja un empleado real. Elegí un rol en Blur Bank y vas a ver cómo el agente adapta sus preguntas en tiempo real.",
+    en: "This is the same interview we use to understand how a real employee works. Pick a role at Blur Bank and you'll see the agent adapt its questions in real time.",
+  },
+  "try.step": { es: "Paso", en: "Step" },
+  "try.step1_title": {
+    es: "¿En qué idioma querés que el agente te hable?",
+    en: "Which language should the agent speak?",
+  },
+  "try.step2_title": {
+    es: "Elegí un rol al que querés ponerte en los zapatos.",
+    en: "Pick a role you'd like to step into.",
+  },
+  "try.step2_subtitle": {
+    es: "El agente va a saber tu rol y área antes de llamarte. Vas a notar cómo cambian las preguntas según a quién esté entrevistando.",
+    en: "The agent will know your role and area before the call starts. You'll notice the questions change based on who it's interviewing.",
+  },
+  "try.cta": { es: "Empezar la llamada", en: "Start the call" },
+  "try.starting": { es: "Conectando…", en: "Connecting…" },
+  "try.disclaimer": {
+    es: "La llamada dura un máximo de 5 minutos y nada se persiste — esto es solo una prueba. Vas a necesitar permitir el micrófono.",
+    en: "The call is capped at 5 minutes and nothing is persisted — this is just a test drive. You'll need to allow microphone access.",
+  },
+  "try.back_to_landing": { es: "Volver", en: "Back" },
 
   // Hero
   "hero.badge": {
@@ -113,10 +146,10 @@ export const STRINGS: Dict = {
     es: "Workflows operativos con su responsable y participantes.",
     en: "Operating workflows with their owner and participants.",
   },
-  "captures.glossary": { es: "Manual del nuevo empleado", en: "New employees playbook" },
+  "captures.glossary": { es: "Glosario interno", en: "Internal glossary" },
   "captures.glossary_desc": {
-    es: "Lo que el nuevo necesita saber su primer mes — y nadie le dice.",
-    en: "What a new hire needs to know in their first month — and nobody tells them.",
+    es: "Términos, siglas, productos. Lo que un empleado nuevo no entiende.",
+    en: "Terms, acronyms, products. What a new hire doesn't get.",
   },
 
   // Integraciones

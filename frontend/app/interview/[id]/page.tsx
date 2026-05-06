@@ -39,6 +39,8 @@ export default function InterviewPage() {
   const employeeId = params?.id ?? "";
   const orgId = search?.get("org") || "tcb_demo";
   const isMock = search?.get("mock") === "1";
+  const isDemo = search?.get("demo") === "1";
+  const langOverride = (search?.get("lang") as "en" | "es" | null) || null;
 
   const [phase, setPhase] = useState<Phase>("ready");
   const [orbPhase, setSpherePhase] = useState<SpherePhase>("idle");
@@ -72,7 +74,17 @@ export default function InterviewPage() {
   function startTimer() {
     const t0 = Date.now();
     timerRef.current = setInterval(() => {
-      setElapsed(Math.floor((Date.now() - t0) / 1000));
+      const sec = Math.floor((Date.now() - t0) / 1000);
+      setElapsed(sec);
+      // Demo cap: auto-end the call at 5 minutes so a public visitor
+      // cannot drain the Retell budget.
+      if (isDemo && sec >= 300) {
+        try { clientRef.current?.stopCall(); } catch {}
+        setPhase("ended");
+        setSpherePhase("ended");
+        stopTimer();
+        clientRef.current = null;
+      }
     }, 1000);
   }
 
@@ -126,9 +138,10 @@ export default function InterviewPage() {
     setError(null);
     try {
       const RetellWebClient = await loadRetell();
-      // Per-org language pref set in /admin/settings (defaults to en).
-      const lang = getOrgLanguage(orgId);
-      const r = await startWebCall(employeeId, orgId, lang);
+      // /try sends ?lang=&demo=1 directly. Otherwise fall back to the
+      // per-org default set in /admin/settings.
+      const lang = langOverride ?? getOrgLanguage(orgId);
+      const r = await startWebCall(employeeId, orgId, lang, isDemo);
       const client = new RetellWebClient();
       clientRef.current = client;
 
@@ -252,6 +265,11 @@ export default function InterviewPage() {
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-red-500" />
             </span>
             REC · {fmtTime(elapsed)}
+          </div>
+        )}
+        {isDemo && phase !== "live" && (
+          <div className="rounded-full border border-stone-300 bg-white px-3 py-1 text-[10px] font-medium uppercase tracking-wider text-stone-700">
+            Demo mode — 5 min max, nothing is saved
           </div>
         )}
         {isMock && phase !== "live" && (

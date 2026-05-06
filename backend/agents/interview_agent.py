@@ -117,6 +117,7 @@ def initiate_phone_call(
     employee_role: str = "",
     employee_area: str = "",
     language: str = "en",
+    demo: bool = False,
 ) -> dict[str, Any]:
     """Trigger an outbound call. Retell + Twilio handle the rest."""
     payload = {
@@ -127,6 +128,7 @@ def initiate_phone_call(
             "employee_id": employee_id,
             "employee_name": employee_name,
             "organization_id": settings.default_org_id,
+            "demo": demo,
         },
         "retell_llm_dynamic_variables": {
             "nombre": employee_name.split()[0] if employee_name else "",
@@ -156,6 +158,7 @@ def initiate_web_call(
     employee_role: str = "",
     employee_area: str = "",
     language: str = "en",
+    demo: bool = False,
 ) -> dict[str, Any]:
     """Create a web-call (browser-based) — for testing without Twilio."""
     payload = {
@@ -164,6 +167,7 @@ def initiate_web_call(
             "employee_id": employee_id,
             "employee_name": employee_name,
             "organization_id": settings.default_org_id,
+            "demo": demo,
         },
         "retell_llm_dynamic_variables": {
             "nombre": employee_name.split()[0] if employee_name else "",
