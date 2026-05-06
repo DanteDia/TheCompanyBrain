@@ -81,36 +81,77 @@ def _client() -> httpx.Client:
 
 
 def create_or_update_agent(employee_name: str) -> dict[str, Any]:
-    """Register / update a Retell agent personalized for one employee.
+    """Register / update the Retell brain-interviewer.
 
-    For V1 we create a generic "brain-interviewer" agent once and reuse it.
-    The {nombre} placeholder gets injected as a per-call dynamic variable
-    via Retell's "dynamic_variables" feature when initiating the call.
+    Retell's API treats the LLM (system prompt, model id, begin_message)
+    and the Agent (voice + language + which LLM to use) as TWO objects.
+    A single PATCH against /update-agent that includes response_engine
+    fails because system_prompt lives on the LLM, not the agent.
+
+    Flow:
+      1. If the agent doesn't exist yet → create LLM + create Agent
+         pointing at it. Persist both ids in env (manual step).
+      2. If the agent exists → fetch it to discover its llm_id, PATCH
+         the LLM with the new system_prompt + begin_message=null,
+         then PATCH the agent with the new voice + language.
     """
-    payload = {
-        "agent_name": "brain-interviewer",
-        # Adrian is one of the few ElevenLabs voices that does both English
-        # and Spanish naturally; we rely on Retell's "multi" language mode
-        # so STT/TTS adapt to whatever the LLM produces.
-        "voice_id": "11labs-Adrian",
-        "language": "multi",
-        "response_engine": {
-            "type": "retell-llm",
-            "llm_id": settings.model_interview,
-            "system_prompt": _system_prompt_for_employee(employee_name),
-            # No fixed begin_message: the LLM produces the greeting itself
-            # in the language the dynamic variable {language} resolves to.
-        },
-    }
+    sys_prompt = _system_prompt_for_employee(employee_name)
+
+    if settings.retell_agent_id:
+        with _client() as c:
+            # Discover the LLM id from the existing agent
+            ar = c.get(f"/get-agent/{settings.retell_agent_id}")
+            ar.raise_for_status()
+            agent_data = ar.json()
+            llm_id = (agent_data.get("response_engine") or {}).get("llm_id")
+            if not llm_id:
+                raise RuntimeError("Could not discover llm_id from existing agent")
+
+            # PATCH the LLM (prompt + clear hardcoded greeting)
+            llm_patch = {
+                "general_prompt": sys_prompt,
+                "begin_message": "",
+            }
+            lr = c.patch(f"/update-retell-llm/{llm_id}", json=llm_patch)
+            lr.raise_for_status()
+
+            # PATCH the agent (voice + multi-language so STT/TTS adapt)
+            agent_patch = {
+                "voice_id": "11labs-Adrian",
+                "language": "multi",
+            }
+            r = c.patch(f"/update-agent/{settings.retell_agent_id}", json=agent_patch)
+            r.raise_for_status()
+            data = r.json()
+            log.info(
+                "retell.agent_upserted",
+                agent_id=data.get("agent_id"),
+                llm_id=llm_id,
+            )
+            return data
+
+    # No existing agent — create LLM first, then agent pointing at it.
     with _client() as c:
-        if settings.retell_agent_id:
-            r = c.patch(f"/update-agent/{settings.retell_agent_id}", json=payload)
-        else:
-            r = c.post("/create-agent", json=payload)
-    r.raise_for_status()
-    data = r.json()
-    log.info("retell.agent_upserted", agent_id=data.get("agent_id"))
-    return data
+        llm_create = {
+            "model": "claude-sonnet-4",
+            "general_prompt": sys_prompt,
+            "begin_message": "",
+        }
+        lr = c.post("/create-retell-llm", json=llm_create)
+        lr.raise_for_status()
+        llm_id = lr.json().get("llm_id")
+
+        agent_create = {
+            "agent_name": "brain-interviewer",
+            "voice_id": "11labs-Adrian",
+            "language": "multi",
+            "response_engine": {"type": "retell-llm", "llm_id": llm_id},
+        }
+        r = c.post("/create-agent", json=agent_create)
+        r.raise_for_status()
+        data = r.json()
+        log.info("retell.agent_created", agent_id=data.get("agent_id"), llm_id=llm_id)
+        return data
 
 
 def initiate_phone_call(
