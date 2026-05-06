@@ -40,7 +40,7 @@ export default function TryDemoPage() {
   function handleStart() {
     if (!selected) return;
     setStarting(true);
-    const url = `/interview/${selected}?org=tcb_demo&demo=1&lang=${locale}`;
+    const url = `/interview/${selected}?org=banco_demo&demo=1&lang=${locale}`;
     router.push(url);
   }
 
