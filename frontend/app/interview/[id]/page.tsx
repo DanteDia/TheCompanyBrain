@@ -17,7 +17,7 @@ import { useParams, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mic, MicOff, Loader2, AlertTriangle } from "lucide-react";
 import { GradientSphere, type SpherePhase } from "@/components/gradient-sphere";
-import { Logo } from "@/components/ui/logo";
+import { Logo, LogoMark } from "@/components/ui/logo";
 import { startWebCall, ApiError, analyzeDemoTranscript, type DemoExtractedContribution } from "@/lib/api-backend";
 import { t } from "@/lib/i18n";
 import { useLocale } from "@/components/locale-toggle";
@@ -316,7 +316,7 @@ export default function InterviewPage() {
 
       {/* Top bar */}
       <header className="absolute top-0 inset-x-0 z-10 flex items-center justify-between px-4 sm:px-6 py-4 sm:py-5">
-        <Logo variant="default" priority />
+        <><div className="sm:hidden"><LogoMark size={28} variant="default" priority /></div><div className="hidden sm:block"><Logo variant="default" priority /></div></>
         {phase === "live" && (
           <div className="flex items-center gap-2 rounded-full border border-stone-200 bg-white/80 backdrop-blur-sm px-3 py-1 text-xs font-mono text-stone-700 shadow-sm">
             <span className="relative flex h-1.5 w-1.5">
