@@ -1,0 +1,118 @@
+{
+  "organization_id": "banco_demo",
+  "organization_name": "Blur Bank",
+  "generated_at": "2026-05-04T00:00:00Z",
+  "people": [
+    {
+      "id": "ceo_01",
+      "name": "Mariana Torres",
+      "role": "CEO",
+      "area": "Dirección",
+      "email": "mariana@blurbank.com",
+      "is_active": true
+    },
+    {
+      "id": "sysadmin",
+      "name": "Tomás Ledesma",
+      "role": "Sysadmin / IT",
+      "area": "Tecnología",
+      "email": "tomas@blurbank.com",
+      "manager_id": "cto_01",
+      "expertise_areas": ["Salesforce admin", "SharePoint admin", "VPN", "Tech onboarding", "AWS"],
+      "is_active": true
+    },
+    {
+      "id": "analyst_sr",
+      "name": "Martín Suárez",
+      "role": "Analista de Créditos Senior",
+      "area": "Riesgo",
+      "email": "martin@blurbank.com",
+      "manager_id": "gte_credit",
+      "expertise_areas": ["Credit evaluation", "Collateral", "Score Blur", "Exception approval"],
+      "is_active": true
+    },
+    {
+      "id": "account_off",
+      "name": "Roberto Pascual",
+      "role": "Oficial de Cuentas",
+      "area": "Operaciones",
+      "email": "roberto@blurbank.com",
+      "manager_id": "gte_ops",
+      "expertise_areas": ["Client complaints", "In-person service", "Consumer defense"],
+      "is_active": true
+    },
+    {
+      "id": "hr_lead",
+      "name": "Valeria Ríos",
+      "role": "Líder de RRHH",
+      "area": "Personas",
+      "email": "valeria@blurbank.com",
+      "manager_id": "ceo_01",
+      "expertise_areas": ["Employee onboarding", "Benefits", "Leaves", "Culture"],
+      "is_active": true
+    },
+    {
+      "id": "gte_ops",
+      "name": "Diego Ramírez",
+      "role": "Gerente de Operaciones",
+      "area": "Operaciones",
+      "email": "diego@blurbank.com",
+      "manager_id": "ceo_01",
+      "direct_reports": ["account_off", "backoffice"],
+      "expertise_areas": ["Operational processes", "Client SLAs"],
+      "is_active": true
+    },
+    {
+      "id": "gte_credit",
+      "name": "Ana López",
+      "role": "Gerente de Créditos",
+      "area": "Riesgo",
+      "email": "ana@blurbank.com",
+      "manager_id": "vp_risk",
+      "expertise_areas": ["Salesforce Credits", "Exception approval", "Credit policy"],
+      "is_active": true
+    },
+    {
+      "id": "cto_01",
+      "name": "Juan Pérez",
+      "role": "CTO",
+      "area": "Tecnología",
+      "email": "juan@blurbank.com",
+      "manager_id": "ceo_01",
+      "direct_reports": ["sysadmin"],
+      "is_active": true
+    },
+    {
+      "id": "vp_risk",
+      "name": "Carlos Méndez",
+      "role": "VP de Riesgo",
+      "area": "Riesgos",
+      "email": "carlos@blurbank.com",
+      "manager_id": "ceo_01",
+      "direct_reports": ["gte_credit"],
+      "is_active": true
+    },
+    {
+      "id": "backoffice",
+      "name": "Sofía Méndez",
+      "role": "Backoffice Operaciones",
+      "area": "Operaciones",
+      "email": "sofia@blurbank.com",
+      "manager_id": "gte_ops",
+      "expertise_areas": ["SharePoint clients", "Document verification"],
+      "is_active": true
+    }
+  ],
+  "tools": [],
+  "access_paths": [],
+  "processes": [],
+  "ticket_types": [],
+  "glossary": [],
+  "informal_rules": [],
+  "relationships": [],
+  "coverage": {
+    "total_employees": 10,
+    "interviewed": 0,
+    "pct_interviewed": 0
+  }
+}

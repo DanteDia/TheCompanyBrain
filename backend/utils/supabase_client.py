@@ -35,19 +35,50 @@ def get_client() -> Client:
 # ─── Skills File CRUD ────────────────────────────────────────────────────────
 
 
-def load_skills_file(org_id: str) -> Optional[SkillsFile]:
-    """Read the current Skills File for an org, or None if not built yet."""
-    res = (
-        get_client()
-        .table("skills_file")
-        .select("payload")
-        .eq("organization_id", org_id)
-        .limit(1)
-        .execute()
-    )
-    if not res.data:
+def _load_static_fallback(org_id: str) -> Optional[SkillsFile]:
+    """If Supabase is unreachable, fall back to a bundled JSON seed for the
+    canonical demo orgs so /try keeps working. Returns None for unknown orgs.
+    """
+    import json as _json
+    from pathlib import Path
+    here = Path(__file__).resolve().parents[1] / "sample_data"
+    candidate = here / f"{org_id}_fallback.json"
+    if not candidate.exists():
         return None
-    return SkillsFile.model_validate(res.data[0]["payload"])
+    try:
+        data = _json.loads(candidate.read_text())
+        return SkillsFile.model_validate(data)
+    except Exception:
+        return None
+
+
+def load_skills_file(org_id: str) -> Optional[SkillsFile]:
+    """Read the current Skills File for an org, or None if not built yet.
+    If Supabase is unreachable, fall back to bundled seed JSON for known
+    demo orgs (banco_demo) so the public /try demo keeps working.
+    """
+    try:
+        res = (
+            get_client()
+            .table("skills_file")
+            .select("payload")
+            .eq("organization_id", org_id)
+            .limit(1)
+            .execute()
+        )
+        if not res.data:
+            # Supabase reachable but row absent — try the fallback (covers
+            # the case where the row was never seeded for this org).
+            return _load_static_fallback(org_id)
+        return SkillsFile.model_validate(res.data[0]["payload"])
+    except Exception as e:
+        import structlog
+        structlog.get_logger().warning(
+            "supabase.load_skills_file_failed_using_fallback",
+            org_id=org_id,
+            error=str(e),
+        )
+        return _load_static_fallback(org_id)
 
 
 def ensure_organization(org_id: str, org_name: str = "") -> None:
