@@ -66,7 +66,7 @@ export default function TryDemoPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-5xl px-6 py-12 md:py-16">
+      <main className="mx-auto max-w-5xl px-4 sm:px-6 py-8 md:py-16">
         {/* Title */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
@@ -78,7 +78,7 @@ export default function TryDemoPage() {
             <Mic className="h-3 w-3" />
             {t("try.eyebrow", locale)}
           </div>
-          <h1 className="text-3xl md:text-5xl font-medium tracking-tight text-stone-900">
+          <h1 className="text-2xl sm:text-3xl md:text-5xl font-medium tracking-tight text-stone-900">
             {t("try.title", locale)}
           </h1>
           <p className="mt-4 text-stone-600 text-base md:text-lg leading-relaxed">
@@ -96,13 +96,13 @@ export default function TryDemoPage() {
               {t("try.step1_title", locale)}
             </h2>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             {(["en", "es"] as const).map((l) => (
               <button
                 key={l}
                 onClick={() => setLocale(l)}
                 className={cn(
-                  "flex-1 max-w-[200px] rounded-xl border px-5 py-4 text-left transition-all",
+                  "flex-1 sm:max-w-[200px] rounded-xl border px-5 py-4 text-left transition-all",
                   locale === l
                     ? "border-stone-900 bg-white shadow-sm"
                     : "border-stone-200 bg-white/60 hover:border-stone-400 hover:bg-white"

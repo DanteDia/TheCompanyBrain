@@ -51,6 +51,23 @@ export default function InterviewPage() {
   const [bookingOpen, setBookingOpen] = useState(false);
   const [extractedContribs, setExtractedContribs] = useState<DemoExtractedContribution[] | null>(null);
   const [extracting, setExtracting] = useState(false);
+  // Desktop sizes by default — useEffect overrides for mobile after mount
+  // so SSR markup matches the client's first render (no hydration mismatch).
+  const [sphereSize, setSphereSize] = useState({ ready: 360, live: 400, ended: 260 });
+
+  useEffect(() => {
+    function syncSize() {
+      if (typeof window === "undefined") return;
+      if (window.innerWidth < 640) {
+        setSphereSize({ ready: 240, live: 280, ended: 200 });
+      } else {
+        setSphereSize({ ready: 360, live: 400, ended: 260 });
+      }
+    }
+    syncSize();
+    window.addEventListener("resize", syncSize);
+    return () => window.removeEventListener("resize", syncSize);
+  }, []);
   const demoPersona = isDemo ? findDemoPersona(employeeId) : undefined;
 
   const [phase, setPhase] = useState<Phase>("ready");
@@ -298,7 +315,7 @@ export default function InterviewPage() {
       </div>
 
       {/* Top bar */}
-      <header className="absolute top-0 inset-x-0 z-10 flex items-center justify-between px-6 py-5">
+      <header className="absolute top-0 inset-x-0 z-10 flex items-center justify-between px-4 sm:px-6 py-4 sm:py-5">
         <Logo variant="default" priority />
         {phase === "live" && (
           <div className="flex items-center gap-2 rounded-full border border-stone-200 bg-white/80 backdrop-blur-sm px-3 py-1 text-xs font-mono text-stone-700 shadow-sm">
@@ -333,12 +350,12 @@ export default function InterviewPage() {
               transition={{ duration: 0.4 }}
               className="flex flex-col items-center text-center"
             >
-              <GradientSphere phase="idle" size={360} theme="light" />
+              <GradientSphere phase="idle" size={sphereSize.ready} theme="light" />
               <div className="mt-12 max-w-md">
                 <div className="text-[11px] uppercase tracking-wider text-stone-500 font-medium">
                   {t("interview.eyebrow", uiLocale)}
                 </div>
-                <h1 className="mt-3 text-3xl md:text-4xl tracking-tight font-medium text-stone-900">
+                <h1 className="mt-3 text-2xl sm:text-3xl md:text-4xl tracking-tight font-medium text-stone-900">
                   {t("interview.ready_title", uiLocale)}
                 </h1>
                 <p className="mt-4 text-base md:text-lg leading-relaxed text-stone-600">
@@ -369,7 +386,7 @@ export default function InterviewPage() {
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="flex flex-col items-center text-center"
             >
-              <GradientSphere phase={orbPhase} level={audioLevel} size={400} theme="light" />
+              <GradientSphere phase={orbPhase} level={audioLevel} size={sphereSize.live} theme="light" />
               <div className="mt-10 h-6 text-sm font-medium text-stone-700">
                 {phase === "starting" ? (
                   <span className="inline-flex items-center gap-2">
@@ -443,7 +460,7 @@ export default function InterviewPage() {
               transition={{ duration: 0.4 }}
               className="flex flex-col items-center text-center"
             >
-              <GradientSphere phase="ended" size={260} theme="light" />
+              <GradientSphere phase="ended" size={sphereSize.ended} theme="light" />
               <div className="mt-10 max-w-md">
                 <h2 className="text-2xl tracking-tight font-medium text-stone-900">
                   {t("interview.done_title", uiLocale)}

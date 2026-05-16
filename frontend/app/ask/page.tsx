@@ -164,10 +164,10 @@ function EmptyState({
       transition={{ duration: 0.3 }}
       className="text-center pt-4 md:pt-12"
     >
-      <h1 className="text-3xl md:text-4xl tracking-tight font-medium text-stone-900">
+      <h1 className="text-2xl sm:text-3xl md:text-4xl tracking-tight font-medium text-stone-900">
         Hi {userName}.
       </h1>
-      <p className="mt-3 text-stone-600 max-w-md mx-auto text-base md:text-lg">
+      <p className="mt-3 text-stone-600 max-w-md mx-auto text-sm sm:text-base md:text-lg">
         {locale === "es"
           ? `Ask me anything about how ${orgName} works.`
           : `Ask me anything about how ${orgName} works.`}

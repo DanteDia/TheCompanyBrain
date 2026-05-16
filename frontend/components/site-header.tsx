@@ -14,10 +14,10 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-30 border-b border-stone-200/80 bg-white/80 backdrop-blur-md">
-      <div className="mx-auto max-w-6xl px-6 md:px-8">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 md:px-8">
         <div className="flex h-16 items-center justify-between">
           <Logo />
-          <nav className="hidden md:flex items-center gap-7 text-sm text-stone-600">
+          <nav className="hidden md:flex items-center gap-5 lg:gap-7 text-sm text-stone-600">
             <a href="#producto" className="hover:text-stone-900 transition-colors">
               {t("nav.product", locale)}
             </a>
@@ -31,7 +31,7 @@ export function SiteHeader() {
               {t("nav.demo_call", locale)}
             </Link>
           </nav>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             <LocaleToggle locale={locale} onChange={setLocale} />
             <Button
               variant="default"

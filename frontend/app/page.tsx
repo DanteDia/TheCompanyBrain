@@ -38,26 +38,24 @@ export default function LandingPage() {
       {/* HERO */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-grid pointer-events-none opacity-50 [mask-image:radial-gradient(ellipse_at_top,white,transparent_70%)]" />
-        <div className="relative mx-auto max-w-6xl px-6 md:px-8 pt-16 md:pt-24 pb-16 md:pb-24">
+        <div className="relative mx-auto max-w-6xl px-6 md:px-8 pt-10 md:pt-24 pb-12 md:pb-24">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <div>
-              <h1 className="text-5xl md:text-6xl lg:text-7xl tracking-tight font-medium text-stone-900 leading-[1.02]">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight font-medium text-stone-900 leading-[1.05] md:leading-[1.02]">
                 The Company Brain
                 <br />
-                <span className="whitespace-nowrap">
-                  For Your <RotatingWord />
-                </span>
+                For Your <RotatingWord />
               </h1>
 
               {/* Brain visualization with animated connections */}
-              <div className="mt-12 mb-12">
+              <div className="mt-8 mb-8 md:mt-12 md:mb-12">
                 <BrainNetwork />
               </div>
 
               <div className="flex flex-col gap-3">
-                <div className="flex flex-wrap items-stretch gap-3">
-                  <Link href="/try" className="group">
-                    <Button size="lg" className="h-auto py-3 px-5">
+                <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch gap-3">
+                  <Link href="/try" className="group w-full sm:w-auto">
+                    <Button size="lg" className="h-auto py-3 px-5 w-full sm:w-auto justify-center sm:justify-start">
                       <Mic className="h-4 w-4" />
                       <span className="flex flex-col items-start leading-tight ml-1">
                         <span className="text-sm font-semibold">
@@ -70,8 +68,8 @@ export default function LandingPage() {
                       <ArrowRight className="h-4 w-4 ml-1 transition-transform group-hover:translate-x-0.5" />
                     </Button>
                   </Link>
-                  <Link href="/ask" className="group">
-                    <Button variant="outline" size="lg" className="h-auto py-3 px-5">
+                  <Link href="/ask" className="group w-full sm:w-auto">
+                    <Button variant="outline" size="lg" className="h-auto py-3 px-5 w-full sm:w-auto justify-center sm:justify-start">
                       <MessageCircle className="h-4 w-4" />
                       <span className="flex flex-col items-start leading-tight ml-1">
                         <span className="text-sm font-semibold">
@@ -89,7 +87,7 @@ export default function LandingPage() {
             </div>
 
             {/* Right — Hero chat mock */}
-            <div className="lg:pl-4">
+            <div className="hidden lg:block lg:pl-4">
               <HeroChatMock locale={locale} />
             </div>
           </div>
@@ -97,7 +95,7 @@ export default function LandingPage() {
       </section>
 
       {/* PROBLEMA — Antes vs Después */}
-      <section className="border-t border-stone-200/80 bg-white py-24 md:py-28">
+      <section className="border-t border-stone-200/80 bg-white py-14 md:py-28">
         <div className="mx-auto max-w-6xl px-6 md:px-8">
           <div className="text-center max-w-3xl mx-auto mb-14">
             <div className="text-[11px] uppercase tracking-wider text-accent-600 font-medium mb-4">
@@ -118,7 +116,7 @@ export default function LandingPage() {
       </section>
 
       {/* LO QUE CAPTURA */}
-      <section id="producto" className="border-t border-stone-200/80 bg-white py-24 md:py-28">
+      <section id="producto" className="border-t border-stone-200/80 bg-white py-14 md:py-28">
         <div className="mx-auto max-w-6xl px-6 md:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <div className="text-[11px] uppercase tracking-wider text-accent-600 font-medium mb-4">

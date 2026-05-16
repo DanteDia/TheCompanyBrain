@@ -351,7 +351,7 @@ export function DemoContributionAnim({
       </motion.div>
 
       {/* Animation surface */}
-      <div className="relative mt-8 w-full max-w-2xl" style={{ height: 280 }}>
+      <div className="relative mt-8 w-full max-w-2xl" style={{ height: 240 }}>
         {/* Persona on the left */}
         <motion.div
           initial={{ opacity: 0, x: -12 }}
@@ -380,7 +380,7 @@ export function DemoContributionAnim({
             transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1] }}
             style={{ transformOrigin: "center" }}
           >
-            <GradientSphere phase="speaking" size={220} theme="light" />
+            <GradientSphere phase="speaking" size={180} theme="light" />
           </motion.div>
 
           {/* Halo ring that breathes on pulse */}
@@ -465,7 +465,7 @@ export function DemoContributionAnim({
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: lastArrivalDelay + 0.3 }}
-        className="mt-6 flex flex-wrap gap-3 justify-center"
+        className="mt-6 flex flex-col sm:flex-row sm:flex-wrap gap-2.5 sm:gap-3 justify-center items-stretch sm:items-center"
       >
         <button
           onClick={() => setReviewOpen(true)}
