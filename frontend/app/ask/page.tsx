@@ -79,7 +79,7 @@ export default function AskPage() {
     <div className="flex h-dvh flex-col bg-stone-50">
       {/* Header */}
       <header className="sticky top-0 z-30 border-b border-stone-200 bg-white/90 backdrop-blur-sm">
-        <div className="flex h-14 items-center justify-between px-4 md:px-6">
+        <div className="flex h-14 items-center justify-between px-3 sm:px-4 md:px-6">
           <div className="flex items-center gap-3">
             <Logo />
             <span className="hidden sm:inline-block text-stone-300">/</span>
@@ -96,7 +96,7 @@ export default function AskPage() {
 
       {/* Conversation area */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto">
-        <div className="mx-auto max-w-3xl px-4 md:px-6 py-8 md:py-12">
+        <div className="mx-auto max-w-3xl px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-12">
           {turns.length === 0 ? (
             <EmptyState
               userName={user.name.split(" ")[0]}
@@ -134,7 +134,7 @@ export default function AskPage() {
 
       {/* Composer */}
       <div className="border-t border-stone-200 bg-white">
-        <div className="mx-auto max-w-3xl px-4 md:px-6 py-4">
+        <div className="mx-auto max-w-3xl px-3 sm:px-4 md:px-6 py-3 sm:py-4">
           <Composer
             onSubmit={handleQuestion}
             disabled={thinking}

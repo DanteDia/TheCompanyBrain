@@ -296,7 +296,20 @@ export function DemoContributionAnim({
   const contribs = persona.contributions;
   const [pulseKey, setPulseKey] = useState(0);
   const [reviewOpen, setReviewOpen] = useState(false);
+  const [surfaceSize, setSurfaceSize] = useState({ sphere: 180, height: 240 });
   const cleanupRef = useRef<number[]>([]);
+
+  // Mobile vs desktop sizing — synced after mount to avoid SSR hydration mismatch.
+  useEffect(() => {
+    function sync() {
+      if (typeof window === "undefined") return;
+      const narrow = window.innerWidth < 640;
+      setSurfaceSize(narrow ? { sphere: 130, height: 200 } : { sphere: 180, height: 240 });
+    }
+    sync();
+    window.addEventListener("resize", sync);
+    return () => window.removeEventListener("resize", sync);
+  }, []);
 
   // Trigger a sphere pulse exactly when each pill arrives at the sphere.
   // Arrival = ~85% through the travel curve (matches the `times` array
@@ -320,7 +333,7 @@ export function DemoContributionAnim({
     TRAVEL_BASE_DELAY + (contribs.length - 1) * TRAVEL_STAGGER + TRAVEL_DURATION;
 
   return (
-    <div className="flex flex-col items-center text-center max-w-3xl px-4">
+    <div className="flex flex-col items-center text-center max-w-3xl w-full px-2 sm:px-4">
       <ReviewModal
         open={reviewOpen}
         onClose={() => setReviewOpen(false)}
@@ -339,7 +352,7 @@ export function DemoContributionAnim({
         <div className="text-[10px] font-mono uppercase tracking-wider text-stone-500">
           {t("demo_end.eyebrow", locale)}
         </div>
-        <h2 className="mt-2 text-2xl md:text-3xl tracking-tight font-medium text-stone-900">
+        <h2 className="mt-2 text-xl sm:text-2xl md:text-3xl tracking-tight font-medium text-stone-900">
           {t("demo_end.title", locale)}
         </h2>
         <p className="mt-3 text-sm md:text-base text-stone-600 max-w-xl mx-auto leading-relaxed">
@@ -351,15 +364,15 @@ export function DemoContributionAnim({
       </motion.div>
 
       {/* Animation surface */}
-      <div className="relative mt-8 w-full max-w-2xl" style={{ height: 240 }}>
+      <div className="relative mt-8 w-full max-w-2xl" style={{ height: surfaceSize.height }}>
         {/* Persona on the left */}
         <motion.div
           initial={{ opacity: 0, x: -12 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
-          className="absolute left-[6%] top-1/2 -translate-y-1/2 z-10 flex flex-col items-center"
+          className="absolute left-[4%] sm:left-[6%] top-1/2 -translate-y-1/2 z-10 flex flex-col items-center"
         >
-          <Avatar name={persona.name} size="lg" />
+          <div className="scale-[0.8] sm:scale-100 origin-center"><Avatar name={persona.name} size="lg" /></div>
           <div className="mt-2 text-xs font-medium text-stone-800">
             {persona.name}
           </div>
@@ -369,7 +382,7 @@ export function DemoContributionAnim({
         </motion.div>
 
         {/* Sphere on the right — pulses on each pill arrival via key change */}
-        <div className="absolute right-[2%] top-1/2 -translate-y-1/2">
+        <div className="absolute right-[2%] sm:right-[4%] top-1/2 -translate-y-1/2">
           <motion.div
             key={pulseKey}
             initial={pulseKey === 0 ? { scale: 1, filter: "brightness(1)" } : false}
@@ -380,7 +393,7 @@ export function DemoContributionAnim({
             transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1] }}
             style={{ transformOrigin: "center" }}
           >
-            <GradientSphere phase="speaking" size={180} theme="light" />
+            <GradientSphere phase="speaking" size={surfaceSize.sphere} theme="light" />
           </motion.div>
 
           {/* Halo ring that breathes on pulse */}
