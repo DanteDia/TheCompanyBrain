@@ -94,7 +94,7 @@ function TravelingNode({
     <motion.div
       initial={{ left: "14%", top: startTop, opacity: 0, scale: 0.7, rotate: -4 }}
       animate={{
-        left: ["14%", "48%", "76%"],
+        left: ["16%", "48%", "72%"],
         top: [startTop, midTop, endTop],
         opacity: [0, 1, 1, 0],
         scale: [0.7, 1, 1.04, 0.45],
@@ -109,14 +109,14 @@ function TravelingNode({
       className="absolute -translate-x-1/2 -translate-y-1/2 pointer-events-none z-20"
     >
       <div
-        className="inline-flex items-center gap-1.5 rounded-full bg-white/95 backdrop-blur-sm border border-stone-200 px-2.5 py-1 shadow-[0_4px_16px_rgba(15,12,10,0.06)]"
+        className="inline-flex items-center gap-1.5 rounded-full bg-white/95 backdrop-blur-sm border border-stone-200 px-2 sm:px-2.5 py-1 shadow-[0_4px_16px_rgba(15,12,10,0.06)] max-w-[140px] sm:max-w-[260px]"
         style={{ willChange: "transform" }}
       >
         <span
-          className={`h-2 w-2 rounded-full bg-gradient-to-br ${TYPE_DOT_GRADIENT[contribution.type]} ${TYPE_GLOW[contribution.type]}`}
+          className={`h-2 w-2 rounded-full bg-gradient-to-br ${TYPE_DOT_GRADIENT[contribution.type]} ${TYPE_GLOW[contribution.type]} shrink-0`}
         />
-        <Icon className={`h-3 w-3 ${TYPE_TEXT[contribution.type]}`} strokeWidth={1.6} />
-        <span className="text-[10px] font-mono text-stone-700 tracking-tight whitespace-nowrap">
+        <Icon className={`h-3 w-3 ${TYPE_TEXT[contribution.type]} shrink-0`} strokeWidth={1.6} />
+        <span className="text-[10px] font-mono text-stone-700 tracking-tight truncate">
           {contribution.label[locale]}
         </span>
       </div>

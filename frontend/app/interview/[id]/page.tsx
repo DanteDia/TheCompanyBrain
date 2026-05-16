@@ -326,14 +326,18 @@ export default function InterviewPage() {
             REC · {fmtTime(elapsed)}
           </div>
         )}
-        {isDemo && phase !== "live" && (
-          <div className="rounded-full border border-stone-300 bg-white px-3 py-1 text-[10px] font-medium uppercase tracking-wider text-stone-700">
-            {t("interview.demo_badge", uiLocale)}
-          </div>
-        )}
-        {isMock && phase !== "live" && (
-          <div className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-[10px] font-medium uppercase tracking-wider text-amber-700">
-            {t("interview.mock_badge", uiLocale)}
+        {(isDemo || isMock) && phase !== "live" && (
+          <div className="flex flex-col items-end gap-1.5 max-w-[55%] sm:max-w-none sm:flex-row sm:items-center sm:gap-2">
+            {isDemo && (
+              <div className="rounded-full border border-stone-300 bg-white px-2.5 py-0.5 sm:px-3 sm:py-1 text-[9px] sm:text-[10px] font-medium uppercase tracking-wider text-stone-700 text-right whitespace-nowrap">
+                {t("interview.demo_badge", uiLocale)}
+              </div>
+            )}
+            {isMock && (
+              <div className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-0.5 sm:px-3 sm:py-1 text-[9px] sm:text-[10px] font-medium uppercase tracking-wider text-amber-700 text-right whitespace-nowrap">
+                {t("interview.mock_badge", uiLocale)}
+              </div>
+            )}
           </div>
         )}
       </header>
