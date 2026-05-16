@@ -314,6 +314,25 @@ async def seed_portals() -> dict[str, Any]:
     }
 
 
+@app.get("/api/admin/debug-supabase")
+async def api_debug_supabase(organization_id: str = "banco_demo") -> dict[str, Any]:
+    """Temporary diagnostic — exposes the underlying exception when
+    skills-file/web-initiate are 500'ing."""
+    import traceback
+    out: dict[str, Any] = {"organization_id": organization_id}
+    try:
+        sf = _supabase().load_skills_file(organization_id)
+        out["skills_file_present"] = sf is not None
+        if sf:
+            out["people_count"] = len(sf.people)
+            out["org_name"] = sf.organization_name
+    except Exception as e:
+        out["error_type"] = type(e).__name__
+        out["error"] = str(e)
+        out["trace"] = traceback.format_exc()[-800:]
+    return out
+
+
 @app.post("/api/admin/test-set-lang")
 async def api_test_set_lang(language: str = "es") -> dict[str, Any]:
     """Run _set_agent_language(language) and return the result. Pure debug."""
